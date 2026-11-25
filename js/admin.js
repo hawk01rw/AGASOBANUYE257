@@ -228,11 +228,22 @@
     openEditor();
   }
 
-  async function uploadArtwork(file,folder,status) {
-    if(!file)return null;
-    status.textContent="Uploading artwork to ImageKit...";
-    const result=await window.AgasobanuyeImageKit.uploadImage(file,{folder,client:db()});
-    status.textContent="Artwork uploaded.";
+  async function uploadArtwork(file,url,folder,status,currentUrl,currentFileId,fileBase) {
+    if(!file&&!url)return null;
+    if(!file&&url===currentUrl&&currentFileId&&url.includes("ik.imagekit.io/")){
+      status.textContent="Existing ImageKit artwork kept.";
+      return {url:currentUrl,fileId:currentFileId};
+    }
+    const source=file||url;
+    let fileName=file?.name||"";
+    if(!fileName){
+      let extension=".jpg";
+      try { const path=new URL(url).pathname; const match=path.match(/\.(jpe?g|png|webp|gif|avif)$/i); if(match)extension="."+match[1].toLowerCase(); } catch(_){}
+      fileName=(fileBase||"artwork")+extension;
+    }
+    status.textContent=file?"Uploading artwork to ImageKit...":"Importing image URL into ImageKit...";
+    const result=await window.AgasobanuyeImageKit.uploadImage(source,{folder,fileName,client:db(),tags:["agasobanuye257"]});
+    status.textContent="Image stored in ImageKit successfully.";
     return result;
   }
 
@@ -296,8 +307,8 @@
       const posterUrl=$("#posterUrl").value.trim(),backdropUrl=$("#backdropUrl").value.trim();
       const validImageUrl=value=>{if(!value)return true;try{const u=new URL(value);return u.protocol==="https:"||u.protocol==="http:";}catch(_){return false;}};
       if(!validImageUrl(posterUrl)||!validImageUrl(backdropUrl))throw new Error("Enter a valid http:// or https:// image URL.");
-      const poster=await uploadArtwork(posterFile,"/agasobanuye257/posters",$("#posterStatus"));
-      const backdrop=await uploadArtwork(backdropFile,"/agasobanuye257/backdrops",$("#backdropStatus"));
+      const poster=await uploadArtwork(posterFile,posterUrl,"/agasobanuye257/posters",$("#posterStatus"),state.editing?.poster_url,state.editing?.imagekit_file_id,slug+"-poster");
+      const backdrop=await uploadArtwork(backdropFile,backdropUrl,"/agasobanuye257/backdrops",$("#backdropStatus"),state.editing?.backdrop_url,state.editing?.backdrop_imagekit_file_id,slug+"-backdrop");
       const video=type==="series"?null:await uploadVideo($("#videoFile").files[0],type,slug);
       const record={
         title,slug,content_type:type,
@@ -319,12 +330,10 @@
         episode_title:type==="episode"?title:null
       };
       if(poster){record.poster_url=poster.url;record.imagekit_file_id=poster.fileId;}
-      else if(posterUrl){record.poster_url=posterUrl;record.imagekit_file_id=null;}
-      else if(state.editing?.poster_url){record.poster_url=state.editing.poster_url;record.imagekit_file_id=state.editing.imagekit_file_id;}
+      else if(state.editing?.poster_url){record.poster_url=state.editing.poster_url;record.imagekit_file_id=state.editing.imagekit_file_id||null;}
       else {record.poster_url=null;record.imagekit_file_id=null;}
       if(backdrop){record.backdrop_url=backdrop.url;record.backdrop_imagekit_file_id=backdrop.fileId;}
-      else if(backdropUrl){record.backdrop_url=backdropUrl;record.backdrop_imagekit_file_id=null;}
-      else if(state.editing?.backdrop_url){record.backdrop_url=state.editing.backdrop_url;record.backdrop_imagekit_file_id=state.editing.backdrop_imagekit_file_id;}
+      else if(state.editing?.backdrop_url){record.backdrop_url=state.editing.backdrop_url;record.backdrop_imagekit_file_id=state.editing.backdrop_imagekit_file_id||null;}
       else {record.backdrop_url=null;record.backdrop_imagekit_file_id=null;}
       if(video)record.video_path=video;
       else if(state.editing?.video_path)record.video_path=state.editing.video_path;
