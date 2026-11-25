@@ -23,8 +23,12 @@
     async toggleWatchlist(movieId,currentlySaved){if(!client)throw new Error("Supabase is not configured yet.");const session=await api.getSession();if(!session)throw new Error("Please sign in to use your watchlist.");const result=currentlySaved?await client.from("watchlist").delete().eq("movie_id",movieId).eq("user_id",session.user.id):await client.from("watchlist").insert({movie_id:movieId,user_id:session.user.id});if(result.error)throw result.error;return !currentlySaved;},
     async getEpisodes(seriesId){
       if(!client||!seriesId)return [];
-      const {data,error}=await client.from("movies").select("id,title,slug,episode_title,season_number,episode_number,release_year,poster_url,video_path,download_url,synopsis,duration_minutes,language,series_id,content_type,published").eq("content_type","episode").eq("series_id",seriesId).eq("published",true).order("season_number",{ascending:true}).order("episode_number",{ascending:true});
-      if(error)throw error;return (data||[]).map(mapMovie);
+      let result=await client.from("movies").select("*").eq("series_id",seriesId).eq("published",true).order("season_number",{ascending:true}).order("episode_number",{ascending:true});
+      if(result.error)throw result.error;
+      let rows=result.data||[];
+      // Accept legacy episode rows that may not have content_type populated consistently.
+      rows=rows.filter(row=>row.content_type==="episode"||row.series_id===seriesId);
+      return rows.map(mapMovie);
     },
     async getVideoUrl(path,download=false){if(!client||!path)throw new Error("No video file has been configured for this title.");const {data,error}=await client.storage.from("movie-videos").createSignedUrl(path,3600,download?{download:true}:{});if(error)throw error;return data.signedUrl;},
     async getComments(target){
