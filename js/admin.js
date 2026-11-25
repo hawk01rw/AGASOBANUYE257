@@ -15,10 +15,15 @@
     const { data: { session }, error } = await db().auth.getSession();
     if (error) throw error;
     if (!session) return false;
-    const { data: profile, error: profileError } = await db().from("profiles").select("is_admin").eq("id",session.user.id).single();
-    if (profileError || profile?.is_admin !== true) {
-      await db().auth.signOut();
-      throw new Error("This account is not an administrator. Ask the project owner to grant admin access.");
+    const { data: profile, error: profileError } = await db().from("profiles").select("is_admin").eq("id",session.user.id).maybeSingle();
+    if (profileError) {
+      throw new Error("Admin check failed ("+(profileError.code||"no code")+"): "+profileError.message+". Your login is still active. Please share this exact message.");
+    }
+    if (!profile) {
+      throw new Error("No public.profiles row was found for the signed-in user ID "+session.user.id+". The admin email may belong to a different Supabase account.");
+    }
+    if (profile.is_admin !== true) {
+      throw new Error("The signed-in account is "+(session.user.email||"unknown")+", but its profiles.is_admin value is "+JSON.stringify(profile.is_admin)+".");
     }
     $("#adminEmail").textContent=session.user.email || "Administrator";
     loginPanel.hidden=true;studioPanel.hidden=false;$("#signOutButton").hidden=false;
