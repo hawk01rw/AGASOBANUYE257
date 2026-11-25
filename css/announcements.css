@@ -1,0 +1,12 @@
+.site-announcements{width:min(100% - 32px,1240px);margin:14px auto 0;display:grid;gap:8px;position:relative;z-index:30}
+.site-announcement{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid rgba(103,157,222,.24);border-radius:12px;background:linear-gradient(110deg,rgba(18,48,81,.96),rgba(8,24,43,.97));box-shadow:0 8px 24px rgba(0,0,0,.18);color:#eef5ff}
+.site-announcement-mark{width:27px;height:27px;flex:0 0 27px;display:grid;place-items:center;border-radius:9px;background:rgba(75,145,240,.18);color:#9fc6ff;font-weight:900}
+.site-announcement.tone-success .site-announcement-mark{background:rgba(53,174,129,.16);color:#8ce0bc}
+.site-announcement.tone-warning{border-color:rgba(214,165,46,.38)}
+.site-announcement.tone-warning .site-announcement-mark{background:rgba(214,165,46,.17);color:#f1d28a}
+.site-announcement-copy{min-width:0;flex:1}
+.site-announcement-copy strong{display:block;font-size:12px;font-weight:800;letter-spacing:.01em}
+.site-announcement-copy p{margin:2px 0 0;color:#c4d4e9;font-size:12px;line-height:1.55;overflow-wrap:anywhere}
+.site-announcement-close{width:30px;height:30px;flex:0 0 30px;border:0;border-radius:8px;background:rgba(255,255,255,.06);color:#c8d8ec;font-size:21px;line-height:1;cursor:pointer}
+.site-announcement-close:hover{background:rgba(255,255,255,.13);color:#fff}
+@media(max-width:600px){.site-announcements{width:calc(100% - 24px);margin-top:10px}.site-announcement{padding:10px;gap:9px}.site-announcement-copy p{font-size:11px}}
