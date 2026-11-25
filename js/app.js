@@ -18,7 +18,7 @@ function escapeHTML(value) {
 }
 
 // Only display artwork hosted by ImageKit. TMDB is used for metadata, not images.
-function imageKitURL(value) {
+function imageKitURL(value, transform = "w-420,h-630,fo-auto,q-82") {
   if (!value) return "";
   try {
     const url = new URL(value, window.location.href);
@@ -28,7 +28,9 @@ function imageKitURL(value) {
     const allowed = url.protocol === "https:" &&
       (url.hostname === "ik.imagekit.io" || url.hostname.endsWith(".imagekit.io") ||
        (endpointHost && url.hostname === endpointHost));
-    return allowed ? url.href : "";
+    if (!allowed) return "";
+    if (!url.searchParams.has("tr")) url.searchParams.set("tr", transform);
+    return url.href;
   } catch (_) {
     return "";
   }
@@ -128,7 +130,7 @@ function renderFeature() {
     "<span>" + escapeHTML(movie.type === "series" ? "Series" : "Movie") +
     "</span><span>" + escapeHTML(movie.genre || "Discover") +
     "</span><span>" + escapeHTML(movie.year || "—") + "</span>";
-  const backdrop = imageKitURL(movie.backdrop || movie.poster);
+  const backdrop = imageKitURL(movie.backdrop || movie.poster, "w-1600,h-900,fo-auto,q-82");
   $("#featureImage").style.backgroundImage = backdrop ? 'url("' + backdrop.replace(/["\\\\]/g, "") + '")' : "none";
   $("#featureWatch").onclick = event => { event.preventDefault(); openWatch(movie); };
   $("#featureDetails").onclick = event => { event.preventDefault(); openWatch(movie); };
