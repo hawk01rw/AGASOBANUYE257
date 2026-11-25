@@ -210,7 +210,7 @@ $("#newsletterForm").onsubmit = async event => {
     const {error}=await client.from("newsletter_subscribers").insert({email});
     if(error?.code==="23505"){status.textContent="This email is already on the update list.";return;}
     if(error)throw error;
-    status.textContent="You're subscribed. We'll email you when new titles arrive.";
+    status.textContent="You're subscribed. Thanks for joining the AGASOBANUYE257 update list.";
     form.reset();
   }catch(error){
     console.error("Newsletter subscription:",error);
