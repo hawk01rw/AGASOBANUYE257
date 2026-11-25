@@ -94,3 +94,17 @@ button,input,select,textarea{font:inherit!important}
 @media(max-width:520px){
  .poster-row .poster-image{aspect-ratio:2/3!important;height:auto!important}
 }
+
+/* Watch-page download actions stay clearly green above the shared button theme. */
+#movieDownloadButton,.watch-main .episode-download{
+  background:linear-gradient(135deg,#20b86b,#087f4b)!important;
+  color:#fff!important;
+  border:1px solid rgba(102,240,166,.48)!important;
+  box-shadow:0 5px 16px rgba(8,150,83,.2)!important;
+  font-weight:750!important;
+}
+#movieDownloadButton:hover,.watch-main .episode-download:hover{
+  background:linear-gradient(135deg,#2bd47d,#09985a)!important;
+  border-color:rgba(125,255,184,.75)!important;
+  box-shadow:0 7px 20px rgba(8,150,83,.3)!important;
+}
