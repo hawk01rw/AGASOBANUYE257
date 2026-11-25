@@ -121,7 +121,8 @@ function renderFeature() {
     $("#heroCount").textContent = "00 / 00";
     return;
   }
-  const heroMovies = movies.slice(0, 10);\n  const movie = heroMovies[featuredIndex % heroMovies.length];
+  const heroMovies = movies.slice(0, 10);
+  const movie = heroMovies[featuredIndex % heroMovies.length];
   const hero = $("#featureHero");
   if (hero) hero.classList.add("hero-changing");
   $("#featureTitle").textContent = movie.title || "Discover your next favourite";
@@ -140,8 +141,9 @@ function renderFeature() {
 }
 
 function advanceFeature(direction = 1) {
-  if (movies.length < 2) return;
-  featuredIndex = (featuredIndex + direction + movies.length) % movies.length;
+  const total = Math.min(movies.length, 10);
+  if (total < 2) return;
+  featuredIndex = (featuredIndex + direction + total) % total;
   renderFeature();
 }
 
