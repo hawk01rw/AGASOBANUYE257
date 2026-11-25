@@ -35,7 +35,7 @@
     $("#sidebarUser").textContent=(session.user.email||"admin").split("@")[0];$("#sidebarEmail").textContent=session.user.email||"";
     $("#dashboardDate").textContent=new Intl.DateTimeFormat("en",{weekday:"long",month:"long",day:"numeric",year:"numeric"}).format(new Date());
     $("#loginPanel").hidden=true;$("#studioPanel").hidden=false;$("#signOutButton").hidden=false;
-    if((session.user.email||"").toLowerCase()===ownerEmail){$("#adminManagementPanel").hidden=false;await loadAdmins();}
+    if((session.user.email||"").toLowerCase()===ownerEmail){$("#adminManagementPanel").hidden=false;$("#adminAccessDenied").hidden=true;await loadAdmins();}else{$("#adminAccessDenied").hidden=false;}
     await loadCatalogue();
     await loadCategories();
     return true;
@@ -125,7 +125,7 @@
         done++;row.classList.add("success");row.textContent=(i+1)+"/"+files.length+" · "+title+" — uploaded";
       }catch(err){failed++;row.classList.add("failed");row.textContent=(i+1)+"/"+files.length+" · "+title+" — "+err.message;}
     }
-    await loadCatalogue();if(type==="episode"&&seriesId)openSeriesManager(seriesId);
+    await loadCatalogue();if(type==="episode"&&seriesId){showView("series");openSeriesManager(seriesId);}
     msg($("#bulkMessage"),"Bulk upload finished: "+done+" successful, "+failed+" failed.",failed>0);button.disabled=false;
   }
 
