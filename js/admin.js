@@ -306,20 +306,22 @@
       const type=$("#contentType").value,title=$("#contentTitle").value.trim(),slug=slugify($("#contentSlug").value||title);
       if(!title||!slug)throw new Error("Enter a title and valid URL slug.");
       const duplicate=findDuplicateTitle(title,state.editing?.id||null);
-      if(duplicate)throw new Error("This name is already used by \""+duplicate.title+"\". Choose a different title. Names are checked without case sensitivity.");
+      if(duplicate)throw new Error("This name is already used by \""+duplicate.title+"\". Choose a different title.");
       const seriesId=type==="episode"?$("#seriesPicker").value:null;
       if(type==="episode"&&!seriesId)throw new Error("Choose the series this episode belongs to.");
       if(type==="episode"&&(!Number($("#seasonNumber").value)||!Number($("#episodeNumber").value)))throw new Error("Enter both season and episode numbers.");
-      const posterFile=$("#posterFile").files[0],backdropFile=$("#backdropFile").files[0];
-      const posterUrl=$("#posterUrl").value.trim(),backdropUrl=$("#backdropUrl").value.trim();
+      const videoFiles=type==="series"?[]:Array.from($("#videoFiles").files||[]);
+      if(videoFiles.length>26)throw new Error("A movie can have up to 26 parts (A–Z).");
+      if(videoFiles.length>1&&type!=="movie")throw new Error("Multi-part uploads are for movies. Upload series episodes separately.");
+      if(videoFiles.some(file=>!file.type.startsWith("video/")))throw new Error("Choose valid video files only.");
+      const posterFile=$("#posterFile").files[0],backdropFile=$("#backdropFile").files[0],posterUrl=$("#posterUrl").value.trim(),backdropUrl=$("#backdropUrl").value.trim();
       const validImageUrl=value=>{if(!value)return true;try{const u=new URL(value);return u.protocol==="https:"||u.protocol==="http:";}catch(_){return false;}};
       if(!validImageUrl(posterUrl)||!validImageUrl(backdropUrl))throw new Error("Enter a valid http:// or https:// image URL.");
       const poster=await uploadArtwork(posterFile,posterUrl,"/agasobanuye257/posters",$("#posterStatus"),state.editing?.poster_url,state.editing?.imagekit_file_id,slug+"-poster");
       const backdrop=await uploadArtwork(backdropFile,backdropUrl,"/agasobanuye257/backdrops",$("#backdropStatus"),state.editing?.backdrop_url,state.editing?.backdrop_imagekit_file_id,slug+"-backdrop");
-      const video=type==="series"?null:await uploadVideo($("#videoFile").files[0],type,slug);
+      const video=videoFiles.length===1?await uploadVideo(videoFiles[0],type,slug):null;
       const record={
-        title,slug,content_type:type,
-        tmdb_id:$("#contentTmdbId").value?Number($("#contentTmdbId").value):null,
+        title,slug,content_type:type,tmdb_id:$("#contentTmdbId").value?Number($("#contentTmdbId").value):null,
         tmdb_vote_average:$("#contentTmdbVoteAverage").value?Number($("#contentTmdbVoteAverage").value):null,
         tmdb_vote_count:$("#contentTmdbVoteCount").value?Number($("#contentTmdbVoteCount").value):null,
         tmdb_metadata:$("#contentTmdbMetadata").value?JSON.parse($("#contentTmdbMetadata").value):{},
@@ -327,39 +329,33 @@
         release_year:$("#contentYear").value?Number($("#contentYear").value):null,
         language:$("#contentLanguage").value.trim()||"Kinyarwanda",
         duration_minutes:type==="series"||!$("#contentDuration").value?null:Number($("#contentDuration").value),
-        trailer_url:$("#contentTrailer").value.trim()||null,
-        download_url:$("#contentDownloadUrl").value.trim()||null,
-        featured:type==="series"?false:$("#contentFeatured").checked,
-        published:$("#contentPublished").checked,
-        series_id:seriesId,
-        season_number:type==="episode"?Number($("#seasonNumber").value):null,
-        episode_number:type==="episode"?Number($("#episodeNumber").value):null,
-        episode_title:type==="episode"?title:null
+        trailer_url:$("#contentTrailer").value.trim()||null,download_url:$("#contentDownloadUrl").value.trim()||null,
+        featured:type==="series"?false:$("#contentFeatured").checked,published:$("#contentPublished").checked,
+        series_id:seriesId,season_number:type==="episode"?Number($("#seasonNumber").value):null,
+        episode_number:type==="episode"?Number($("#episodeNumber").value):null,episode_title:type==="episode"?title:null
       };
-      if(poster){record.poster_url=poster.url;record.imagekit_file_id=poster.fileId;}
-      else if(state.editing?.poster_url){record.poster_url=state.editing.poster_url;record.imagekit_file_id=state.editing.imagekit_file_id||null;}
-      else {record.poster_url=null;record.imagekit_file_id=null;}
-      if(backdrop){record.backdrop_url=backdrop.url;record.backdrop_imagekit_file_id=backdrop.fileId;}
-      else if(state.editing?.backdrop_url){record.backdrop_url=state.editing.backdrop_url;record.backdrop_imagekit_file_id=state.editing.backdrop_imagekit_file_id||null;}
-      else {record.backdrop_url=null;record.backdrop_imagekit_file_id=null;}
-      if(video)record.video_path=video;
-      else if(state.editing?.video_path)record.video_path=state.editing.video_path;
-      if(state.editing){
-        const {error}=await db().from("movies").update(record).eq("id",state.editing.id);
-        if(error)throw error;
-        msg($("#saveMessage"),"Changes saved successfully.");
-      }else{
-        record.created_by=state.session.user.id;
-        const {error}=await db().from("movies").insert(record);
-        if(error)throw error;
-        msg($("#saveMessage"),"Content added successfully.");
-      }
-      await loadCatalogue();resetEditor();
-      msg($("#saveMessage"),"Content saved successfully.");
+      if(poster){record.poster_url=poster.url;record.imagekit_file_id=poster.fileId;}else if(state.editing?.poster_url){record.poster_url=state.editing.poster_url;record.imagekit_file_id=state.editing.imagekit_file_id||null;}else{record.poster_url=null;record.imagekit_file_id=null;}
+      if(backdrop){record.backdrop_url=backdrop.url;record.backdrop_imagekit_file_id=backdrop.fileId;}else if(state.editing?.backdrop_url){record.backdrop_url=state.editing.backdrop_url;record.backdrop_imagekit_file_id=state.editing.backdrop_imagekit_file_id||null;}else{record.backdrop_url=null;record.backdrop_imagekit_file_id=null;}
+      if(video)record.video_path=video;else if(videoFiles.length>1)record.video_path=null;else if(state.editing?.video_path)record.video_path=state.editing.video_path;
+      let savedId=state.editing?.id||null;
+      if(state.editing){const {error}=await db().from("movies").update(record).eq("id",savedId);if(error)throw error;}
+      else{record.created_by=state.session.user.id;const {data,error}=await db().from("movies").insert(record).select("id").single();if(error)throw error;savedId=data.id;}
+      if(videoFiles.length>1){
+        const uploaded=[];
+        for(let i=0;i<videoFiles.length;i++){
+          const label=String.fromCharCode(65+i),file=videoFiles[i];
+          $("#videoStatus").textContent="Uploading Part "+label+" ("+(i+1)+"/"+videoFiles.length+")…";
+          const path=await uploadVideo(file,"movie",slug+"-part-"+label.toLowerCase());
+          uploaded.push({movie_id:savedId,part_label:"Part "+label,video_path:path,sort_order:i+1});
+        }
+        const {error:removeError}=await db().from("movie_parts").delete().eq("movie_id",savedId);if(removeError)throw removeError;
+        const {error:partsError}=await db().from("movie_parts").insert(uploaded);if(partsError)throw partsError;
+        $("#videoStatus").textContent=uploaded.length+" parts uploaded successfully.";
+      }else if(videoFiles.length===1){const {error}=await db().from("movie_parts").delete().eq("movie_id",savedId);if(error)throw error;}
+      await loadCatalogue();resetEditor();msg($("#saveMessage"),"Content saved successfully.");
     }catch(error){msg($("#saveMessage"),error.message||"Could not save content.",true);}
     finally{button.disabled=false;}
   }
-
   async function deleteContent(id) {
     const m=state.catalogue.find(x=>x.id===id);if(!m)return;
     const prompt=m.content_type==="series"?"Delete this series and all its episodes? This cannot be undone.":"Delete this content? This cannot be undone.";
