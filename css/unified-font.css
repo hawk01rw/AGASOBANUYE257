@@ -1,0 +1,6 @@
+/* AGASOBANUYE257 — one typeface across every page.
+   Playfair Display matches the series-title styling on the Watch page. */
+html, body, body *,
+html body :is(input, textarea, select, button, option, optgroup) {
+  font-family: "Playfair Display", Georgia, serif !important;
+}
