@@ -109,7 +109,7 @@ async function toggleFavorite(id) {
 }
 function openWatch(movie) {
   try { sessionStorage.setItem("agasobanuyeSelectedTitle", JSON.stringify(movie)); } catch (_) {}
-  location.href = "watch.html?id=" + encodeURIComponent(movie.slug || movie.id);
+  location.href = movie.watchUrl || ("watch.html?id=" + encodeURIComponent(movie.slug || movie.id));
 }
 
 function renderFeature() {
