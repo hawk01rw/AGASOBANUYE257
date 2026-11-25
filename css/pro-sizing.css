@@ -1,94 +1,97 @@
-/* AGASOBANUYE257 — consistent professional sizing */
-:root{--pro-page-width:1440px}
-html{font-size:16px;scroll-padding-top:90px}
-body{min-width:320px;overflow-x:hidden}
-img,video{max-width:100%}
-.cineva-header,.member-header{padding-left:clamp(16px,2.4vw,36px)!important;padding-right:clamp(16px,2.4vw,36px)!important}
-.cineva-brand img{flex:0 0 auto}
-.feature-hero{width:min(calc(100% - 48px),var(--pro-page-width));height:clamp(420px,57vw,650px);min-height:420px;margin:20px auto 0;border-radius:20px}
-.feature-copy{max-width:min(720px,58%)}
-.feature-copy h1{font-size:clamp(34px,4.8vw,64px);letter-spacing:-1.8px}
-.feature-copy>p:not(.feature-eyebrow){font-size:clamp(13px,1.1vw,16px);line-height:1.65}
-.cineva-section,.content-section,.category-section{width:min(100%,var(--pro-page-width));margin-left:auto;margin-right:auto;padding-left:clamp(18px,3.2vw,46px);padding-right:clamp(18px,3.2vw,46px)}
-.cineva-heading h2,.section-top h2{font-size:clamp(21px,2.2vw,32px)}
-.poster-row{grid-auto-columns:clamp(132px,15.5vw,205px);gap:clamp(10px,1.1vw,16px)}
-.poster-image{aspect-ratio:2/2.55;height:auto}
-.poster-info h3{font-size:clamp(11px,.95vw,14px)}
-.catalog-main{width:min(94%,1320px);padding-top:clamp(24px,3vw,42px)}
-.catalog-hero{padding:clamp(24px,3.5vw,48px);border-radius:18px}
-.catalog-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,165px),1fr));gap:clamp(11px,1.3vw,18px)}
-.watch-main{width:min(100% - 36px,1160px);margin-inline:auto}
-.watch-player{width:min(100%,920px);max-height:520px;margin-inline:auto;aspect-ratio:16/9}
-.watch-title-block,.watch-details{width:min(100%,920px);margin-inline:auto}
-.related-section,.comments-section{width:100%;max-width:1080px;margin-inline:auto}
-.agas-footer-inner{width:min(100%,1320px);margin-inline:auto}
-.vip-section,.membership-banner,.newsletter{width:min(calc(100% - 36px),1320px);margin-left:auto;margin-right:auto}
-@media(min-width:1500px){
- .feature-hero{height:650px}
- .cineva-section{padding-top:38px;padding-bottom:24px}
+/* AGASOBANUYE257 — premium responsive header refresh */
+.cineva-header,.member-header{
+  position:sticky!important;top:0!important;z-index:1000!important;
+  min-height:78px!important;display:flex!important;align-items:center!important;
+  gap:clamp(12px,1.7vw,26px)!important;
+  padding-top:12px!important;padding-bottom:12px!important;
+  background:rgba(5,15,29,.94)!important;
+  border-bottom:1px solid rgba(121,174,248,.2)!important;
+  box-shadow:0 12px 34px rgba(0,0,0,.28),inset 0 -1px rgba(255,255,255,.025)!important;
+  -webkit-backdrop-filter:blur(18px) saturate(145%)!important;backdrop-filter:blur(18px) saturate(145%)!important;
+}
+.cineva-header:after,.member-header:after{
+  content:"";position:absolute;left:clamp(16px,2.4vw,36px);right:clamp(16px,2.4vw,36px);bottom:-1px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(75,145,240,.65) 30%,rgba(214,165,46,.48) 70%,transparent);pointer-events:none
+}
+.cineva-header .cineva-brand,.member-header .cineva-brand{
+  flex:0 0 auto;display:flex!important;align-items:center!important;gap:11px!important;
+  text-decoration:none!important;min-width:max-content
+}
+.cineva-header .cineva-brand img,.member-header .cineva-brand img{
+  width:48px!important;height:48px!important;object-fit:contain!important;padding:3px;
+  border:1px solid rgba(121,174,248,.25)!important;border-radius:13px!important;
+  background:linear-gradient(145deg,rgba(23,105,210,.17),rgba(214,165,46,.08))!important;
+  box-shadow:0 5px 20px rgba(23,105,210,.16)!important
+}
+.cineva-header .cineva-brand b,.member-header .cineva-brand b{
+  display:block;font:850 clamp(16px,1.35vw,20px)/1 'DM Sans',sans-serif!important;letter-spacing:-.7px!important;color:#f7f9ff!important
+}
+.cineva-header .cineva-brand b span,.member-header .cineva-brand b span{color:#f0cc78!important}
+.cineva-header .cineva-brand small,.member-header .cineva-brand small{
+  display:block;margin-top:5px;font:700 7px/1.2 'DM Sans',sans-serif!important;letter-spacing:1.15px!important;color:#91a9c8!important
+}
+.cineva-header .top-links,.member-header .top-links{
+  display:flex;align-items:center;justify-content:center;gap:clamp(12px,1.6vw,24px)!important;
+  flex:1 1 auto;min-width:0
+}
+.cineva-header .top-links a,.member-header .top-links a{
+  position:relative;display:inline-flex;align-items:center;min-height:40px;padding:0 2px!important;
+  color:#b9c9df!important;font:650 12px/1 'DM Sans',sans-serif!important;white-space:nowrap;
+  text-decoration:none!important;transition:color .2s ease,transform .2s ease
+}
+.cineva-header .top-links a:hover,.member-header .top-links a:hover{color:#fff!important;transform:translateY(-1px)}
+.cineva-header .top-links a:after,.member-header .top-links a:after{
+  content:"";position:absolute;left:0;right:100%;bottom:3px;height:2px;border-radius:3px;
+  background:linear-gradient(90deg,#4b91f0,#d6a52e);transition:right .22s ease
+}
+.cineva-header .top-links a:hover:after,.cineva-header .top-links a.active:after,.cineva-header .top-links a.nav-home:after,
+.member-header .top-links a:hover:after,.member-header .top-links a.active:after{right:0}
+.cineva-header .top-links .vip-nav-link,.member-header .top-links .vip-nav-link{
+  color:#f0cc78!important;padding:0 12px!important;min-height:34px;border:1px solid rgba(214,165,46,.27);border-radius:8px;
+  background:linear-gradient(120deg,rgba(214,165,46,.1),rgba(214,165,46,.025))
+}
+.cineva-header .top-links .vip-nav-link:after,.member-header .top-links .vip-nav-link:after{display:none}
+.cineva-header .cineva-search,.member-header .member-search{
+  flex:0 1 245px;min-width:145px;height:42px!important;display:flex;align-items:center;gap:9px;
+  padding:0 13px!important;border:1px solid rgba(121,174,248,.22)!important;border-radius:11px!important;
+  background:rgba(14,32,54,.78)!important;transition:border-color .2s,box-shadow .2s,background .2s
+}
+.cineva-header .cineva-search input,.member-header .member-search input{
+  min-width:0;width:100%;color:#f4f7ff!important;font:500 12px 'DM Sans',sans-serif!important;background:transparent!important
+}
+.cineva-header .cineva-search input::placeholder,.member-header .member-search input::placeholder{color:#8298b7!important}
+.cineva-header .top-actions,.member-header .top-actions{display:flex;align-items:center;gap:9px!important;flex:0 0 auto}
+.cineva-header .icon-action,.cineva-header .profile-action,.cineva-header .menu-action,
+.member-header .icon-action,.member-header .profile-action,.member-header .menu-action{
+  width:40px!important;height:40px!important;min-width:40px!important;border-radius:11px!important;
+  display:inline-flex;align-items:center;justify-content:center;transition:transform .2s,border-color .2s,background .2s
+}
+.cineva-header .icon-action:hover,.cineva-header .profile-action:hover,.member-header .icon-action:hover,.member-header .profile-action:hover{transform:translateY(-2px)}
+.cineva-header .menu-action,.member-header .menu-action{border:1px solid rgba(121,174,248,.25)!important;background:rgba(23,105,210,.1)!important}
+@media(max-width:1050px) and (min-width:850px){
+ .cineva-header,.member-header{gap:12px!important}
+ .cineva-header .cineva-brand img,.member-header .cineva-brand img{width:42px!important;height:42px!important}
+ .cineva-header .cineva-brand small,.member-header .cineva-brand small{display:none}
+ .cineva-header .top-links,.member-header .top-links{gap:12px!important}
+ .cineva-header .top-links a,.member-header .top-links a{font-size:11px!important}
+ .cineva-header .cineva-search{flex-basis:175px;min-width:125px}
 }
 @media(max-width:849px){
- .feature-hero{width:calc(100% - 28px);height:clamp(390px,72vw,540px);min-height:390px;margin-top:14px;border-radius:16px}
- .feature-copy{left:5%;max-width:78%}
- .feature-copy h1{font-size:clamp(30px,6vw,48px)}
- .cineva-section,.content-section,.category-section{padding-top:26px;padding-bottom:16px}
- .poster-row{grid-auto-columns:clamp(138px,27vw,185px)}
- .watch-main{width:calc(100% - 28px)}
- .catalog-main{width:94%}
-}
-@media(max-width:480px){
- html{font-size:15px}
- .feature-hero{width:calc(100% - 20px);height:430px;min-height:430px;margin-top:10px;border-radius:13px}
- .feature-copy{left:5%;right:5%;bottom:10%;max-width:90%}
- .feature-copy h1{font-size:clamp(29px,8vw,38px);letter-spacing:-1px}
- .feature-copy>p:not(.feature-eyebrow){font-size:12px;line-height:1.55}
- .feature-buttons{gap:8px;flex-wrap:wrap}
- .premium-button,.outline-button{min-height:40px;padding:0 13px;font-size:11px}
- .cineva-section,.content-section,.category-section{padding-left:12px;padding-right:12px}
- .cineva-heading{gap:8px}
- .cineva-heading h2,.section-top h2{font-size:19px}
- .poster-row{grid-auto-columns:clamp(126px,39vw,158px);gap:9px}
- .poster-info{padding:8px}
- .poster-info h3{font-size:11px;min-height:30px}
- .watch-main{width:calc(100% - 20px)}
- .watch-player{border-radius:10px}
- .catalog-main{width:calc(100% - 20px)}
- .catalog-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- .agas-footer-inner{padding-left:16px;padding-right:16px}
-}
-
-
-/* Netflix-inspired brand, typography and content-card proportions */
-.cineva-header .cineva-brand{gap:10px;white-space:nowrap}
-.cineva-header .cineva-brand img{width:46px!important;height:46px!important;border:0!important;border-radius:8px!important;box-shadow:none!important;object-fit:contain}
-.cineva-header .cineva-brand b{font:800 clamp(17px,1.5vw,21px)/1 'DM Sans',sans-serif!important;letter-spacing:-.65px!important}
-.cineva-header .cineva-brand small{font:700 7px 'DM Sans',sans-serif!important;letter-spacing:1.15px!important}
-.cineva-header .top-links a{font:600 12px 'DM Sans',sans-serif!important}
-.cineva-header .cineva-search{height:38px!important;border-radius:7px!important}
-.cineva-section .cineva-heading h2,.related-section>h2,.comments-heading h2{font:750 clamp(19px,1.8vw,25px)/1.2 'DM Sans',sans-serif;letter-spacing:-.35px}
-.poster-card,.member-card{border-radius:10px!important}
-.poster-row{grid-auto-columns:clamp(145px,14.5vw,190px);gap:12px}
-.poster-image{aspect-ratio:2/2.8!important}
-.poster-info{padding:10px 11px 12px!important}
-.poster-info h3,.member-card-info h2{font:700 13px/1.35 'DM Sans',sans-serif!important;letter-spacing:-.15px;min-height:34px;margin-bottom:7px}
-.poster-meta{font:500 10px 'DM Sans',sans-serif}
-.catalog-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px}
-.catalog-grid .poster-info h3{font-size:13px}
-.member-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px}
-.member-card-info h2{min-height:0}
-.catalog-hero h1,.member-heading h1,.vip-page-content h1{letter-spacing:-1.1px}
-@media(max-width:849px){
- .cineva-header .cineva-brand img{width:40px!important;height:40px!important}
- .cineva-header .cineva-brand b{font-size:18px!important}
- .poster-row{grid-auto-columns:clamp(140px,26vw,175px)}
- .catalog-grid,.member-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .cineva-header,.member-header{min-height:68px!important;padding-top:9px!important;padding-bottom:9px!important}
+ .cineva-header .cineva-brand img,.member-header .cineva-brand img{width:42px!important;height:42px!important}
+ .cineva-header .cineva-brand small,.member-header .cineva-brand small{font-size:6px!important;letter-spacing:.8px!important}
+ .cineva-header .top-actions,.member-header .top-actions{gap:7px!important}
+ .cineva-header .icon-action,.cineva-header .profile-action,.cineva-header .menu-action,
+ .member-header .icon-action,.member-header .profile-action,.member-header .menu-action{width:38px!important;height:38px!important;min-width:38px!important}
 }
 @media(max-width:560px){
- .cineva-header .cineva-brand img{width:35px!important;height:35px!important}
- .cineva-header .cineva-brand b{font-size:16px!important}
- .cineva-header .cineva-brand small{font-size:6px!important;letter-spacing:.7px!important}
- .poster-row{grid-auto-columns:clamp(128px,39vw,155px);gap:9px}
- .poster-info h3,.member-card-info h2{font-size:11px!important;min-height:30px}
- .catalog-grid,.member-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
- .catalog-grid .poster-info h3{font-size:11px}
+ .cineva-header,.member-header{min-height:62px!important;gap:7px!important;padding-left:12px!important;padding-right:12px!important}
+ .cineva-header .cineva-brand,.member-header .cineva-brand{gap:7px!important}
+ .cineva-header .cineva-brand img,.member-header .cineva-brand img{width:36px!important;height:36px!important;border-radius:10px!important}
+ .cineva-header .cineva-brand b,.member-header .cineva-brand b{font-size:15px!important;letter-spacing:-.55px!important}
+ .cineva-header .cineva-brand small,.member-header .cineva-brand small{font-size:5px!important;letter-spacing:.55px!important;margin-top:3px}
+ .cineva-header .top-actions,.member-header .top-actions{gap:5px!important}
+ .cineva-header .icon-action,.cineva-header .profile-action,.cineva-header .menu-action,
+ .member-header .icon-action,.member-header .profile-action,.member-header .menu-action{width:34px!important;height:34px!important;min-width:34px!important;border-radius:9px!important}
 }
+@media(prefers-reduced-motion:reduce){.cineva-header *,.member-header *{transition:none!important}}
