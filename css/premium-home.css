@@ -1,131 +1,46 @@
-/* AGASOBANUYE257 premium homepage refinement */
-:root{--cv-accent:#bd72e5;--cv-accent-2:#e34f91;--cv-glow:rgba(189,114,229,.22)}
-body{font-family:'DM Sans',sans-serif;background:radial-gradient(ellipse at 50% -18%,#241431 0,transparent 42%),var(--cv-bg)}
-.cineva-header{backdrop-filter:blur(18px);box-shadow:0 12px 36px #0003}
-.cineva-brand b,.cineva-heading h2,.feature-copy h1,.newsletter h2,.footer-column h3{font-family:'Playfair Display',Georgia,serif}
-.cineva-brand img{box-shadow:0 0 24px var(--cv-glow)}
-.top-links a{position:relative;padding:9px 0;transition:color .2s}
-.top-links a:hover,.top-links a:focus-visible{color:#e5b4f5}
-.top-links a:after{content:"";position:absolute;left:0;right:100%;bottom:0;height:2px;background:linear-gradient(90deg,var(--cv-purple),var(--cv-pink));transition:right .2s}
-.top-links a:hover:after,.top-links a:focus-visible:after{right:0}
-.cineva-search{box-shadow:inset 0 1px #ffffff08,0 10px 28px #0002;transition:border-color .2s,box-shadow .2s}
-.cineva-search:focus-within{border-color:#a95bd2;box-shadow:0 0 0 4px var(--cv-glow)}
-.feature-hero{isolation:isolate;box-shadow:0 28px 80px #0007;border-color:#56366a}
-.feature-hero:after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;box-shadow:inset 0 0 0 1px #ffffff12,inset 0 -100px 160px #08071155}
-.feature-image{filter:saturate(1.08);transform:scale(1.001)}
-.feature-overlay{background:linear-gradient(90deg,rgba(8,7,17,.96) 0%,rgba(8,7,17,.72) 42%,rgba(8,7,17,.12) 100%),linear-gradient(0deg,rgba(8,7,17,.82),transparent 64%)}
-.feature-eyebrow{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border:1px solid #b56bd455;border-radius:30px;background:#1b1029b8}
-.feature-copy h1{max-width:780px;text-wrap:balance;text-shadow:0 5px 25px #0008}
-.feature-buttons .premium-button{box-shadow:0 10px 28px #a64bd144;transition:transform .2s,box-shadow .2s}
-.feature-buttons .premium-button:hover{transform:translateY(-3px);box-shadow:0 15px 35px #a64bd166}
-.outline-button:hover{border-color:#bd72e5;background:#282037}
-.cineva-section{position:relative}
-.cineva-heading{align-items:center}
-.heading-icon{box-shadow:0 8px 25px #9d4cc522}
-.category-tile{isolation:isolate;box-shadow:0 15px 35px #0003;transition:transform .25s,border-color .25s,box-shadow .25s}
-.category-tile:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(135deg,#ffffff10,transparent 45%)}
-.category-tile:hover{transform:translateY(-6px);border-color:#a95bd2;box-shadow:0 20px 42px #0006,0 0 24px #a95bd21c}
-.category-tile>span{border:1px solid #ffffff1a;box-shadow:0 5px 18px #0004}
-.tile-action{background-image:radial-gradient(ellipse at 80% 15%,#a64bd155,transparent 48%),linear-gradient(135deg,#342044,#151323 75%)}
-.tile-comedy{background-image:radial-gradient(ellipse at 85% 15%,#d78a4d55,transparent 48%),linear-gradient(135deg,#49301f,#151323 75%)}
-.tile-horror{background-image:radial-gradient(ellipse at 85% 15%,#d0448355,transparent 48%),linear-gradient(135deg,#3b172b,#151323 75%)}
-.tile-drama{background-image:radial-gradient(ellipse at 85% 15%,#557bd255,transparent 48%),linear-gradient(135deg,#1c2c4a,#151323 75%)}
-.tile-romance{background-image:radial-gradient(ellipse at 85% 15%,#e66ca655,transparent 48%),linear-gradient(135deg,#4a203b,#151323 75%)}
-.tile-school{background-image:radial-gradient(ellipse at 85% 15%,#4cbaa455,transparent 48%),linear-gradient(135deg,#173a37,#151323 75%)}
-.tile-animation{background-image:radial-gradient(ellipse at 85% 15%,#d9bb5a55,transparent 48%),linear-gradient(135deg,#443b1e,#151323 75%)}
-.tile-adventure{background-image:radial-gradient(ellipse at 85% 15%,#5f9fd855,transparent 48%),linear-gradient(135deg,#1b3546,#151323 75%)}
-.poster-card{box-shadow:0 12px 28px #0003;transition:transform .25s,border-color .25s,box-shadow .25s}
-.poster-card:hover{transform:translateY(-7px);border-color:#a95bd2;box-shadow:0 20px 38px #0006,0 0 24px #a95bd21c}
-.poster-image{overflow:hidden}
-.poster-image img{transition:transform .45s}
-.poster-card:hover .poster-image img{transform:scale(1.055)}
-.poster-info h3{font-family:'Playfair Display',Georgia,serif}
-.poster-label{backdrop-filter:blur(10px);background:#171020d9;border-color:#b56bd455}
-.filter-chip{cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
-.filter-chip:hover{transform:translateY(-2px);border-color:#a95bd2}
-.newsletter{position:relative;overflow:hidden;box-shadow:0 24px 65px #0005}
-.newsletter:after{content:"257";position:absolute;right:4%;bottom:-90px;font:800 260px 'Playfair Display',serif;color:#ffffff08;pointer-events:none}
-.newsletter form,.newsletter h2,.newsletter p,.newsletter-icon,.newsletter small{position:relative;z-index:1}
-.cineva-footer{background:linear-gradient(180deg,transparent,#0d0b18 35%)}
-.social-links a{transition:transform .2s,border-color .2s,background .2s}
-.social-links a:hover{transform:translateY(-4px);border-color:#b56bd4;background:#251630}
-.mobile-bottom-nav{backdrop-filter:blur(18px);box-shadow:0 -10px 30px #0004}
-.mobile-bottom-nav a,.mobile-bottom-nav button{min-width:54px}
-.mobile-bottom-nav a:focus-visible,.mobile-bottom-nav button:focus-visible,.category-tile:focus-visible,.poster-card:focus-visible{outline:2px solid #d28be9;outline-offset:3px}
-@media(min-width:1100px){.cineva-header{padding-left:5%;padding-right:5%}.feature-hero{margin-left:5%;margin-right:5%;height:min(760px,78vh)}.cineva-section{padding-left:5%;padding-right:5%}.category-cards{grid-template-columns:repeat(4,minmax(0,1fr))}.poster-row{grid-auto-columns:minmax(190px,18%)}}
-@media(max-width:849px){.feature-overlay{background:linear-gradient(0deg,rgba(8,7,17,.98),rgba(8,7,17,.15) 100%)}.feature-copy{max-width:680px}.poster-card:hover{transform:translateY(-3px)}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
-
-/* Branded artwork placeholder shown until an ImageKit poster is uploaded. */
-.poster-placeholder{width:100%;height:100%;display:grid;place-items:center;position:relative;overflow:hidden;background:radial-gradient(ellipse at 70% 20%,#8b4cb455,transparent 42%),linear-gradient(145deg,#30203f,#141222 72%)}
-.poster-placeholder:before,.poster-placeholder:after{content:"";position:absolute;border:1px solid #d6a3ed24;border-radius:50%;width:72%;aspect-ratio:1}
-.poster-placeholder:after{width:105%;}
-.poster-placeholder>span{position:relative;font:800 16px 'DM Sans',sans-serif;letter-spacing:2px;color:#f4e8fa;text-shadow:0 4px 18px #0008}
-.poster-placeholder>span>span{color:#d68be8}
-.poster-image:has(.poster-placeholder){background:#171323}
-
-/* Requested additional genre tiles */
-.tile-erotic{background-image:radial-gradient(ellipse at 85% 15%,#d45c9a66,transparent 48%),linear-gradient(135deg,#481b38,#151323 75%)}
-.tile-others{background-image:radial-gradient(ellipse at 85% 15%,#8a78b866,transparent 48%),linear-gradient(135deg,#302744,#151323 75%)}
-.genre-shelf{scroll-margin-top:110px}
-
-
-/* Medium-density layout: balanced sizing instead of oversized sections */
-.cineva-header{min-height:68px;padding-top:8px;padding-bottom:8px}
-.cineva-brand img{width:52px;height:52px}
-.cineva-brand b{font-size:25px}
-.cineva-brand small{font-size:9px}
-.top-links{gap:25px}
-.top-links a{font-size:14px}
-.cineva-search{height:42px;max-width:360px}
-.feature-hero{height:560px;min-height:480px;margin-top:16px;border-radius:20px}
-.feature-copy{left:5%;bottom:11%;max-width:680px}
-.feature-copy h1{font-size:clamp(34px,5vw,58px);line-height:1.08}
-.feature-eyebrow{font-size:10px;padding:7px 11px}
-.feature-tags{gap:7px;margin:12px 0}
-.feature-tags span{font-size:11px;padding:6px 11px}
-.feature-copy>p:not(.feature-eyebrow){font-size:14px;line-height:1.6;max-width:540px}
-.feature-buttons{gap:10px;margin-top:18px}
-.premium-button,.outline-button{min-height:44px;padding:0 19px;font-size:13px;border-radius:9px}
-.hero-pagination{gap:12px;padding:5px 10px}
-.hero-pagination button{width:31px;height:31px;font-size:21px}
-.cineva-section{padding-top:30px;padding-bottom:25px}
-.cineva-heading{gap:12px;margin-bottom:17px}
-.heading-icon{width:46px;height:46px;border-radius:12px;font-size:21px}
-.cineva-heading h2{font-size:clamp(21px,2.5vw,29px)}
-.cineva-heading p{font-size:12px}
-.row-heading>a{font-size:12px}
-.poster-row{grid-auto-columns:minmax(145px,17%);gap:13px;padding-bottom:13px}
-.poster-card{border-radius:14px}
-.poster-image{height:220px}
-.poster-info{padding:10px}
-.poster-info h3{font-size:14px;margin-bottom:20px}
-.poster-meta{font-size:10px}
-.poster-label{font-size:9px;padding:5px 7px}
-.filter-row{gap:7px}
-.filter-chip{font-size:10px;padding:7px 13px}
-.newsletter{margin:38px 5%;padding:32px 4%;border-radius:22px}
-.newsletter-icon{font-size:25px}
-.newsletter h2{font-size:30px;margin:14px 0 8px}
-.newsletter p{font-size:13px}
-.newsletter input,.newsletter button{height:48px;font-size:13px;border-radius:10px}
-.cineva-footer{padding:38px 5% 85px}
-.footer-main{gap:25px}
-.footer-logo img{width:58px;height:58px}
-.footer-logo b{font-size:27px}
-.footer-about p,.footer-column p{font-size:13px}
-.footer-column h3{font-size:17px}
-.footer-column a{font-size:12px}
-.social-links a{width:36px;height:36px;font-size:16px}
-.footer-bottom{font-size:11px}
-@media(min-width:1100px){.feature-hero{height:560px;max-height:68vh;margin-left:5%;margin-right:5%}.poster-row{grid-auto-columns:minmax(145px,16%)}}
-@media(max-width:849px){.feature-hero{height:520px;min-height:440px}.feature-copy{left:5%;right:5%;bottom:14%}.poster-row{grid-auto-columns:minmax(140px,29%)}.poster-image{height:215px}.cineva-section{padding:28px 4%}.newsletter{margin:35px 4%}}
-@media(max-width:480px){.cineva-brand img{width:42px;height:42px}.cineva-brand b{font-size:20px}.cineva-brand small{font-size:7px}.feature-hero{height:470px;min-height:420px;border-radius:15px}.feature-copy h1{font-size:34px}.feature-copy>p:not(.feature-eyebrow){font-size:12px}.feature-tags span{font-size:9px;padding:5px 8px}.feature-buttons .premium-button,.feature-buttons .outline-button{min-height:40px;padding:0 12px;font-size:11px}.heading-icon{width:38px;height:38px;font-size:18px}.cineva-heading h2{font-size:20px}.cineva-heading p{font-size:10px}.poster-row{grid-auto-columns:minmax(125px,42%);gap:10px}.poster-image{height:185px}.poster-info h3{font-size:12px;margin-bottom:14px}.poster-meta{font-size:9px}.newsletter h2{font-size:26px}.footer-logo b{font-size:22px}}
-
-
-/* Keep the footer at the true end of the page; on short pages it rests at viewport bottom. */
-html,body{min-height:100%}
-body{min-height:100vh;min-height:100svh;display:flex;flex-direction:column}
-body>main{flex:1 0 auto;width:100%}
-body>.cineva-footer{flex-shrink:0;margin-top:auto}
-@media(max-width:849px){body>.cineva-footer{padding-bottom:calc(85px + env(safe-area-inset-bottom))}}
+/* Premium single-row desktop header and refined bottom footer */
+@media(min-width:850px){
+  .cineva-header{
+    display:grid;
+    grid-template-columns:auto auto minmax(190px,360px) auto;
+    grid-template-rows:1fr;
+    align-items:center;
+    gap:clamp(16px,2.2vw,34px);
+    min-height:78px;
+    padding:10px clamp(24px,4.5vw,72px);
+    background:rgba(10,8,20,.82);
+    border-bottom:1px solid rgba(190,126,224,.2);
+    box-shadow:0 12px 38px rgba(0,0,0,.34),inset 0 1px rgba(255,255,255,.035);
+  }
+  .cineva-header .cineva-brand{grid-column:1;grid-row:1;white-space:nowrap}
+  .cineva-header .top-links{grid-column:2;grid-row:1;display:flex;justify-content:center;gap:clamp(14px,1.8vw,28px);white-space:nowrap}
+  .cineva-header .cineva-search{grid-column:3;grid-row:1;width:100%;max-width:360px;height:42px;margin:0;border-radius:999px;background:rgba(255,255,255,.055);border-color:rgba(190,126,224,.22)}
+  .cineva-header .top-actions{grid-column:4;grid-row:1;gap:9px;white-space:nowrap}
+  .cineva-header .profile-action{width:42px;height:42px;border-radius:50%;font-size:21px;box-shadow:0 5px 18px rgba(169,91,210,.28)}
+  .cineva-header .menu-action{width:42px;height:42px;border-radius:50%;font-size:21px}
+  .cineva-header .icon-action{font-size:23px}
+  .cineva-header .cineva-brand img{width:48px;height:48px}
+  .cineva-header .cineva-brand b{font-size:23px}
+}
+.cineva-header{isolation:isolate}
+.cineva-header:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,rgba(190,126,224,.42),rgba(227,79,145,.3),transparent);pointer-events:none}
+.cineva-header .top-links a{font-family:'DM Sans',sans-serif;font-weight:700;letter-spacing:.1px}
+.cineva-header .top-links a:hover{color:#f0c9ff}
+.cineva-header .cineva-search{transition:background .2s,border-color .2s,box-shadow .2s}
+.cineva-header .cineva-search:focus-within{background:rgba(255,255,255,.09);border-color:#bd72e5;box-shadow:0 0 0 3px rgba(189,114,229,.16),0 8px 25px rgba(0,0,0,.2)}
+.cineva-footer{
+  position:relative;
+  width:100%;
+  margin-top:auto;
+  padding-top:clamp(30px,4vw,52px);
+  background:linear-gradient(180deg,rgba(13,11,24,.72),#0d0b18 22%,#090812 100%);
+  border-top:1px solid rgba(190,126,224,.22);
+  box-shadow:0 -18px 55px rgba(0,0,0,.18);
+}
+.cineva-footer:before{content:"";position:absolute;top:-1px;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(189,114,229,.55),rgba(227,79,145,.42),transparent)}
+.cineva-footer .footer-main,.cineva-footer .footer-bottom{width:100%;max-width:1440px;margin-left:auto;margin-right:auto}
+.cineva-footer .footer-bottom{padding-bottom:4px}
+@media(max-width:849px){
+  .cineva-header{background:rgba(10,8,20,.91);border-bottom-color:rgba(190,126,224,.2)}
+  .cineva-footer{padding-top:30px;padding-bottom:calc(85px + env(safe-area-inset-bottom))}
+}
