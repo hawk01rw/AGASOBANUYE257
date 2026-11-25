@@ -120,7 +120,7 @@
 
   async function loadCatalogue() {
     msg($("#catalogueMessage"),"Loading catalogue...");
-    const {data,error}=await db().from("movies").select("id,title,slug,synopsis,genre,release_year,poster_url,backdrop_url,imagekit_file_id,backdrop_imagekit_file_id,video_path,download_url,trailer_url,duration_minutes,language,featured,published,content_type,series_id,season_number,episode_number,episode_title,created_at").order("created_at",{ascending:false}).limit(5000);
+    const {data,error}=await db().from("movies").select("id,title,slug,synopsis,genre,release_year,poster_url,backdrop_url,imagekit_file_id,backdrop_imagekit_file_id,video_path,download_url,trailer_url,duration_minutes,language,featured,published,content_type,series_id,season_number,episode_number,episode_title,watch_url,created_at").order("created_at",{ascending:false}).limit(5000);
     if(error) throw error;
     state.catalogue=data||[];
     $("#statMovies").textContent=state.catalogue.filter(x=>x.content_type==="movie"||!x.content_type).length;
@@ -222,7 +222,7 @@
     $("#contentTitle").value=m.title||"";$("#contentSlug").value=m.slug||"";
     $("#contentGenre").value=m.genre||"Drama";$("#contentYear").value=m.release_year||"";
     $("#contentLanguage").value=m.language||"Kinyarwanda";$("#contentDuration").value=m.duration_minutes||"";
-    $("#contentSynopsis").value=m.synopsis||"";$("#contentTrailer").value=m.trailer_url||"";$("#contentDownloadUrl").value=m.download_url||"";
+    $("#contentSynopsis").value=m.synopsis||"";$("#contentTrailer").value=m.trailer_url||"";$("#contentWatchUrl").value=m.watch_url||"";$("#contentDownloadUrl").value=m.download_url||"";
     $("#seasonNumber").value=m.season_number||"";$("#episodeNumber").value=m.episode_number||"";
     $("#contentFeatured").checked=!!m.featured;$("#contentPublished").checked=!!m.published;
     updateTypeFields();if(m.series_id)$("#seriesPicker").value=m.series_id;
@@ -316,6 +316,9 @@
       if(videoFiles.some(file=>!file.type.startsWith("video/")))throw new Error("Choose valid video files only.");
       const posterFile=$("#posterFile").files[0],backdropFile=$("#backdropFile").files[0],posterUrl=$("#posterUrl").value.trim(),backdropUrl=$("#backdropUrl").value.trim();
       const validImageUrl=value=>{if(!value)return true;try{const u=new URL(value);return u.protocol==="https:"||u.protocol==="http:";}catch(_){return false;}};
+       const watchUrl=$("#contentWatchUrl").value.trim();
+       const validWatchUrl=value=>{if(!value)return true;try{const u=new URL(value,location.href);return (u.protocol==="https:"||u.protocol==="http:")&&(value.startsWith("/")||value.startsWith("./")||/^https?:\/\//i.test(value));}catch(_){return false;}};
+       if(!validWatchUrl(watchUrl))throw new Error("Enter a valid http://, https:// or same-site relative Watch URL.");
       if(!validImageUrl(posterUrl)||!validImageUrl(backdropUrl))throw new Error("Enter a valid http:// or https:// image URL.");
       const poster=await uploadArtwork(posterFile,posterUrl,"/agasobanuye257/posters",$("#posterStatus"),state.editing?.poster_url,state.editing?.imagekit_file_id,slug+"-poster");
       const backdrop=await uploadArtwork(backdropFile,backdropUrl,"/agasobanuye257/backdrops",$("#backdropStatus"),state.editing?.backdrop_url,state.editing?.backdrop_imagekit_file_id,slug+"-backdrop");
@@ -329,7 +332,7 @@
         release_year:$("#contentYear").value?Number($("#contentYear").value):null,
         language:$("#contentLanguage").value.trim()||"Kinyarwanda",
         duration_minutes:type==="series"||!$("#contentDuration").value?null:Number($("#contentDuration").value),
-        trailer_url:$("#contentTrailer").value.trim()||null,download_url:$("#contentDownloadUrl").value.trim()||null,
+        trailer_url:$("#contentTrailer").value.trim()||null,watch_url:watchUrl||null,download_url:$("#contentDownloadUrl").value.trim()||null,
         featured:type==="series"?false:$("#contentFeatured").checked,published:$("#contentPublished").checked,
         series_id:seriesId,season_number:type==="episode"?Number($("#seasonNumber").value):null,
         episode_number:type==="episode"?Number($("#episodeNumber").value):null,episode_title:type==="episode"?title:null
