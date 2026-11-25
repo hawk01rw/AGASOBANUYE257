@@ -1,0 +1,53 @@
+/* AGASOBANUYE257 — unified stable design system */
+:root{
+  color-scheme:dark;
+  --aga-bg:#090e15;
+  --aga-surface:#101923;
+  --aga-surface-2:#151f2b;
+  --aga-border:rgba(166,185,207,.15);
+  --aga-text:#edf2f8;
+  --aga-muted:#9baabd;
+  --aga-blue:#739bc8;
+  --aga-blue-strong:#4e7eaf;
+  --aga-gold:#b99a62;
+  --aga-radius:14px;
+  --aga-shadow:0 14px 38px rgba(0,0,0,.24);
+}
+html{font-size:14px;background:var(--aga-bg)!important;scroll-behavior:smooth}
+body,body *{font-family:"DM Sans",Arial,sans-serif!important}
+body{background:var(--aga-bg)!important;color:var(--aga-text)!important;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,h5,h6,strong,b{font-family:"DM Sans",Arial,sans-serif!important;letter-spacing:-.025em}
+p{color:inherit}
+a{transition:color .18s ease,border-color .18s ease,background .18s ease}
+button,input,select,textarea{font:inherit!important}
+:where(input,select,textarea){color:var(--aga-text)!important;background:#0d151f!important;border:1px solid var(--aga-border)!important;border-radius:9px!important}
+:where(input,select,textarea):focus{outline:none!important;border-color:rgba(115,155,200,.72)!important;box-shadow:0 0 0 3px rgba(115,155,200,.12)!important}
+:where(button,.premium-button,.outline-button,.admin-button,.episode-watch,.episode-download){border-radius:9px!important;transition:transform .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease}
+:where(button,.premium-button,.outline-button,.admin-button):focus-visible,a:focus-visible{outline:2px solid var(--aga-blue)!important;outline-offset:3px}
+:where(.cineva-header,.watch-header,.admin-header,.member-header){background:rgba(9,14,21,.96)!important;border-color:var(--aga-border)!important;box-shadow:0 6px 24px rgba(0,0,0,.18)!important;backdrop-filter:blur(14px)}
+:where(.cineva-header,.watch-header) a{color:#dce5ef}
+:where(.cineva-header,.watch-header) a:hover,:where(.cineva-header,.watch-header) a.active{color:#d7bd88!important}
+:where(.cineva-search,.search-box,.member-search){background:#111b27!important;border:1px solid var(--aga-border)!important;box-shadow:none!important}
+:where(.feature-hero,.watch-player){box-shadow:var(--aga-shadow)!important}
+:where(.cineva-section,.content-section,.category-section){color:var(--aga-text)}
+:where(.poster-card,.content-card,.movie-card,.series-card,.admin-panel,.upload-card,.comment-form,.episode-row){background:var(--aga-surface)!important;border:1px solid var(--aga-border)!important;box-shadow:none}
+:where(.poster-card,.content-card,.movie-card,.series-card){border-radius:12px!important;overflow:hidden}
+:where(.poster-card,.content-card,.movie-card,.series-card):hover{border-color:rgba(115,155,200,.48)!important;transform:translateY(-2px)}
+:where(.poster-info,.poster-info h3,.poster-meta){color:var(--aga-text)}
+:where(.premium-button,.admin-button.primary,.episode-watch){background:linear-gradient(135deg,#739bc8,#4e7eaf)!important;color:#07111c!important;border:1px solid transparent!important;font-weight:700!important;box-shadow:0 5px 16px rgba(78,126,175,.16)!important}
+:where(.outline-button,.admin-button,.episode-download){background:#142131!important;color:#dce8f5!important;border:1px solid rgba(115,155,200,.28)!important}
+:where(.premium-button,.outline-button,.admin-button,.episode-watch,.episode-download):hover{filter:brightness(1.08);transform:translateY(-1px)}
+:where(.cineva-heading h2,.related-section h2,.comments-heading h2){color:var(--aga-text)!important}
+:where(.cineva-heading p,.admin-muted,.admin-hint,.poster-meta,.watch-details p){color:var(--aga-muted)!important}
+:where(.newsletter,.detail-dialog,.small-dialog){background:linear-gradient(145deg,#121d29,#0d151f)!important;border:1px solid var(--aga-border)!important;border-radius:var(--aga-radius)!important;box-shadow:var(--aga-shadow)!important}
+:where(.admin-page){background:var(--aga-bg)!important;color:var(--aga-text)!important}
+.admin-page:before{opacity:.55!important}
+:where(.admin-page .admin-panel,.admin-page .admin-stats>div){border-color:var(--aga-border)!important;border-radius:12px!important;background:var(--aga-surface)!important;box-shadow:none!important}
+:where(.admin-page .admin-form input,.admin-page .admin-form select,.admin-page .admin-form textarea,.admin-page .search-form input){background:#0b131d!important;border-color:var(--aga-border)!important;border-radius:8px!important}
+:where(.admin-page .admin-section-heading h2){color:var(--aga-text)!important}
+:where(.watch-main .watch-title-block,.watch-main .watch-details,.comments-section){border-color:var(--aga-border)!important}
+:where(.watch-main .watch-kicker,.episode-number){color:#9bbce0!important}
+:where(.detail-chips span){background:#142131!important;border-color:rgba(115,155,200,.24)!important;color:#dce8f5!important}
+::selection{background:rgba(115,155,200,.32);color:white}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
+@media(max-width:700px){:where(.admin-panel,.newsletter,.comment-form){border-radius:11px!important}}
