@@ -44,7 +44,7 @@ function card(movie) {
   const rating = escapeHTML(movie.rating || movie.voteAverage || "—");
   const tag = escapeHTML(movie.tag || "MOVIE");
   const artwork = poster
-    ? '<img src="' + escapeHTML(poster) + '" alt="' + title + ' poster" loading="lazy">'
+    ? '<img src="' + escapeHTML(poster) + '" alt="' + title + ' poster" loading="lazy" decoding="async">'
     : '<div class="poster-placeholder" aria-hidden="true"><span>AGASOBANUYE<span>257</span></span></div>';
   const isSaved = savedIds.has(String(movie.id));
   return '<article class="poster-card" data-id="' + escapeHTML(movie.id) +
