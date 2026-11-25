@@ -3,13 +3,14 @@
   const config = window.AGASOBANUYE257_CONFIG || {};
 
   async function uploadImage(file, options = {}) {
-    if (!window.AgasobanuyeDB?.client) throw new Error("Supabase is not configured.");
+    const client = options.client || window.AgasobanuyeDB?.client;
+    if (!client) throw new Error("Supabase is not configured.");
     if (!config.imagekitPublicKey) throw new Error("Add imagekitPublicKey to supabase-config.js.");
     if (!file) throw new Error("Choose an image to upload.");
     if (!file.type?.startsWith("image/")) throw new Error("Please choose an image file.");
     if (file.size > 15 * 1024 * 1024) throw new Error("Image must be 15 MB or smaller.");
 
-    const { data: auth, error: authError } = await window.AgasobanuyeDB.client.functions.invoke("imagekit-auth", { body: {} });
+    const { data: auth, error: authError } = await client.functions.invoke("imagekit-auth", { body: {} });
     if (authError) throw new Error(authError.message || "Could not authorize ImageKit upload.");
     if (!auth?.token || !auth?.signature || !auth?.expire) throw new Error("ImageKit authorization response was incomplete.");
 
