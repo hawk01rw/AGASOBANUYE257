@@ -37,7 +37,8 @@
     const lines = [["Email","Subscribed at","Active"], ...subscribers.map(row => [
       row.email, row.subscribed_at, row.is_active ? "Yes" : "No"
     ])];
-    const csv = "\uFEFF" + lines.map(row => row.map(quote).join(",")).join("\r\n");
+    const csv = "\uFEFF" + lines.map(row => row.map(quote).join(",")).join("\r
+");
     const url = URL.createObjectURL(new Blob([csv], {type:"text/csv;charset=utf-8"}));
     const link = document.createElement("a");
     link.href = url;
@@ -59,7 +60,8 @@
       const db=await getClient();
       const {data,error}=await db.from("newsletter_subscribers").select("id,email,is_active,subscribed_at").order("subscribed_at",{ascending:false}).limit(500);
       if(error)throw error;
-      const rows=data||[];\n      subscribers=rows;
+      const rows=data||[];
+      subscribers=rows;
       list.innerHTML=rows.map(x=>'<article class="catalogue-item"><div class="catalogue-copy"><strong>'+escapeHTML(x.email)+'</strong><small>Subscribed '+escapeHTML(new Date(x.subscribed_at).toLocaleString())+'</small></div><div class="catalogue-actions"><button class="admin-button danger" type="button" data-remove-subscriber="'+escapeHTML(x.id)+'">Remove</button></div></article>').join("")||'<p class="admin-hint">No newsletter subscribers yet.</p>';
       status(rows.length+" subscriber"+(rows.length===1?"":"s")+" loaded.");
     }catch(error){
@@ -75,7 +77,8 @@
     observer.observe(panel,{attributes:true,attributeFilter:["hidden"]});
     if(!panel.hidden)loadSubscribers();
   }
-  $("#newsletterRefresh")?.addEventListener("click",loadSubscribers);\n  $("#newsletterExport")?.addEventListener("click",exportSubscribers);
+  $("#newsletterRefresh")?.addEventListener("click",loadSubscribers);
+  $("#newsletterExport")?.addEventListener("click",exportSubscribers);
   $("#newsletterAdminList")?.addEventListener("click",async event=>{
     const button=event.target.closest("[data-remove-subscriber]");
     if(!button)return;
