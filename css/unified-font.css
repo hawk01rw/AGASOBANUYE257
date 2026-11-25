@@ -1,18 +1,13 @@
-/* AGASOBANUYE257 — one typeface across every page.
-   Playfair Display matches the series-title styling on the Watch page. */
-html, body, body *,
-html body :is(input, textarea, select, button, option, optgroup) {
-  font-family: "Playfair Display", Georgia, serif !important;
+/* AGASOBANUYE257 unified typography: elegant titles, readable interface. */
+html,body,body *{
+  font-family:"DM Sans",Arial,sans-serif!important;
 }
-
-
-/* Stronger final override: component font shorthands in headers/admin were
-   outranking the earlier body-wide family rule. */
-html body .premium-header *,
-html body .premium-header *::before,
-html body .premium-header *::after,
-html body .admin-page *,
-html body .admin-page *::before,
-html body .admin-page *::after {
-  font-family: "Playfair Display", Georgia, serif !important;
+html body :is(h1,h2,h3,h4,h5,h6,.hero-title,.hero-content h1,.watch-title,
+.watch-title-block h1,.series-title,.movie-title,.poster-title,.section-title,
+.cineva-heading h2,.related-section h2,.comments-heading h2,.pro-brand,
+.brand-logo,.logo-text,.editor-heading,.pro-card-head h2){
+  font-family:"Playfair Display",Georgia,serif!important;
+}
+html body :is(button,input,select,textarea,option,optgroup){
+  font-family:"DM Sans",Arial,sans-serif!important;
 }
