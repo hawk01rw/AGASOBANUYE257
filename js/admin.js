@@ -15,12 +15,53 @@
         }
       })
     : null;
-  const state = { catalogue: [], editing: null, session: null, selectedSeries: null, categories: [], translators: [], announcements: [] };
+  const state = { catalogue: [], editing: null, session: null, selectedSeries: null, categories: [], translators: [], announcements: [], tmdbResults: [] };
   const db = () => adminClient || window.AgasobanuyeDB?.client;
   const msg = (node, value, error=false) => { node.textContent=value; node.classList.toggle("error",error); };
   const esc = value => String(value ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const slugify = value => String(value||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,190);
   const ownerEmail = "mrhawk2007@gmail.com";
+
+  async function searchTmdb(event) {
+    event.preventDefault();
+    const query=$("#tmdbQuery").value.trim();
+    if(query.length<2){msg($("#tmdbSearchMessage"),"Enter at least two characters to search.",true);return;}
+    const button=$("#tmdbSearchButton");button.disabled=true;
+    msg($("#tmdbSearchMessage"),"Searching TMDB...");
+    $("#tmdbSearchResults").innerHTML="";
+    try{
+      const {data,error}=await db().functions.invoke("tmdb-search",{body:{query}});
+      if(error)throw error;
+      if(data?.error)throw new Error(data.error);
+      state.tmdbResults=Array.isArray(data?.results)?data.results:[];
+      $("#tmdbSearchResults").innerHTML=state.tmdbResults.map((item,index)=>{
+        const kind=item.content_type==="series"?"Series":"Movie";
+        const meta=[kind,item.release_year||"Year unknown",item.vote_average?"★ "+Number(item.vote_average).toFixed(1):"No rating"].join(" · ");
+        return '<article class="tmdb-result"><div class="tmdb-result-copy"><strong>'+esc(item.title||"Untitled")+'</strong><small>'+esc(meta)+'</small><p>'+esc(item.synopsis||"No synopsis available.")+'</p></div><button class="admin-button subtle" type="button" data-tmdb-select="'+index+'">Use details</button></article>';
+      }).join("")||'<p class="admin-hint">No matching movies or series found.</p>';
+      msg($("#tmdbSearchMessage"),state.tmdbResults.length+" TMDB result(s). Choose one to fill the editor.");
+    }catch(error){msg($("#tmdbSearchMessage"),error.message||"TMDB search failed.",true);}
+    finally{button.disabled=false;}
+  }
+
+  function chooseTmdbResult(index) {
+    const item=state.tmdbResults[Number(index)];
+    if(!item)return;
+    resetEditor();
+    $("#contentType").value=item.content_type==="series"?"series":"movie";
+    $("#contentTitle").value=item.title||"";
+    $("#contentSlug").value=slugify(item.title||"");
+    $("#contentSlug").dataset.edited="true";
+    $("#contentSynopsis").value=item.synopsis||"";
+    $("#contentYear").value=item.release_year||"";
+    $("#contentTmdbId").value=item.tmdb_id||"";
+    $("#contentTmdbVoteAverage").value=Number(item.vote_average)||"";
+    $("#contentTmdbVoteCount").value=Number(item.vote_count)||"";
+    updateTypeFields();
+    msg($("#tmdbSearchMessage"),"Metadata added to the editor. Add your authorized artwork and video before publishing.");
+    $("#contentEditorCard").scrollIntoView({behavior:"smooth",block:"start"});
+  }
+
 
   async function requireAdmin() {
     if (!db()) throw new Error("Supabase is not configured. Check the public Supabase configuration.");
@@ -148,7 +189,7 @@
   }
 
   function resetEditor() {
-    state.editing=null;$("#contentForm").reset();$("#contentId").value="";$("#contentType").value="movie";$("#contentLanguage").value="Kinyarwanda";
+    state.editing=null;$("#contentForm").reset();$("#contentId").value="";$("#contentTmdbId").value="";$("#contentTmdbVoteAverage").value="";$("#contentTmdbVoteCount").value="";$("#contentType").value="movie";$("#contentLanguage").value="Kinyarwanda";
     $("#posterPreview").hidden=true;$("#backdropPreview").hidden=true;
     $("#posterStatus").textContent="Choose an image to upload to ImageKit.";
     $("#backdropStatus").textContent="Choose a wide image to upload to ImageKit.";
@@ -159,7 +200,7 @@
 
   function editContent(id) {
     const m=state.catalogue.find(x=>x.id===id);if(!m)return;
-    state.editing=m;$("#contentId").value=m.id;$("#contentType").value=m.content_type||"movie";
+    state.editing=m;$("#contentId").value=m.id;$("#contentTmdbId").value=m.tmdb_id||"";$("#contentTmdbVoteAverage").value=m.tmdb_vote_average??"";$("#contentTmdbVoteCount").value=m.tmdb_vote_count??"";$("#contentType").value=m.content_type||"movie";
     $("#contentTitle").value=m.title||"";$("#contentSlug").value=m.slug||"";
     $("#contentGenre").value=m.genre||"Drama";$("#contentYear").value=m.release_year||"";
     $("#contentLanguage").value=m.language||"Kinyarwanda";$("#contentDuration").value=m.duration_minutes||"";
@@ -243,6 +284,9 @@
       const video=type==="series"?null:await uploadVideo($("#videoFile").files[0],type,slug);
       const record={
         title,slug,content_type:type,
+        tmdb_id:$("#contentTmdbId").value?Number($("#contentTmdbId").value):null,
+        tmdb_vote_average:$("#contentTmdbVoteAverage").value?Number($("#contentTmdbVoteAverage").value):null,
+        tmdb_vote_count:$("#contentTmdbVoteCount").value?Number($("#contentTmdbVoteCount").value):null,
         synopsis:$("#contentSynopsis").value.trim(),genre:$("#contentGenre").value,
         release_year:$("#contentYear").value?Number($("#contentYear").value):null,
         language:$("#contentLanguage").value.trim()||"Kinyarwanda",
@@ -341,6 +385,8 @@
     finally{button.disabled=false;}
   });
   $("#signOutButton").addEventListener("click",async()=>{await db()?.auth.signOut();location.reload();});
+  $("#tmdbSearchForm").addEventListener("submit",searchTmdb);
+  $("#tmdbSearchResults").addEventListener("click",e=>{const b=e.target.closest("[data-tmdb-select]");if(b)chooseTmdbResult(b.dataset.tmdbSelect);});
   $("#contentForm").addEventListener("submit",saveContent);
   $("#contentType").addEventListener("change",updateTypeFields);
   $("#contentTitle").addEventListener("input",()=>{if(!$("#contentSlug").dataset.edited)$("#contentSlug").value=slugify($("#contentTitle").value);});
