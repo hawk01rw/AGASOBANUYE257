@@ -71,7 +71,7 @@
     $("#contentTmdbVoteAverage").value=Number(item.vote_average)||"";
     $("#contentTmdbVoteCount").value=Number(item.vote_count)||"";
     updateTypeFields();
-    msg($("#tmdbSearchMessage"),"Full TMDB details added, including rating, genres and available cast/crew. Add your authorized artwork and video before publishing.");
+    msg($("#tmdbSearchMessage"),state.tmdbMetadata?"Full TMDB details added, including rating, genres and available cast/crew. Add your authorized artwork and video before publishing.":"Basic TMDB details added. Full credits were unavailable; you can retry the selection.");
     openEditor();
   }
 
