@@ -6,7 +6,7 @@
 function publicConfig(env) {
   return {
     supabaseUrl: env.SUPABASE_URL || "https://owpmwujpvtdfbcagffcm.supabase.co",
-    supabaseAnonKey: env.SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+    supabaseAnonKey: env.SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im93cG13dWpwdnRkZmJjYWdmZmNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1ODQwNzYsImV4cCI6MjExMTE2MDA3Nn0.O8GQltDMfxlKCRhZrLx1Gx7pmK0XBkpn9bnMwcly78w",
     imagekitPublicKey: env.IMAGEKIT_PUBLIC_KEY || "public_1gmRyLQokgyIrmapaNRIj716h6w=",
     imagekitUrlEndpoint: env.IMAGEKIT_URL_ENDPOINT || "https://ik.imagekit.io/pw7jzqgkso"
   };
