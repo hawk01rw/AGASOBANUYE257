@@ -1,41 +1,27 @@
+/* AGASOBANUYE257 Pro Search — shared instant search modal */
 (()=>{"use strict";
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const cleanURL=value=>{try{const u=new URL(value,location.href);if(u.protocol!=="https:"||!(u.hostname==="ik.imagekit.io"||u.hostname.endsWith(".imagekit.io")))return"";if(!u.searchParams.has("tr"))u.searchParams.set("tr","w-84,h-112,fo-auto,q-75");return u.href}catch(_){return""}};
-const init=()=>{
- const inputs=[...document.querySelectorAll("[data-site-search],#searchInput,#catalogSearch")];
- if(!inputs.length)return;
- let titles=[],loaded=false,loading=false;
- const db=window.AgasobanuyeDB;
- const load=()=>{if(loaded||loading)return;loading=true;if(!db?.configured){loaded=true;loading=false;return}db.getMovies().then(rows=>{titles=Array.isArray(rows)?rows:[];loaded=true;loading=false;inputs.forEach(x=>x.dispatchEvent(new Event("input")));}).catch(()=>{loaded=true;loading=false;});};
- load();
- const searchable=m=>[m.title,m.genre,m.description,m.year,m.language,m.type].join(" ").toLowerCase();
- const rank=(m,q)=>{const t=String(m.title||"").toLowerCase(),g=String(m.genre||"").toLowerCase(),hay=searchable(m),parts=q.split(/\s+/).filter(Boolean);if(!parts.every(p=>hay.includes(p)))return -1;let n=0;if(t===q)n+=120;else if(t.startsWith(q))n+=75;else if(t.includes(q))n+=55;parts.forEach(p=>{if(t.split(/\s+/).some(w=>w.startsWith(p)))n+=18;if(g.includes(p))n+=7});if(m.featured)n+=2;return n;};
- inputs.forEach(input=>{
-  const host=input.closest(".cineva-search,.member-search")||input.parentElement;
-  if(!host)return;
-  host.classList.add("site-search-host");
-  input.setAttribute("autocomplete","off");input.setAttribute("aria-autocomplete","list");
-  const panel=document.createElement("div");panel.className="site-search-results";panel.hidden=true;panel.setAttribute("role","listbox");panel.id="siteSearch-"+Math.random().toString(36).slice(2,9);input.setAttribute("aria-controls",panel.id);host.appendChild(panel);
-  let active=-1,last=[];
-  const close=()=>{panel.hidden=true;active=-1;input.removeAttribute("aria-activedescendant");};
-  const choose=i=>{const row=last[i];if(!row)return;location.href="watch.html?id="+encodeURIComponent(row.slug||row.id);};
-  const paint=()=>{
-   const q=input.value.trim().toLowerCase();active=-1;
-   if(q.length<2){close();return}
-   if(!loaded){panel.innerHTML='<div class="site-search-state"><span class="site-search-spinner"></span>Searching the library…</div>';panel.hidden=false;return}
-   last=titles.map(m=>({m,score:rank(m,q)})).filter(x=>x.score>=0).sort((a,b)=>b.score-a.score||String(a.m.title).localeCompare(String(b.m.title))).slice(0,8).map(x=>x.m);
-   if(!last.length){panel.innerHTML='<div class="site-search-state"><strong>No titles found</strong><span>Try another title, genre, year or language.</span></div>';panel.hidden=false;return}
-   panel.innerHTML='<div class="site-search-heading">SEARCH RESULTS <span>'+last.length+(last.length===8?"+":"")+'</span></div>'+last.map((m,i)=>{const poster=cleanURL(m.poster);const art=poster?'<img src="'+esc(poster)+'" alt="" loading="lazy">':'<span class="site-search-art"><i data-lucide="clapperboard"></i></span>';const kind=m.type==="series"?"Series":"Movie";const meta=[kind,m.genre,m.year].filter(Boolean).map(esc).join(" · ");return '<a class="site-search-result" role="option" aria-selected="false" data-search-index="'+i+'" href="watch.html?id='+encodeURIComponent(m.slug||m.id)+'">'+art+'<span class="site-search-copy"><strong>'+esc(m.title||"Untitled")+'</strong><small>'+meta+'</small></span><b aria-hidden="true">↗</b></a>';}).join("");
-   panel.hidden=false;
-  };
-  const setActive=i=>{const nodes=[...panel.querySelectorAll("[data-search-index]")];if(!nodes.length)return;active=(i+nodes.length)%nodes.length;nodes.forEach((n,k)=>{n.setAttribute("aria-selected",String(k===active));n.classList.toggle("is-active",k===active)});input.setAttribute("aria-activedescendant",nodes[active].id||(nodes[active].id="siteSearchOption-"+active));nodes[active].scrollIntoView({block:"nearest"});};
-  let timer;
-  input.addEventListener("input",()=>{clearTimeout(timer);timer=setTimeout(paint,70)});
-  input.addEventListener("focus",()=>{load();if(input.value.trim().length>=2)paint()});
-  input.addEventListener("keydown",e=>{if(e.key==="Escape"){close();return}if(e.key==="ArrowDown"&&!panel.hidden){e.preventDefault();setActive(active+1)}if(e.key==="ArrowUp"&&!panel.hidden){e.preventDefault();setActive(active<0?last.length-1:active-1)}if(e.key==="Enter"&&!panel.hidden&&last.length){e.preventDefault();choose(active<0?0:active)}});
-  panel.addEventListener("click",e=>{const row=e.target.closest("[data-search-index]");if(row){e.preventDefault();choose(Number(row.dataset.searchIndex))}});
-  document.addEventListener("click",e=>{if(!host.contains(e.target))close()});
- });
-};
-if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
+const imageURL=v=>{try{const u=new URL(v,location.href);if(u.protocol!=="https:"||!(u.hostname==="ik.imagekit.io"||u.hostname.endsWith(".imagekit.io")))return"";if(!u.searchParams.has("tr"))u.searchParams.set("tr","w-100,h-136,fo-auto,q-78");return u.href}catch(_){return""}};
+function init(){
+const source=[...document.querySelectorAll("[data-site-search],#searchInput,#catalogSearch,#memberSearch")][0];
+if(!source)return;
+let titles=[],loaded=false,loading=false,active=-1,results=[];
+const overlay=document.createElement("div");overlay.className="pro-search-overlay";overlay.hidden=true;overlay.innerHTML='<section class="pro-search-dialog" role="dialog" aria-modal="true" aria-label="Search AGASOBANUYE257"><div class="pro-search-top"><i data-lucide="search" aria-hidden="true"></i><input class="pro-search-input" type="search" placeholder="Search movies, series, genres..." autocomplete="off" aria-label="Search the library"><button class="pro-search-close" type="button" aria-label="Close search"><i data-lucide="x"></i></button></div><div class="pro-search-hint">DISCOVER YOUR NEXT WATCH</div><div class="pro-search-results"><div class="pro-search-empty">Start typing to search the library.</div></div><div class="pro-search-footer">Enter to open · ↑ ↓ to navigate · Esc to close</div></section>';
+document.body.appendChild(overlay);
+const input=overlay.querySelector("input"),panel=overlay.querySelector(".pro-search-results"),closeBtn=overlay.querySelector(".pro-search-close");
+const launch=document.createElement("button");launch.type="button";launch.className="pro-search-launch";launch.setAttribute("aria-label","Open search");launch.innerHTML='<i data-lucide="search" aria-hidden="true"></i>';
+const actions=document.querySelector(".top-actions");if(actions)actions.insertBefore(launch,actions.firstChild);
+if(window.lucide?.createIcons)window.lucide.createIcons();
+const load=()=>{if(loaded||loading)return;loading=true;const db=window.AgasobanuyeDB;if(!db?.configured){loaded=true;loading=false;return}db.getMovies().then(rows=>{titles=Array.isArray(rows)?rows:[];loaded=true;loading=false;if(input.value.trim())paint()}).catch(()=>{loaded=true;loading=false})};
+const open=()=>{overlay.hidden=false;document.body.classList.add("pro-search-open");load();setTimeout(()=>input.focus(),30);if(source.value)input.value=source.value;paint()};
+const close=()=>{overlay.hidden=true;document.body.classList.remove("pro-search-open");active=-1;source.blur()};
+const rank=(m,q)=>{const t=String(m.title||"").toLowerCase(),hay=[m.title,m.genre,m.description,m.year,m.language,m.type].join(" ").toLowerCase(),parts=q.split(/\s+/).filter(Boolean);if(!parts.every(p=>hay.includes(p)))return -1;let n=t===q?140:t.startsWith(q)?90:t.includes(q)?60:0;parts.forEach(p=>{if(t.split(/\s+/).some(w=>w.startsWith(p)))n+=16;if(String(m.genre||"").toLowerCase().includes(p))n+=6});return n};
+const paint=()=>{const q=input.value.trim().toLowerCase();active=-1;if(q.length<2){panel.innerHTML='<div class="pro-search-empty">Start typing at least 2 characters to search.</div>';return}if(!loaded){panel.innerHTML='<div class="pro-search-empty">Loading the library…</div>';return}results=titles.map(m=>({m,score:rank(m,q)})).filter(x=>x.score>=0).sort((a,b)=>b.score-a.score||String(a.m.title).localeCompare(String(b.m.title))).slice(0,12).map(x=>x.m);if(!results.length){panel.innerHTML='<div class="pro-search-empty"><strong>No matching titles</strong>Try another title, genre, year or language.</div>';return}panel.innerHTML=results.map((m,i)=>{const p=imageURL(m.poster),art=p?'<img src="'+esc(p)+'" alt="" loading="lazy">':'<span class="pro-search-art"><i data-lucide="clapperboard"></i></span>',meta=[m.type==="series"?"Series":"Movie",m.genre,m.year].filter(Boolean).map(esc).join(" · ");return '<a class="pro-search-result" data-result="'+i+'" href="watch.html?id='+encodeURIComponent(m.slug||m.id)+'">'+art+'<span class="pro-search-copy"><strong>'+esc(m.title||"Untitled")+'</strong><small>'+meta+'</small></span><b>↗</b></a>'}).join("");if(window.lucide?.createIcons)window.lucide.createIcons()};
+const choose=i=>{const m=results[i];if(m)location.href="watch.html?id="+encodeURIComponent(m.slug||m.id)};
+launch.addEventListener("click",open);source.addEventListener("focus",e=>{e.preventDefault();open()});source.addEventListener("click",e=>{e.preventDefault();open()});
+input.addEventListener("input",paint);input.addEventListener("keydown",e=>{const nodes=[...panel.querySelectorAll("[data-result]")];if(e.key==="Escape"){close();source.focus()}else if(e.key==="ArrowDown"&&nodes.length){e.preventDefault();active=(active+1)%nodes.length;nodes.forEach((n,i)=>n.classList.toggle("is-active",i===active));nodes[active].scrollIntoView({block:"nearest"})}else if(e.key==="ArrowUp"&&nodes.length){e.preventDefault();active=(active-1+nodes.length)%nodes.length;nodes.forEach((n,i)=>n.classList.toggle("is-active",i===active));nodes[active].scrollIntoView({block:"nearest"})}else if(e.key==="Enter"&&nodes.length){e.preventDefault();choose(active<0?0:active)}});
+panel.addEventListener("click",e=>{const row=e.target.closest("[data-result]");if(row){e.preventDefault();choose(Number(row.dataset.result))}});
+closeBtn.addEventListener("click",close);overlay.addEventListener("click",e=>{if(e.target===overlay)close()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!overlay.hidden)close()});
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
 })();
