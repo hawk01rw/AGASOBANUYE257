@@ -46,10 +46,18 @@ function card(movie) {
     '</span><span>★ ' + rating + '</span></div></div></article>';
 }
 
+const HOME_CATEGORIES = ["Action", "Drama", "Animation", "Erotic", "Romance", "Horror", "Comedy", "Others"];
+
+function genreMatches(movie, category) {
+  const genres = String(movie.genre || "").split(/[,/&|]/).map(value => value.trim().toLowerCase()).filter(Boolean);
+  if (category === "Others") return !genres.some(value => HOME_CATEGORIES.slice(0, 7).some(name => name.toLowerCase() === value));
+  return genres.includes(category.toLowerCase()) || genres.some(value => value.includes(category.toLowerCase()));
+}
+
 function renderRows() {
   const query = ($("#searchInput").value || "").trim().toLowerCase();
   const filtered = movies.filter(movie =>
-    (activeFilter === "All" || String(movie.genre).toLowerCase() === activeFilter.toLowerCase()) &&
+    (activeFilter === "All" || genreMatches(movie, activeFilter)) &&
     (!query || (String(movie.title) + " " + String(movie.genre)).toLowerCase().includes(query))
   );
   $("#movieRow").innerHTML = filtered.map(card).join("");
@@ -58,6 +66,13 @@ function renderRows() {
   $("#seriesRow").innerHTML = series.length
     ? series.map(card).join("")
     : '<p class="empty-state">Series will appear here when added in Admin Studio.</p>';
+  HOME_CATEGORIES.forEach(category => {
+    const row = document.getElementById("category-row-" + category.toLowerCase());
+    if (!row) return;
+    const matches = movies.filter(movie => genreMatches(movie, category));
+    row.innerHTML = matches.length ? matches.map(card).join("") :
+      '<p class="empty-state">No ' + escapeHTML(category.toLowerCase()) + ' titles published yet.</p>';
+  });
   $("#emptyState").textContent = query ? "No titles found. Try another search." : "No published movies yet. Add and publish a movie in Admin Studio to show it here.";
   $("#emptyState").hidden = filtered.length > 0;
 }
@@ -96,7 +111,8 @@ function applyFilter(category) {
   document.querySelectorAll(".filter-chip").forEach(button =>
     button.classList.toggle("selected", button.dataset.filter === category)
   );
-  $("#movies").scrollIntoView({behavior:"smooth"});
+  const target = category === "All" ? $("#movies") : document.getElementById("genre-" + category.toLowerCase());
+  (target || $("#movies")).scrollIntoView({behavior:"smooth"});
   renderRows();
 }
 
