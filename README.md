@@ -13,7 +13,7 @@ Responsive movie-discovery website with a blue, metallic-gold and midnight-black
 1. Create a project at https://supabase.com/.
 2. Open **SQL Editor** and run `supabase/schema.sql` for a new database.
 3. If the original schema was already applied, run `supabase/migrations/002_tmdb_imagekit.sql` to add TMDB and ImageKit columns.
-4. Run `supabase/migrations/003_series_episodes.sql` in the same SQL Editor to add series, seasons and episode relationships. Existing movie records remain movies.
+4. Run `supabase/migrations/004_site_database.sql` in the same SQL Editor. It adds the eight site categories, category links, series/episode fields, watch history, user preferences, homepage section controls and site settings. Existing movie records remain movies. This migration includes the series/episode fields, so you do not need to run `003_series_episodes.sql` separately.
 5. In **Project Settings → API**, copy the Project URL and public publishable/anon key.
 6. Copy `supabase-config.example.js` to `supabase-config.js`; replace the two placeholders with your project values. The local config is ignored by Git.
 7. Register your own account in Supabase Auth. Copy that user's UUID from Authentication → Users and run the admin grant SQL comment at the bottom of `supabase/schema.sql` in SQL Editor. Only the project owner should grant admin access.
@@ -79,3 +79,22 @@ The Worker serves `/supabase-config.js` dynamically, so the public website can c
 **Never add** `SUPABASE_SERVICE_ROLE_KEY`, an ImageKit private key, or the TMDB Read Access Token to these Worker Variables or the browser config. Keep those private values only in the appropriate server-side Supabase Edge Function Secrets.
 
 If the Worker variables are missing, the homepage will remain in its empty-catalogue state rather than showing invented demo movies. Add a movie in `/admin.html`, upload its poster to ImageKit, and mark it Published for it to appear on the homepage.
+
+
+## Site database expansion (migration 004)
+
+Run `supabase/migrations/004_site_database.sql` in **Supabase Dashboard → SQL Editor** after the base schema and TMDB/ImageKit migration. It is additive and designed to be safe to re-run.
+
+Tables and responsibilities:
+- `profiles` — member display names and administrator flag (created by the base schema).
+- `movies` — movies, series and episode records, including ImageKit artwork URLs and authorized video paths.
+- `site_categories` and `movie_categories` — the eight browse categories and the many-to-many title/category relationship. The existing Admin Studio genre field automatically synchronizes category links.
+- `watchlist` — titles saved by each member.
+- `watch_history` — private per-member playback position and completion status.
+- `user_preferences` — language, autoplay and subtitle preferences.
+- `homepage_sections` — admin-controlled category shelves and their order/visibility.
+- `site_settings` — admin-only JSON settings for future site configuration.
+
+The migration enables Row Level Security on all new tables. Public visitors can read active categories, published-title category links and enabled homepage sections. Members can access only their own watch history and preferences. Only site admins can manage catalogue categories, homepage sections and settings.
+
+**Important:** Adding this migration file to GitHub does not execute it in Supabase. You must open the Supabase SQL Editor, paste the full contents of `004_site_database.sql`, and click **Run**. Do not paste private API keys into SQL or browser code.
