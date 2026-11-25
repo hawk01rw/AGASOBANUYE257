@@ -32,3 +32,40 @@
 @keyframes agaAtmosphere{0%{transform:translate3d(-1%,0,0) scale(1)}100%{transform:translate3d(1.5%,-1%,0) scale(1.06)}}
 @keyframes agaGridDrift{from{background-position:0 0,0 0}to{background-position:0 58px,58px 0}}
 @media(prefers-reduced-motion:reduce){.pro-admin:before,.pro-admin:after{animation:none!important}}
+
+/* Compact dashboard controls: smaller, cleaner action buttons. */
+.pro-admin .pro-main .admin-button,
+.pro-admin .pro-main button:not(.password-visibility){
+  min-height:29px;
+  padding:6px 9px!important;
+  border-radius:7px!important;
+  font-size:9px!important;
+  line-height:1.25;
+  letter-spacing:0;
+  box-shadow:none;
+}
+.pro-admin .pro-main .save-button{
+  min-height:34px;
+  min-width:150px;
+  padding:8px 13px!important;
+  font-size:10px!important;
+}
+.pro-admin .quick-actions{gap:8px}
+.pro-admin .quick-actions button{
+  min-height:96px;
+  padding:11px!important;
+  gap:5px;
+}
+.pro-admin .quick-actions button b{
+  width:28px;height:28px;font-size:17px;
+}
+.pro-admin .quick-actions button strong{font-size:10px}
+.pro-admin .quick-actions button small{font-size:9px;line-height:1.35}
+.pro-admin .pro-nav a{min-height:35px;padding:8px 10px;font-size:10px}
+.pro-admin .pro-head-buttons{gap:6px}
+.pro-admin .catalogue-actions .admin-button{padding:5px 8px!important;font-size:9px!important}
+@media(max-width:760px){
+  .pro-admin .pro-main .admin-button,
+  .pro-admin .pro-main button:not(.password-visibility){min-height:28px;padding:6px 8px!important}
+  .pro-admin .quick-actions button{min-height:88px;padding:9px!important}
+}
