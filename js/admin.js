@@ -1,7 +1,22 @@
 (function () {
   const $ = s => document.querySelector(s);
+  const adminStorageKey = "agasobanuye257-admin-auth";
+  // Admin auth is isolated from public-site sign-in and cleared on every page load.
+  try { window.sessionStorage.removeItem(adminStorageKey); } catch (_) {}
+  const config = window.AGASOBANUYE257_CONFIG || {};
+  const adminClient = window.supabase && config.supabaseUrl && config.supabaseAnonKey
+    ? window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey, {
+        auth: {
+          storage: window.sessionStorage,
+          storageKey: adminStorageKey,
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true
+        }
+      })
+    : null;
   const state = { catalogue: [], editing: null, session: null };
-  const db = () => window.AgasobanuyeDB?.client;
+  const db = () => adminClient || window.AgasobanuyeDB?.client;
   const msg = (node, value, error=false) => { node.textContent=value; node.classList.toggle("error",error); };
   const esc = value => String(value ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const slugify = value => String(value||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,190);
@@ -232,5 +247,14 @@
     catch(error){msg($("#adminMessage"),error.message,true);}
   });
   $("#year").textContent=new Date().getFullYear();updateTypeFields();
-  requireAdmin().catch(error=>msg($("#loginMessage"),error.message||"Could not initialize Admin Studio.",true));
+  // A fresh page load always starts at the sign-in screen. The isolated
+  // sessionStorage auth client prevents this from signing out public-site users.
+  if (!db()) {
+    msg($("#loginMessage"),"Supabase is not configured. Check the public Supabase configuration.",true);
+  } else {
+    $("#loginPanel").hidden=false;
+    $("#studioPanel").hidden=true;
+    $("#signOutButton").hidden=true;
+    msg($("#loginMessage"),"Sign in to open Admin Studio.");
+  }
 })();
