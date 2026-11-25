@@ -433,3 +433,19 @@ body:has(.watch-main){
   .episode-info small{font-size:10px!important}
   .episode-status{font-size:7px!important}
 }
+
+
+/* Compact episode cards */
+#seriesEpisodesSection{max-width:1120px!important;width:calc(100% - 56px)!important;margin-inline:auto!important}
+.episode-season{padding:14px!important;margin:14px 0!important}
+.episode-season-list{gap:9px!important}
+.episode-row{padding:8px!important;gap:7px!important;border-radius:9px!important}
+.episode-info strong{font-size:11px!important;line-height:1.3!important}
+.episode-info small{font-size:9px!important}
+.episode-actions{gap:5px!important}
+.episode-actions a,.episode-actions button{flex:1 1 calc(50% - 5px)!important;font-size:9px!important;padding:6px 5px!important;min-height:28px!important}
+@media(max-width:760px){
+ #seriesEpisodesSection{width:calc(100% - 28px)!important}
+ .episode-season{padding:10px!important}
+ .episode-row{padding:7px!important}
+}
