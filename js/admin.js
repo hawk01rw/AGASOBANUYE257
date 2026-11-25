@@ -15,7 +15,7 @@
         }
       })
     : null;
-  const state = { catalogue: [], editing: null, session: null };
+  const state = { catalogue: [], editing: null, session: null, selectedSeries: null, categories: [] };
   const db = () => adminClient || window.AgasobanuyeDB?.client;
   const msg = (node, value, error=false) => { node.textContent=value; node.classList.toggle("error",error); };
   const esc = value => String(value ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -32,9 +32,12 @@
     if(profile?.is_admin!==true) throw new Error("This signed-in account does not have administrator permission.");
     state.session=session;
     $("#adminEmail").textContent=session.user.email||"Administrator";
+    $("#sidebarUser").textContent=(session.user.email||"admin").split("@")[0];$("#sidebarEmail").textContent=session.user.email||"";
+    $("#dashboardDate").textContent=new Intl.DateTimeFormat("en",{weekday:"long",month:"long",day:"numeric",year:"numeric"}).format(new Date());
     $("#loginPanel").hidden=true;$("#studioPanel").hidden=false;$("#signOutButton").hidden=false;
     if((session.user.email||"").toLowerCase()===ownerEmail){$("#adminManagementPanel").hidden=false;await loadAdmins();}
     await loadCatalogue();
+    await loadCategories();
     return true;
   }
 
@@ -66,7 +69,10 @@
     $("#statSeries").textContent=state.catalogue.filter(x=>x.content_type==="series").length;
     $("#statEpisodes").textContent=state.catalogue.filter(x=>x.content_type==="episode").length;
     $("#statPublished").textContent=state.catalogue.filter(x=>x.published).length;
-    await populateSeries();renderCatalogue();msg($("#catalogueMessage"),"");
+    await populateSeries();renderCatalogue();renderSeriesCatalogue();renderRecentMovies();
+    $("#analyticsMovies").textContent=$("#statMovies").textContent;$("#analyticsSeries").textContent=$("#statSeries").textContent;$("#analyticsEpisodes").textContent=$("#statEpisodes").textContent;$("#analyticsPublished").textContent=$("#statPublished").textContent;
+    $("#analyticsSummary").textContent=state.catalogue.length+" content records loaded directly from your Supabase database.";
+    msg($("#catalogueMessage"),"");
   }
 
   function renderCatalogue() {
@@ -77,6 +83,50 @@
       const kind=m.content_type||"movie", extra=kind==="episode"?" · S"+m.season_number+" E"+m.episode_number+" · "+(seriesById.get(m.series_id)||"Series"):kind.toUpperCase();
       return '<article class="catalogue-item"><div class="catalogue-copy"><strong>'+esc(m.title)+'</strong><small>'+esc(extra)+' · '+esc(m.release_year||"Year not set")+(m.video_path?" · Video uploaded":" · No video")+'</small><span class="status-pill '+(m.published?"published":"")+'">'+(m.published?"Published":"Draft")+'</span></div><div class="catalogue-actions"><button class="admin-button subtle" data-action="edit" data-id="'+esc(m.id)+'" type="button">Edit</button><button class="admin-button subtle" data-action="publish" data-id="'+esc(m.id)+'" type="button">'+(m.published?"Unpublish":"Publish")+'</button><button class="admin-button danger" data-action="delete" data-id="'+esc(m.id)+'" type="button">Delete</button></div></article>';
     }).join(""):'<p class="admin-hint">No matching content in your catalogue.</p>';
+  }
+
+
+  function renderRecentMovies(){
+    const rows=state.catalogue.filter(x=>(x.content_type||"movie")==="movie").slice(0,6);
+    $("#recentMovies").innerHTML=rows.length?rows.map(m=>'<tr><td><strong>'+esc(m.title)+'</strong></td><td>'+esc(m.genre||"—")+'</td><td>'+esc(m.created_at?new Date(m.created_at).toLocaleDateString():"—")+'</td><td><span class="status-pill '+(m.published?"published":"")+'">'+(m.published?"Active":"Draft")+'</span></td><td><button class="admin-button subtle" data-recent-edit="'+esc(m.id)+'">Open control</button></td></tr>').join(""):'<tr><td colspan="5">No movies have been added yet.</td></tr>';
+  }
+  function renderSeriesCatalogue(){
+    const rows=state.catalogue.filter(x=>x.content_type==="series");
+    $("#seriesCatalogueList").innerHTML=rows.length?rows.map(s=>{const n=state.catalogue.filter(e=>e.content_type==="episode"&&e.series_id===s.id).length;return '<article class="catalogue-item"><div class="catalogue-copy"><strong>'+esc(s.title)+'</strong><small>'+esc(s.genre||"Series")+' · '+n+' episodes · '+(s.published?"Published":"Draft")+'</small></div><div class="catalogue-actions"><button class="admin-button primary" data-open-series="'+esc(s.id)+'">Open episodes · '+n+'</button><button class="admin-button subtle" data-edit-series="'+esc(s.id)+'">Edit</button></div></article>'}).join(""):'<p class="admin-hint">No series yet. Add a series to start organizing episodes.</p>';
+    const picker=$("#bulkSeriesPicker");if(picker){const old=picker.value;picker.innerHTML='<option value="">Choose series</option>'+rows.map(s=>'<option value="'+esc(s.id)+'">'+esc(s.title)+'</option>').join("");if(rows.some(s=>s.id===old))picker.value=old;}
+  }
+  function openSeriesManager(id){
+    const series=state.catalogue.find(x=>x.id===id&&x.content_type==="series");if(!series)return;
+    state.selectedSeries=series;$("#episodeManagerTitle").textContent=series.title+" — Episodes";
+    const episodes=state.catalogue.filter(x=>x.content_type==="episode"&&x.series_id===id).sort((a,b)=>(a.season_number-b.season_number)||(a.episode_number-b.episode_number));
+    $("#seriesEpisodeList").innerHTML=episodes.length?episodes.map(ep=>'<article class="catalogue-item"><div class="catalogue-copy"><strong>S'+ep.season_number+' · E'+ep.episode_number+' — '+esc(ep.episode_title||ep.title)+'</strong><small>'+(ep.video_path?"Video uploaded":"No video")+' · '+(ep.published?"Published":"Draft")+'</small></div><div class="catalogue-actions"><button class="admin-button subtle" data-edit-episode="'+esc(ep.id)+'">Edit</button><button class="admin-button subtle" data-toggle-episode="'+esc(ep.id)+'">'+(ep.published?"Unpublish":"Publish")+'</button><button class="admin-button danger" data-delete-episode="'+esc(ep.id)+'">Delete</button></div></article>').join(""):'<p class="admin-hint">No episodes have been added to this series.</p>';
+    $("#seriesEpisodeManager").hidden=false;$("#seriesEpisodeManager").scrollIntoView({behavior:"smooth",block:"start"});
+  }
+  async function loadCategories(){
+    const {data,error}=await db().from("site_categories").select("id,name,slug,description,is_active,sort_order").order("sort_order").order("name");
+    if(error){msg($("#categoryMessage"),"Categories unavailable: "+error.message,true);return;}
+    state.categories=data||[];$("#categoryList").innerHTML=state.categories.map(x=>'<article class="catalogue-item"><div class="catalogue-copy"><strong>'+esc(x.name)+'</strong><small>'+esc(x.description||x.slug)+'</small></div><div class="catalogue-actions"><span class="status-pill '+(x.is_active?"published":"")+'">'+(x.is_active?"Active":"Hidden")+'</span><button class="admin-button subtle" data-category-toggle="'+esc(x.id)+'">'+(x.is_active?"Hide":"Activate")+'</button><button class="admin-button danger" data-category-delete="'+esc(x.id)+'">Delete</button></div></article>').join("")||'<p class="admin-hint">No categories yet.</p>';
+  }
+  async function bulkUpload(e){
+    e.preventDefault();const files=[...$("#bulkFiles").files];if(!files.length)return;
+    const type=$("#bulkType").value,seriesId=$("#bulkSeriesPicker").value,season=Number($("#bulkSeason").value||1),start=Number($("#bulkEpisodeStart").value||1);
+    if(type==="episode"&&!seriesId){msg($("#bulkMessage"),"Choose the series first.",true);return;}
+    if(type==="episode"&&(!season||!start)){msg($("#bulkMessage"),"Enter a valid season and starting episode number.",true);return;}
+    const button=$("#bulkUploadButton");button.disabled=true;$("#bulkProgress").innerHTML="";let done=0,failed=0;
+    for(let i=0;i<files.length;i++){
+      const file=files[i],base=file.name.replace(/\.[^.]+$/,"").replace(/[_-]+/g," ").trim(),slug=slugify(base)+"-"+Date.now().toString(36)+"-"+i;
+      const episodeNo=start+i,title=type==="episode"?"Episode "+episodeNo+" — "+base:base;
+      const row=document.createElement("div");row.className="bulk-progress-row";row.textContent=(i+1)+"/"+files.length+" · "+title+" — uploading…";$("#bulkProgress").appendChild(row);
+      try{
+        if(!file.type.startsWith("video/"))throw new Error("Not a video file");
+        const path=await uploadVideo(file,type,slug);
+        const record={title,slug,content_type:type,genre:$("#bulkGenre").value,release_year:$("#bulkYear").value?Number($("#bulkYear").value):null,language:$("#bulkLanguage").value.trim()||"Kinyarwanda",video_path:path,download_url:null,featured:false,published:$("#bulkPublish").checked,created_by:state.session.user.id,series_id:type==="episode"?seriesId:null,season_number:type==="episode"?season:null,episode_number:type==="episode"?episodeNo:null,episode_title:type==="episode"?title:null};
+        const {error}=await db().from("movies").insert(record);if(error)throw error;
+        done++;row.classList.add("success");row.textContent=(i+1)+"/"+files.length+" · "+title+" — uploaded";
+      }catch(err){failed++;row.classList.add("failed");row.textContent=(i+1)+"/"+files.length+" · "+title+" — "+err.message;}
+    }
+    await loadCatalogue();if(type==="episode"&&seriesId)openSeriesManager(seriesId);
+    msg($("#bulkMessage"),"Bulk upload finished: "+done+" successful, "+failed+" failed.",failed>0);button.disabled=false;
   }
 
   function resetEditor() {
@@ -203,6 +253,26 @@
     if(error){msg($("#adminMessage"),"Admin management setup needed: "+error.message,true);return;}
     $("#adminUsersList").innerHTML=(data||[]).map(a=>'<div class="catalogue-item"><div><strong>'+esc(a.email)+'</strong><small>Administrator</small></div>'+(a.email.toLowerCase()===ownerEmail?'<span class="status-pill published">Project owner</span>':'<button class="admin-button danger" type="button" data-revoke="'+esc(a.email)+'">Revoke access</button>')+'</div>').join("")||'<p class="admin-hint">No administrator accounts found.</p>';
   }
+
+
+  document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));
+  function showView(name){
+    document.querySelectorAll(".pro-view").forEach(v=>v.classList.toggle("active",v.id==="view-"+name));
+    document.querySelectorAll(".pro-nav [data-view]").forEach(v=>v.classList.toggle("active",v.dataset.view===name));
+    $("#viewTitle").textContent=({overview:"Overview",movies:"Movies",series:"Series",bulk:"Bulk Upload",categories:"Categories",superadmin:"Super Admin",analytics:"Analytics",settings:"Settings",translators:"Translators",announcements:"Announcements"})[name]||"Overview";
+    if(name==="series")renderSeriesCatalogue();
+  }
+  $("#addMovieButton").addEventListener("click",()=>{resetEditor();$("#contentType").value="movie";updateTypeFields();$("#contentEditorCard").scrollIntoView({behavior:"smooth"});});
+  $("#addSeriesButton").addEventListener("click",()=>{resetEditor();$("#contentType").value="series";updateTypeFields();showView("movies");$("#contentEditorCard").scrollIntoView({behavior:"smooth"});});
+  $("#addEpisodeButton").addEventListener("click",()=>{if(!state.selectedSeries)return;resetEditor();$("#contentType").value="episode";updateTypeFields();$("#seriesPicker").value=state.selectedSeries.id;showView("movies");$("#contentEditorCard").scrollIntoView({behavior:"smooth"});});
+  $("#bulkSeriesEpisodes").addEventListener("click",()=>{if(!state.selectedSeries)return;showView("bulk");$("#bulkType").value="episode";$("#bulkSeriesWrap").hidden=false;$("#bulkSeasonWrap").hidden=false;$("#bulkSeriesPicker").value=state.selectedSeries.id;});
+  $("#bulkType").addEventListener("change",()=>{const ep=$("#bulkType").value==="episode";$("#bulkSeriesWrap").hidden=!ep;$("#bulkSeasonWrap").hidden=!ep;});
+  $("#bulkUploadForm").addEventListener("submit",bulkUpload);
+  $("#seriesCatalogueList").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const id=b.dataset.openSeries||b.dataset.editSeries;if(!id)return;if(b.dataset.openSeries)openSeriesManager(id);else{showView("movies");editContent(id);}});
+  $("#seriesEpisodeList").addEventListener("click",async e=>{const b=e.target.closest("button");if(!b)return;const id=b.dataset.editEpisode||b.dataset.toggleEpisode||b.dataset.deleteEpisode;if(!id)return;if(b.dataset.editEpisode){showView("movies");editContent(id);return;}if(b.dataset.toggleEpisode)await setPublished(id);if(b.dataset.deleteEpisode)await deleteContent(id);openSeriesManager(state.selectedSeries.id);});
+  $("#recentMovies").addEventListener("click",e=>{const b=e.target.closest("[data-recent-edit]");if(!b)return;showView("movies");editContent(b.dataset.recentEdit);});
+  $("#categoryForm").addEventListener("submit",async e=>{e.preventDefault();const name=$("#categoryName").value.trim(),slug=slugify(name);try{const {error}=await db().from("site_categories").insert({name,slug,description:$("#categoryDescription").value.trim()});if(error)throw error;$("#categoryForm").reset();await loadCategories();msg($("#categoryMessage"),"Category added.");}catch(err){msg($("#categoryMessage"),err.message,true);}});
+  $("#categoryList").addEventListener("click",async e=>{const b=e.target.closest("button");if(!b)return;try{if(b.dataset.categoryToggle){const item=state.categories.find(x=>x.id===b.dataset.categoryToggle);const {error}=await db().from("site_categories").update({is_active:!item.is_active}).eq("id",item.id);if(error)throw error;}if(b.dataset.categoryDelete){if(!confirm("Delete this category?"))return;const {error}=await db().from("site_categories").delete().eq("id",b.dataset.categoryDelete);if(error)throw error;}await loadCategories();}catch(err){msg($("#categoryMessage"),err.message,true);}});
 
   $("#loginForm").addEventListener("submit",async e=>{
     e.preventDefault();const button=e.submitter;button.disabled=true;msg($("#loginMessage"),"Signing in...");
