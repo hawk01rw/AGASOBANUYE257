@@ -32,3 +32,11 @@ body>.agas-footer{flex-shrink:0;margin-top:auto}
 @media(max-width:850px){.agas-footer{padding:34px 4% calc(88px + env(safe-area-inset-bottom))}.agas-footer-inner{grid-template-columns:1fr 1fr;gap:27px 22px}.agas-footer-main,.agas-footer-note{grid-column:1/-1}.agas-footer-intro{max-width:480px}.agas-footer-bottom{font-size:9px}}
 @media(max-width:480px){.agas-footer{padding-top:29px}.agas-footer-inner{gap:23px 15px}.agas-footer-brand img{width:41px;height:41px}.agas-footer-brand span{font-size:18px}.agas-footer-brand small{font-size:7px}.agas-footer-intro{font-size:11px}.agas-footer-column h2{font-size:12px}.agas-footer-column a{font-size:10px}.agas-footer-note{padding:16px}.agas-footer-bottom{gap:8px;flex-direction:column}.agas-footer-credit{font-size:8px}}
 @media(prefers-reduced-motion:reduce){.agas-footer *{transition:none!important}}
+
+
+/* Social links: one clearly labelled link per row */
+.agas-footer-social{display:flex;flex-direction:column;align-items:flex-start;gap:7px;margin-top:18px}
+.agas-footer-social::before{content:"FOLLOW US";display:block;margin:0 0 3px 2px;color:#d9bd83;font-size:9px;font-weight:800;letter-spacing:1.4px}
+.agas-footer-social a{width:max-content;height:auto;min-height:34px;display:flex;grid-template-columns:none;align-items:center;justify-content:flex-start;gap:11px;padding:7px 11px;border:1px solid rgba(103,157,222,.2);border-radius:9px;background:rgba(255,255,255,.035);color:#dce8f8;text-decoration:none;font-size:11px;font-weight:700;transition:background .2s,border-color .2s,transform .2s}
+.agas-footer-social a svg{display:block;width:17px;height:17px;flex:0 0 17px;fill:currentColor}
+.agas-footer-social a:hover{background:rgba(49,119,201,.18);border-color:rgba(225,190,119,.55);transform:translateX(3px);color:#f0d49b}
