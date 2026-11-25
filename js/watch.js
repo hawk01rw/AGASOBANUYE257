@@ -92,7 +92,21 @@ async function showTitle(m){
   await loadComments();return;
  }
  if(m.downloadUrl){dl.href=m.downloadUrl;dl.hidden=false;dl.target="_blank";dl.rel="noopener noreferrer"}
- if(m.videoPath&&window.AgasobanuyeDB?.configured){
+ let movieParts=[];
+ if(m.type==="movie"&&window.AgasobanuyeDB?.configured){try{movieParts=await window.AgasobanuyeDB.getMovieParts(m.id)}catch(error){console.warn("Movie parts could not be loaded:",error)}}
+ const partsSection=$("#moviePartsSection"),partsList=$("#moviePartsList");
+ if(partsSection)partsSection.hidden=!movieParts.length;
+ if(partsList)partsList.innerHTML=movieParts.map((part,index)=>'<button type="button" class="movie-part-button '+(index===0?'active':'')+'" data-movie-part="'+index+'"><span>'+esc(part.part_label)+'</span><small>'+(index===0?'Now playing':'Play part')+'</small></button>').join("");
+ if(movieParts.length){
+  const playPart=async index=>{
+   const part=movieParts[index];if(!part)return;
+   partsList.querySelectorAll(".movie-part-button").forEach((button,i)=>{button.classList.toggle("active",i===index);button.querySelector("small").textContent=i===index?"Now playing":"Play part"});
+   try{const [playUrl,downloadUrl]=await Promise.all([window.AgasobanuyeDB.getVideoUrl(part.video_path),window.AgasobanuyeDB.getVideoUrl(part.video_path,true)]);const v=document.createElement("video");v.controls=true;v.playsInline=true;v.preload="metadata";v.src=playUrl;$("#watchPlayer").replaceChildren(v);dl.href=downloadUrl;dl.hidden=false;dl.textContent="↓ Download "+part.part_label;dl.target="_blank";dl.rel="noopener noreferrer";}
+   catch(error){const p=$("#watchPlayer .player-placeholder");if(p){p.querySelector("h2").textContent="This part is not available";p.querySelector("p").textContent=error.message||"Please try again."}}
+  };
+  partsList.onclick=e=>{const button=e.target.closest("[data-movie-part]");if(button)playPart(Number(button.dataset.moviePart))};
+  await playPart(0);
+ }else if(m.videoPath&&window.AgasobanuyeDB?.configured){
   try{const [playUrl,downloadUrl]=await Promise.all([window.AgasobanuyeDB.getVideoUrl(m.videoPath),window.AgasobanuyeDB.getVideoUrl(m.videoPath,true)]);const v=document.createElement("video");v.controls=true;v.playsInline=true;v.preload="metadata";v.src=playUrl;$("#watchPlayer").replaceChildren(v);if(!m.downloadUrl){dl.href=downloadUrl;dl.hidden=false;dl.setAttribute("download","")}}
   catch(e){const p=$("#watchPlayer .player-placeholder");if(p){p.querySelector("h2").textContent="Video is not available right now";p.querySelector("p").textContent=e.message||"Please contact support."}}
  }else if(m.trailerUrl){const p=document.createElement("p");p.textContent="A trailer is available, but full playback requires an authorized video file.";const placeholder=$("#watchPlayer").querySelector(".player-placeholder");if(placeholder)placeholder.appendChild(p)}
