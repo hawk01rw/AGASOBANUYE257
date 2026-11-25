@@ -4,12 +4,16 @@
   if (!config.supabaseUrl || !config.supabaseAnonKey) return;
 
   const url = new URL("/rest/v1/site_announcements", config.supabaseUrl);
-  url.search = new URLSearchParams({
+  const params = new URLSearchParams({
     select: "id,title,message,tone,starts_at,ends_at,created_at",
     is_active: "eq.true",
     order: "created_at.desc",
     limit: "5"
-  }).toString();
+  });
+  const now = new Date().toISOString();
+  params.append("or", "(starts_at.is.null,starts_at.lte." + now + ")");
+  params.append("or", "(ends_at.is.null,ends_at.gt." + now + ")");
+  url.search = params.toString();
 
   fetch(url, {
     headers: { apikey: config.supabaseAnonKey, Accept: "application/json" },
