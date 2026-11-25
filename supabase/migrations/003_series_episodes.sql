@@ -58,3 +58,34 @@ create index if not exists movies_series_episode_order_idx
 
 -- Episodes inherit the same published-content RLS rules as movies.
 -- Only admins can create, edit, publish, or delete series and episodes.
+
+create unique index if not exists movies_unique_episode_number_idx
+  on public.movies (series_id, season_number, episode_number)
+  where content_type = 'episode';
+
+create or replace function public.validate_series_episode_parent()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if new.content_type = 'episode' then
+    if not exists (
+      select 1
+      from public.movies parent
+      where parent.id = new.series_id
+        and parent.content_type = 'series'
+    ) then
+      raise exception 'An episode must belong to an existing series';
+    end if;
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists validate_series_episode_parent on public.movies;
+create trigger validate_series_episode_parent
+before insert or update of content_type, series_id
+on public.movies
+for each row execute procedure public.validate_series_episode_parent();
