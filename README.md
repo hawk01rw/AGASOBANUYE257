@@ -27,7 +27,7 @@ TMDB movie IDs and metadata are stored in `movies.tmdb_id`, `tmdb_vote_average` 
 
 The ImageKit authorization function and browser upload helper are now in the repository:
 - `supabase/functions/imagekit-auth/index.ts` signs short-lived ImageKit upload parameters. It requires a valid signed-in Supabase user whose `profiles.is_admin` flag is true.
-- `js/imagekit-upload.js` exposes `window.AgasobanuyeImageKit.uploadImage(file, options)` and sends the file directly to ImageKit. It returns the ImageKit `url` and `fileId`; save those in `movies.poster_url`, `poster_imagekit_file_id` (or the matching existing file-ID column) and backdrop fields as appropriate.
+- `js/imagekit-upload.js` exposes `window.AgasobanuyeImageKit.uploadImage(file, options)` and sends the file directly to ImageKit. It returns the ImageKit `url` and `fileId`; save those in `movies.poster_url`, `imagekit_file_id` and `backdrop_url` / `backdrop_imagekit_file_id` for backdrops.
 
 Deployment and configuration:
 1. In your local Supabase project folder, run `supabase functions deploy imagekit-auth` (install and link the Supabase CLI first if needed).
