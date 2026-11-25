@@ -45,9 +45,15 @@
         :await client.from("watchlist").insert({movie_id:movieId,user_id:session.user.id});
       if(result.error)throw result.error;return !currentlySaved;
     },
-    async getVideoUrl(path){
+    async getEpisodes(seriesId){
+      if(!client||!seriesId)return [];
+      const {data,error}=await client.from("movies").select("id,title,slug,episode_title,season_number,episode_number,release_year,poster_url,video_path,published").eq("content_type","episode").eq("series_id",seriesId).eq("published",true).order("season_number",{ascending:true}).order("episode_number",{ascending:true});
+      if(error)throw error;
+      return data||[];
+    },
+    async getVideoUrl(path,download=false){
       if(!client||!path)throw new Error("No video file has been configured for this title.");
-      const {data,error}=await client.storage.from("movie-videos").createSignedUrl(path,3600);
+      const {data,error}=await client.storage.from("movie-videos").createSignedUrl(path,3600,download?{download:true}:{});
       if(error)throw error;return data.signedUrl;
     }
   };
