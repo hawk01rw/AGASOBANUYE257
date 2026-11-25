@@ -63,6 +63,7 @@ returns trigger language plpgsql set search_path = ''
 as $$
 begin
   if new.is_admin is distinct from old.is_admin
+     and current_user not in ('postgres', 'supabase_admin')
      and coalesce((select auth.role()), '') <> 'service_role' then
     raise exception 'Only a trusted administrator can change the admin flag';
   end if;
