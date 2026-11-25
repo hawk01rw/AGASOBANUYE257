@@ -363,3 +363,16 @@ body>.cineva-footer{flex-shrink:0;margin-top:auto}
  .vip-benefits span{font-size:9px;padding:8px 10px}
  .saved-count{font-size:9px;padding:6px 8px}
 }
+
+@media (min-width:850px) and (max-width:1100px){
+ .cineva-header{grid-template-columns:auto minmax(285px,1fr) minmax(125px,165px) auto!important;gap:9px!important;padding-left:16px!important;padding-right:16px!important}
+ .cineva-header .cineva-brand img{width:36px!important;height:36px!important}
+ .cineva-header .cineva-brand b{font-size:18px!important}
+ .cineva-header .cineva-brand small{display:none}
+ .cineva-header .top-links{gap:9px!important}
+ .cineva-header .top-links a{font-size:10px!important}
+ .cineva-header .cineva-search{height:36px!important;padding:0 9px!important}
+ .cineva-header .cineva-search input{font-size:10px!important}
+ .cineva-header .profile-action,.cineva-header .icon-action{width:32px!important;height:32px!important}
+}
+.vip-coming{display:inline-flex;align-items:center;padding:13px 18px;border:1px solid rgba(229,190,119,.45);border-radius:10px;color:#f0d59e;background:rgba(229,190,119,.08);font:800 11px 'DM Sans',sans-serif;letter-spacing:1px}
