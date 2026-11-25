@@ -23,9 +23,17 @@ The page loads Supabase JS v2 from its official CDN and reads `supabase-config.j
 
 TMDB movie IDs and metadata are stored in `movies.tmdb_id`, `tmdb_vote_average` and `tmdb_vote_count`. ImageKit delivery URLs are stored in `poster_url` and `backdrop_url`, with ImageKit file IDs in the corresponding `*_file_id` fields.
 
-The next integration step is to add server-side Supabase Edge Functions:
-- TMDB search/import, with the TMDB API token stored as a server-side secret.
-- ImageKit upload authorization, signing uploads with the ImageKit private key stored as a server-side secret.
+## ImageKit upload authorization
+
+The ImageKit authorization function and browser upload helper are now in the repository:
+- `supabase/functions/imagekit-auth/index.ts` signs short-lived ImageKit upload parameters. It requires a valid signed-in Supabase user whose `profiles.is_admin` flag is true.
+- `js/imagekit-upload.js` exposes `window.AgasobanuyeImageKit.uploadImage(file, options)` and sends the file directly to ImageKit. It returns the ImageKit `url` and `fileId`; save those in `movies.poster_url`, `poster_imagekit_file_id` (or the matching existing file-ID column) and backdrop fields as appropriate.
+
+Deployment and configuration:
+1. In your local Supabase project folder, run `supabase functions deploy imagekit-auth` (install and link the Supabase CLI first if needed).
+2. In `supabase-config.js` (copied from the example), set `imagekitPublicKey` and `imagekitUrlEndpoint` alongside your Supabase URL and public key. This file is ignored by Git.
+3. Keep `IMAGEKIT_PRIVATE_KEY` in Supabase Edge Function Secrets only. The function uses Supabase's built-in `SUPABASE_URL` and `SUPABASE_ANON_KEY` environment values to verify the current user and admin profile.
+4. Example browser call: `const uploaded = await AgasobanuyeImageKit.uploadImage(fileInput.files[0], { folder: "/agasobanuye257/posters" });`
 
 Do not put TMDB private tokens or the ImageKit private key in browser code or commit them to GitHub. The ImageKit public key and URL endpoint can be used by the frontend where needed. Follow TMDB attribution and image-use requirements and only distribute content you are authorized to use.
 
