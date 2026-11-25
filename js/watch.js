@@ -4,6 +4,7 @@ let title=null,allTitles=[],commentsChannel=null,commentsChannelKey="",authMode=
 try{title=JSON.parse(sessionStorage.getItem("agasobanuyeSelectedTitle")||"null")}catch(e){}
 const id=new URLSearchParams(location.search).get("id");
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function imageKitAsset(value,transform="w-420,h-630,fo-auto,q-82"){try{const u=new URL(value,location.href);if(u.protocol!=="https:"||!(u.hostname==="ik.imagekit.io"||u.hostname.endsWith(".imagekit.io")))return"";if(!u.searchParams.has("tr"))u.searchParams.set("tr",transform);return u.href;}catch(_){return"";}}
 const dateLabel=v=>{try{return new Intl.DateTimeFormat(undefined,{dateStyle:"medium",timeStyle:"short"}).format(new Date(v))}catch(_){return""}};
 function commentTarget(m){return m.type==="episode"&&m.episodeTableId?{episodeId:m.episodeTableId}:{movieId:m.id};}
 function renderComment(c,session){const own=session?.user?.id===c.user_id;return '<article class="comment-card"><div class="comment-avatar">'+esc((c.author_name||"M").slice(0,1).toUpperCase())+'</div><div class="comment-content"><div class="comment-byline"><strong>'+esc(c.author_name||"Member")+'</strong><time>'+esc(dateLabel(c.created_at))+'</time>'+(own?'<button class="comment-delete" data-delete-comment="'+esc(c.id)+'" type="button" aria-label="Delete your comment">Delete</button>':"")+'</div><p>'+esc(c.body)+'</p></div></article>'}
@@ -35,7 +36,7 @@ function renderEpisodeRows(episodes){
    const number=String(Number(ep.episode_number||0)).padStart(2,'0');
    const name=ep.episode_title||ep.title||('Episode '+number);
    const ready=!!ep.videoPath;
-   return '<article class="episode-row"><div class="episode-thumb">'+(ep.poster?'<img src="'+esc(ep.poster)+'" alt="" loading="lazy">':'<span>▶</span>')+'</div><div class="episode-info"><span class="episode-number">EPISODE '+number+'</span><strong>'+esc(name)+'</strong><small>'+esc(ep.description||'')+'</small><em class="episode-status '+(ready?'is-ready':'is-pending')+'">'+(ready?'READY TO WATCH':'VIDEO NOT UPLOADED')+'</em></div><div class="episode-actions">'+(ready?'<a class="episode-watch" href="watch.html?id='+encodeURIComponent(ep.id)+'">▶ Watch</a>':'<span class="episode-unavailable">Coming soon</span>')+(ep.downloadUrl?'<a class="episode-download" href="'+esc(ep.downloadUrl)+'" target="_blank" rel="noopener noreferrer">↓ Download</a>':ep.videoPath?'<button class="episode-download" data-episode-download="'+esc(ep.videoPath)+'" type="button">↓ Download</button>':'')+'</div></article>';
+   return '<article class="episode-row"><div class="episode-thumb">'+(imageKitAsset(ep.poster)?'<img src="'+esc(imageKitAsset(ep.poster,"w-180,h-180,fo-auto,q-78"))+" alt="" loading="lazy" decoding="async">':'<span>▶</span>')+'</div><div class="episode-info"><span class="episode-number">EPISODE '+number+'</span><strong>'+esc(name)+'</strong><small>'+esc(ep.description||'')+'</small><em class="episode-status '+(ready?'is-ready':'is-pending')+'">'+(ready?'READY TO WATCH':'VIDEO NOT UPLOADED')+'</em></div><div class="episode-actions">'+(ready?'<a class="episode-watch" href="watch.html?id='+encodeURIComponent(ep.id)+'">▶ Watch</a>':'<span class="episode-unavailable">Coming soon</span>')+(ep.downloadUrl?'<a class="episode-download" href="'+esc(ep.downloadUrl)+'" target="_blank" rel="noopener noreferrer">↓ Download</a>':ep.videoPath?'<button class="episode-download" data-episode-download="'+esc(ep.videoPath)+'" type="button">↓ Download</button>':'')+'</div></article>';
   }).join('')+'</div></section>';
  }).join('');
 }
@@ -51,7 +52,8 @@ async function showTitle(m){
  $("#watchSynopsis").textContent=m.description||"No synopsis has been added yet.";
  const kind=m.type==="series"?"SERIES":m.type==="episode"?"EPISODE":"MOVIE";
  $("#watchMeta").textContent=kind+" · "+(m.genre||"Entertainment")+" · "+(m.year||"");
- $("#watchBackdrop").style.backgroundImage=m.backdrop||m.poster?'url("'+String(m.backdrop||m.poster).replace(/["\\]/g,"")+'")':"none";
+ const backdrop=imageKitAsset(m.backdrop||m.poster,"w-1600,h-900,fo-auto,q-78");
+  $("#watchBackdrop").style.backgroundImage=backdrop?'url("'+backdrop.replace(/["\\]/g,"")+'")':"none";
  $("#watchChips").innerHTML=["HD EXPERIENCE",m.genre,m.year].filter(Boolean).map(x=>"<span>"+esc(x)+"</span>").join("");
  $("#watchLanguage").textContent="Language: "+(m.language||"Not specified");
  $("#watchDuration").textContent="Duration: "+(m.duration?m.duration+" minutes":"Not specified");
@@ -77,7 +79,7 @@ function renderRelated(){
  let related=allTitles.filter(x=>x.type!=="episode"&&x.type!=="series"&&String(x.id)!==current);
  if(categories.length){const matched=related.filter(x=>String(x.genre||"").split(/[,/&|]/).some(g=>categories.some(c=>g.trim().toLowerCase()===c||g.trim().toLowerCase().includes(c))));related=[...matched,...related.filter(x=>!matched.includes(x))]}
  related=related.slice(0,8);
- $("#relatedRow").innerHTML=related.map(m=>'<article class="poster-card" data-id="'+esc(m.id)+'" tabindex="0" role="button"><div class="poster-image"><img src="'+esc(m.poster||"assets/agasobanuye257-logo.svg")+'" alt="" loading="lazy"></div><div class="poster-info"><h3>'+esc(m.title)+'</h3><div class="poster-meta"><span>'+esc(m.genre)+'</span><span>'+esc(m.year)+'</span></div></div></article>').join("")||'<p class="comments-empty">More titles will appear here as the catalogue grows.</p>';
+ $("#relatedRow").innerHTML=related.map(m=>'<article class="poster-card" data-id="'+esc(m.id)+'" tabindex="0" role="button"><div class="poster-image"><img src="'+esc(imageKitAsset(m.poster)||"assets/agasobanuye257-logo.svg")+'" alt="" loading="lazy"></div><div class="poster-info"><h3>'+esc(m.title)+'</h3><div class="poster-meta"><span>'+esc(m.genre)+'</span><span>'+esc(m.year)+'</span></div></div></article>').join("")||'<p class="comments-empty">More titles will appear here as the catalogue grows.</p>';
  $("#relatedRow").onclick=e=>{const c=e.target.closest("[data-id]");if(!c)return;const m=allTitles.find(x=>String(x.id)===c.dataset.id);if(m){sessionStorage.setItem("agasobanuyeSelectedTitle",JSON.stringify(m));location.href="watch.html?id="+encodeURIComponent(m.slug||m.id)}};
 }
 $("#commentForm").addEventListener("submit",async e=>{e.preventDefault();const input=$("#commentInput"),name=$("#commentName"),button=e.currentTarget.querySelector("button[type=submit]"),message=$("#commentMessage"),body=input.value.trim(),author=name.value.trim();if(!body||!author)return;button.disabled=true;message.textContent="Posting…";try{await window.AgasobanuyeDB.addComment(commentTarget(title),author,body);input.value="";message.textContent="Your comment has been posted.";await loadComments()}catch(err){message.textContent=err.message||"Could not post your comment."}finally{button.disabled=false}});
