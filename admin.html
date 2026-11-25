@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#05070c">
+  <title>Admin Studio — AGASOBANUYE257</title>
+  <link rel="icon" type="image/svg+xml" href="assets/agasobanuye257-logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/agasobanuye.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script defer src="js/supabase-client.js"></script>
+  <script defer src="js/imagekit-upload.js"></script>
+  <script defer src="js/admin.js"></script>
+</head>
+<body class="admin-page">
+  <header class="site-header admin-header">
+    <a class="brand" href="index.html"><img src="assets/agasobanuye257-logo.svg" alt="" class="brand-mark"><span class="brand-word">AGASOBANUYE<span>257</span></span></a>
+    <div class="admin-header-right"><span class="admin-label">ADMIN STUDIO</span><a class="text-link" href="index.html">View website ↗</a><button id="signOutButton" class="admin-button subtle" hidden>Sign out</button></div>
+  </header>
+
+  <main class="admin-main">
+    <section id="loginPanel" class="admin-panel login-panel">
+      <p class="section-kicker">RESTRICTED AREA</p>
+      <h1>Administrator <span>sign in</span></h1>
+      <p class="admin-muted">Sign in with your AGASOBANUYE257 administrator account.</p>
+      <form id="loginForm" class="admin-form">
+        <label>Email address<input id="loginEmail" type="email" autocomplete="username" required></label>
+        <label>Password<input id="loginPassword" type="password" autocomplete="current-password" required></label>
+        <button class="admin-button primary" type="submit">Sign in securely</button>
+      </form>
+      <p id="loginMessage" class="admin-message" role="status"></p>
+    </section>
+
+    <section id="studioPanel" hidden>
+      <div class="admin-welcome"><div><p class="section-kicker">CONTENT MANAGEMENT</p><h1>Admin <span>studio</span></h1><p class="admin-muted">Search TMDB, prepare movie details, upload artwork to ImageKit and publish to your catalogue.</p></div><span id="adminEmail" class="admin-email"></span></div>
+
+      <section class="admin-panel">
+        <div class="admin-section-heading"><div><p class="section-kicker">STEP 01</p><h2>Find a movie on TMDB</h2></div></div>
+        <form id="tmdbSearchForm" class="search-form"><input id="tmdbQuery" type="search" placeholder="Search by movie title..." minlength="2" required><button class="admin-button primary" type="submit">Search TMDB</button></form>
+        <p class="admin-hint">TMDB provides metadata only. Upload artwork you are authorized to use through ImageKit below.</p>
+        <div id="tmdbResults" class="tmdb-results" aria-live="polite"></div>
+      </section>
+
+      <section class="admin-panel">
+        <div class="admin-section-heading"><div><p class="section-kicker">STEP 02</p><h2>Movie information</h2></div><span id="selectedTmdb" class="admin-hint">No TMDB title selected</span></div>
+        <form id="movieForm" class="admin-form movie-form">
+          <input id="movieTmdbId" type="hidden">
+          <div class="form-grid">
+            <label>Movie title<input id="movieTitle" required maxlength="180"></label>
+            <label>URL slug<input id="movieSlug" required maxlength="200" placeholder="movie-title"></label>
+            <label>Genre<select id="movieGenre"><option>Action</option><option>Adventure</option><option>Animation</option><option>Comedy</option><option>Crime</option><option>Documentary</option><option>Drama</option><option>Family</option><option>Fantasy</option><option>Horror</option><option>Romance</option><option>Science Fiction</option><option>Thriller</option><option>War</option><option>Western</option></select></label>
+            <label>Release year<input id="movieYear" type="number" min="1888" max="2200"></label>
+            <label>Language<input id="movieLanguage" value="Kinyarwanda" maxlength="60"></label>
+            <label>Duration (minutes)<input id="movieDuration" type="number" min="1" max="1000"></label>
+            <label class="full-field">Synopsis<textarea id="movieSynopsis" rows="4" maxlength="5000"></textarea></label>
+            <label class="full-field">Authorized video path / URL (optional)<input id="movieVideo" placeholder="Private Supabase movie-videos object path"></label>
+            <label class="full-field">Trailer URL (optional)<input id="movieTrailer" type="url" placeholder="https://..."></label>
+          </div>
+          <div class="artwork-grid">
+            <label class="upload-card"><strong>Poster image <span>Required</span></strong><input id="posterFile" type="file" accept="image/jpeg,image/png,image/webp"><img id="posterPreview" alt="Poster preview" hidden><small id="posterStatus">Choose an image to upload to ImageKit.</small></label>
+            <label class="upload-card"><strong>Backdrop image <span>Optional</span></strong><input id="backdropFile" type="file" accept="image/jpeg,image/png,image/webp"><img id="backdropPreview" alt="Backdrop preview" hidden><small id="backdropStatus">Choose a wide image to upload to ImageKit.</small></label>
+          </div>
+          <div class="publish-row"><label class="check-label"><input id="movieFeatured" type="checkbox"> Feature on homepage</label><label class="check-label"><input id="moviePublished" type="checkbox"> Publish immediately</label></div>
+          <button class="admin-button primary save-button" type="submit">Save movie to catalogue</button>
+          <p id="saveMessage" class="admin-message" role="status"></p>
+        </form>
+      </section>
+
+      <section class="admin-panel">
+        <div class="admin-section-heading"><div><p class="section-kicker">STEP 03</p><h2>Recent catalogue</h2></div><button id="refreshMovies" class="admin-button subtle" type="button">Refresh</button></div>
+        <div id="catalogueList" class="catalogue-list"></div>
+      </section>
+    </section>
+  </main>
+  <footer class="site-footer"><span class="copyright">© <span id="year"></span> AGASOBANUYE257 · Admin Studio</span><span class="copyright">Keep your keys private. Publish only authorized content.</span></footer>
+</body>
+</html>
