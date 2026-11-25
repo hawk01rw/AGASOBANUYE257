@@ -64,3 +64,8 @@
 .comment-auth-panel[hidden]{display:none}.comment-auth-modes{display:flex;gap:7px;margin-bottom:12px}.auth-mode{border:1px solid rgba(75,145,240,.25);border-radius:8px;padding:8px 12px;background:rgba(23,105,210,.07);color:#9fb8d8;font:700 11px 'DM Sans',sans-serif;cursor:pointer}.auth-mode.active{background:rgba(23,105,210,.22);border-color:#4b91f0;color:#eaf3ff}
 .comment-auth-form{display:grid;grid-template-columns:1fr 1fr;gap:9px}.comment-auth-form input{min-width:0;height:42px;padding:0 12px;border:1px solid rgba(75,145,240,.24);border-radius:9px;background:rgba(2,8,16,.65);color:#f4f7ff;font:12px 'DM Sans',sans-serif}.comment-auth-form input[hidden]{display:none}.comment-auth-form #commentAuthName:not([hidden]){grid-column:1/-1}.comment-auth-form button{grid-column:1/-1;justify-self:start}.comment-auth-form p{grid-column:1/-1;margin:0;color:#a9c8f4;font:11px/1.5 'DM Sans',sans-serif}
 @media(max-width:520px){.comment-auth-form{grid-template-columns:1fr}.comment-auth-form button{width:100%}}
+
+/* Guest comment form */
+.comment-form .comment-name{display:block;width:100%;height:44px;margin:0 0 10px;padding:0 13px;border:1px solid rgba(75,145,240,.23);border-radius:10px;background:rgba(2,8,16,.65);color:#f4f7ff;font:13px 'DM Sans',sans-serif;outline:none}
+.comment-form .comment-name:focus{border-color:#4b91f0;box-shadow:0 0 0 3px rgba(75,145,240,.12)}
+.comment-message{margin:10px 0 0;color:#a9c8f4;font:12px/1.5 'DM Sans',sans-serif}
