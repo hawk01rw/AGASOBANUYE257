@@ -117,7 +117,8 @@ async function showTitle(m){
   await loadComments();return;
  }
  if(m.downloadUrl){dl.href=m.downloadUrl;dl.hidden=false;dl.target="_blank";dl.rel="noopener noreferrer"}
- if(m.watchUrl&&mountCustomPlayer(m.watchUrl)){await loadComments();return;}\n  let movieParts=[];
+ if(m.watchUrl&&mountCustomPlayer(m.watchUrl)){await loadComments();return;}
+  let movieParts=[];
  if(m.type==="movie"&&window.AgasobanuyeDB?.configured){try{movieParts=await window.AgasobanuyeDB.getMovieParts(m.id)}catch(error){console.warn("Movie parts could not be loaded:",error)}}
  const partsSection=$("#moviePartsSection"),partsList=$("#moviePartsList");
  if(partsSection)partsSection.hidden=!movieParts.length;
