@@ -463,3 +463,28 @@ body:has(.watch-main){
   border-color:rgba(125,255,184,.75)!important;
   box-shadow:0 7px 20px rgba(8,150,83,.3)!important;
 }
+
+
+/* Wider watch layout: use more of the available screen width. */
+.watch-main{
+  width:calc(100% - 40px)!important;
+  max-width:1600px!important;
+  margin-inline:auto!important;
+  padding:24px 0 90px!important;
+}
+.watch-player-section,.watch-player,.watch-title-block,.watch-details,
+.comments-section,.related-section{
+  width:100%;max-width:none;
+}
+.watch-title-block{padding-inline:2%!important}
+.watch-details{padding-inline:2%!important;gap:28px}
+.comments-section,.related-section{padding-inline:1.5%}
+.watch-player{max-height:min(78vh,820px)}
+.watch-main .comment-form,.watch-main .comment-card{max-width:none}
+.watch-main .comments-list{max-width:100%}
+@media(max-width:700px){
+ .watch-main{width:calc(100% - 22px)!important;padding:14px 0 76px!important}
+ .watch-title-block{padding-inline:1%!important}
+ .watch-details{padding-inline:1%!important}
+ .comments-section,.related-section{padding-inline:0}
+}
