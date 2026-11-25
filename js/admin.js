@@ -367,8 +367,11 @@
         paths=state.catalogue.filter(x=>x.series_id===id&&x.video_path).map(x=>x.video_path);
       }
       if(m.video_path)paths.push(m.video_path);
+      const {data:parts,error:partsError}=await db().from("movie_parts").select("video_path").eq("movie_id",id);
+      if(partsError)throw partsError;
+      paths.push(...(parts||[]).map(part=>part.video_path).filter(Boolean));
       const {error}=await db().from("movies").delete().eq("id",id);if(error)throw error;
-      if(paths.length)await db().storage.from("movie-videos").remove(paths);
+      if(paths.length)await db().storage.from("movie-videos").remove([...new Set(paths)]);
       await loadCatalogue();msg($("#catalogueMessage"),"Content deleted.");
     }catch(error){msg($("#catalogueMessage"),error.message||"Delete failed.",true);}
   }
