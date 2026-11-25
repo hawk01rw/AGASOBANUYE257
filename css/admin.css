@@ -229,3 +229,48 @@
   .pro-admin #contentForm .publish-row .check-label{width:100%}
   .pro-admin #contentForm .save-button{width:100%;min-width:0}
 }
+
+
+/* Focused content editor modal: upload form opens separately from the catalogue */
+.pro-admin #contentEditorCard:not(.editor-open){display:none!important}
+.pro-admin #contentEditorCard.editor-open{
+  display:block!important;position:fixed;z-index:1001;top:22px;bottom:22px;left:50%;
+  transform:translateX(-50%);width:min(1040px,calc(100vw - 36px));max-height:calc(100svh - 44px);
+  margin:0;padding:clamp(18px,3vw,30px);overflow-y:auto;overscroll-behavior:contain;
+  border:1px solid rgba(225,185,93,.42);border-radius:16px;
+  background:linear-gradient(150deg,#10233d 0%,#09182b 55%,#071321 100%);
+  box-shadow:0 30px 100px rgba(0,0,0,.72),0 0 0 1px rgba(126,181,255,.08)
+}
+.pro-admin.editor-modal-open:before{
+  content:"";position:fixed;inset:0;z-index:1000;background:rgba(1,6,13,.82);
+  backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)
+}
+.pro-admin #contentEditorCard.editor-open .pro-card-head{
+  position:sticky;top:-1px;z-index:3;padding:8px 0 17px;margin:-2px 0 20px;
+  background:linear-gradient(180deg,#10233d 82%,rgba(16,35,61,0));
+  border-bottom:1px solid rgba(126,181,255,.14)
+}
+.pro-admin #contentEditorCard.editor-open .pro-card-head>div:first-child p{
+  margin:7px 0 0;color:#91a8c6;font:500 11px/1.6 'DM Sans'
+}
+.pro-admin #contentEditorCard.editor-open .pro-head-buttons{align-items:center}
+.pro-admin #contentEditorCard.editor-open #closeContentEditor{
+  color:#f0dba9;border-color:rgba(225,185,93,.35);white-space:nowrap
+}
+.pro-admin #contentEditorCard.editor-open #contentForm{padding-bottom:8px}
+body.editor-modal-open{overflow:hidden}
+@media(max-width:680px){
+  .pro-admin #contentEditorCard.editor-open{
+    top:8px;bottom:8px;width:calc(100vw - 16px);max-height:calc(100svh - 16px);
+    padding:15px;border-radius:12px
+  }
+  .pro-admin #contentEditorCard.editor-open .pro-card-head{
+    align-items:flex-start;gap:10px
+  }
+  .pro-admin #contentEditorCard.editor-open .pro-head-buttons{
+    width:100%;display:flex;justify-content:flex-end
+  }
+  .pro-admin #contentEditorCard.editor-open #closeContentEditor{
+    padding:8px 10px
+  }
+}
