@@ -35,3 +35,18 @@ input,select,textarea{border-radius:12px}
 .back-top-premium:after{inset:-10px;opacity:.45}
 @media(max-width:600px){.back-top-premium{right:17px;bottom:calc(154px + env(safe-area-inset-bottom));width:46px;height:46px;border-radius:15px;font-size:22px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* Compact two-number WhatsApp picker */
+.contact-float{position:fixed;right:25px;bottom:28px;z-index:120;display:block;width:auto}
+.contact-float__trigger{width:60px;height:60px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.4);border-radius:50%;background:linear-gradient(145deg,#35df83,#079b59);color:#fff;box-shadow:0 8px 28px rgba(20,190,100,.32);cursor:pointer}
+.contact-float__trigger svg{width:31px;height:31px;fill:#fff}
+.contact-float__trigger:focus-visible,.contact-float__panel a:focus-visible{outline:2px solid #fff;outline-offset:4px}
+.contact-float__panel{position:absolute;right:0;bottom:74px;width:248px;padding:13px;border:1px solid rgba(87,220,145,.28);border-radius:15px;background:rgba(12,22,20,.97);box-shadow:0 14px 38px rgba(0,0,0,.42);backdrop-filter:blur(14px)}
+.contact-float__panel[hidden]{display:none}
+.contact-float__panel strong{display:block;margin:0 0 9px;color:#fff;font:700 13px 'DM Sans',sans-serif}
+.contact-float__number{display:flex;flex-direction:column;gap:3px;padding:10px 11px;border:1px solid rgba(255,255,255,.09);border-radius:10px;color:#fff;text-decoration:none;font:600 12px 'DM Sans',sans-serif}
+.contact-float__number+.contact-float__number{margin-top:7px}
+.contact-float__number small{color:#a9c9b7;font-size:10px;font-weight:400}
+.contact-float__number:hover{border-color:rgba(87,220,145,.55);background:rgba(45,180,105,.12)}
+@media(max-width:600px){.contact-float{right:16px;bottom:calc(88px + env(safe-area-inset-bottom))}.contact-float__trigger{width:56px;height:56px}.contact-float__panel{bottom:68px}}
+@media(prefers-reduced-motion:reduce){.contact-float__trigger{transition:none}}
