@@ -195,10 +195,27 @@ $("#savedTop").onclick = () => { location.href = "favorite.html"; };
 $("#backTop").onclick = () => window.scrollTo({top:0, behavior:"smooth"});
 const yearNode = $("#year");
 if (yearNode) yearNode.textContent = new Date().getFullYear();
-$("#newsletterForm").onsubmit = event => {
+$("#newsletterForm").onsubmit = async event => {
   event.preventDefault();
-  $("#newsletterMessage").textContent = "Thanks for subscribing!";
-  event.target.reset();
+  const form=event.currentTarget, input=form.querySelector('input[type="email"]');
+  const button=form.querySelector('button[type="submit"],button');
+  const email=String(input?.value||"").trim().toLowerCase();
+  const status=$("#newsletterMessage");
+  if(!/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(email)){status.textContent="Enter a valid email address.";return;}
+  const client=window.AgasobanuyeDB?.client;
+  if(!client){status.textContent="Subscriptions are temporarily unavailable. Please try again later.";return;}
+  if(button)button.disabled=true;
+  status.textContent="Adding your email…";
+  try{
+    const {error}=await client.from("newsletter_subscribers").insert({email});
+    if(error?.code==="23505"){status.textContent="This email is already on the update list.";return;}
+    if(error)throw error;
+    status.textContent="You're subscribed. We'll email you when new titles arrive.";
+    form.reset();
+  }catch(error){
+    console.error("Newsletter subscription:",error);
+    status.textContent="We couldn't save your subscription. Please try again.";
+  }finally{if(button)button.disabled=false;}
 };
 
 renderRows();
