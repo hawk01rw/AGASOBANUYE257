@@ -120,6 +120,8 @@ function renderFeature() {
     return;
   }
   const movie = movies[featuredIndex % movies.length];
+  const hero = $("#featureHero");
+  if (hero) hero.classList.add("hero-changing");
   $("#featureTitle").textContent = movie.title || "Discover your next favourite";
   $("#featureDescription").textContent = movie.description || "Discover this title on AGASOBANUYE257.";
   $("#featureTags").innerHTML =
@@ -132,6 +134,13 @@ function renderFeature() {
   $("#featureDetails").onclick = event => { event.preventDefault(); openWatch(movie); };
   $("#heroCount").textContent = String(featuredIndex + 1).padStart(2, "0") +
     " / " + String(movies.length).padStart(2, "0");
+  if (hero) { window.setTimeout(() => hero.classList.remove("hero-changing"), 380); }
+}
+
+function advanceFeature(direction = 1) {
+  if (movies.length < 2) return;
+  featuredIndex = (featuredIndex + direction + movies.length) % movies.length;
+  renderFeature();
 }
 
 function applyFilter(category) {
@@ -173,12 +182,10 @@ document.addEventListener("keydown", event => {
 
 $("#searchInput").addEventListener("input", renderRows);
 $("#heroPrev").onclick = () => {
-  featuredIndex = (featuredIndex - 1 + movies.length) % movies.length;
-  renderFeature();
+  advanceFeature(-1);
 };
 $("#heroNext").onclick = () => {
-  featuredIndex = (featuredIndex + 1) % movies.length;
-  renderFeature();
+  advanceFeature(1);
 };
 $("#menuButton").onclick = () => { const open = $(".top-links").classList.toggle("menu-open"); $("#menuButton").setAttribute("aria-expanded", String(open)); };
 $("#profileButton").onclick = () => $("#profileDialog").showModal();
@@ -196,6 +203,12 @@ $("#newsletterForm").onsubmit = event => {
 
 renderRows();
 renderFeature();
+// Auto-rotate featured titles like a streaming-service hero carousel.
+window.setInterval(() => {
+  const hero = $("#featureHero");
+  if (!hero || document.hidden || hero.matches(":hover") || hero.contains(document.activeElement)) return;
+  advanceFeature(1);
+}, 6500);
 window.addEventListener("hashchange", () => {
   const hash = location.hash || "#home";
   document.querySelectorAll(".top-links a,.mobile-bottom-nav a").forEach(link => link.classList.toggle("active", link.getAttribute("href") === hash));
