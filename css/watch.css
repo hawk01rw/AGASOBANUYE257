@@ -1,1 +1,20 @@
 .watch-header{position:relative;z-index:2;background:#090815;border-bottom:1px solid #30283c;padding:12px 4%;display:flex;justify-content:space-between;align-items:center}.watch-header .cineva-brand img{width:54px;height:54px}.watch-main{max-width:1250px;margin:auto;position:relative;padding:30px 3% 100px}.watch-backdrop{position:absolute;z-index:-1;top:0;left:0;right:0;height:550px;background-position:center;background-size:cover;opacity:.2;mask-image:linear-gradient(#000,transparent)}.watch-player{aspect-ratio:16/9;max-height:680px;background:#03030a;border:1px solid #40334f;border-radius:22px;overflow:hidden;display:grid;place-items:center;box-shadow:0 25px 70px #0008}.watch-player video{width:100%;height:100%;background:#000}.player-placeholder{text-align:center;padding:30px;color:#bdb4c8}.player-placeholder h2{font-size:clamp(20px,4vw,34px);color:white}.player-placeholder p{font:14px/1.7 'DM Sans',sans-serif}.play-large{margin:auto;width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(120deg,#a64bd1,#d13d73);color:#fff;font:30px Arial;padding-left:5px}.watch-title-block{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:28px 5px;border-bottom:1px solid #30283c}.watch-title-block h1{font-size:clamp(32px,6vw,56px);margin:8px 0}.watch-title-block p:not(.watch-kicker){font:15px/1.7 'DM Sans',sans-serif;color:#bcb4c6;max-width:750px}.watch-kicker{color:#c38be2;letter-spacing:2px;font-size:12px}.watch-details{display:grid;grid-template-columns:2fr 1fr;gap:35px;padding:30px 5%;border-bottom:1px solid #30283c}.watch-details h3{font-size:23px}.watch-details p{font:14px/1.8 'DM Sans',sans-serif;color:#bdb4c6}.detail-chips{display:flex;gap:10px;flex-wrap:wrap}.detail-chips span{border:1px solid #554363;background:#1d1728;padding:8px 13px;border-radius:30px;font:12px 'DM Sans',sans-serif}.related-section{padding:35px 0}.related-section h2{font-size:30px}.related-section .poster-row{grid-auto-columns:minmax(160px,19%)}@media(max-width:700px){.watch-main{padding:16px 3% 100px}.watch-player{border-radius:13px}.watch-title-block{align-items:flex-start;flex-direction:column}.watch-details{grid-template-columns:1fr;gap:5px;padding:15px 2%}.watch-header .outline-button{min-height:43px;padding:0 12px;font-size:12px}.related-section .poster-row{grid-auto-columns:minmax(155px,43%)}}
+
+/* Medium, balanced watch-page sizing */
+.watch-header{padding:8px 5%}
+.watch-header .cineva-brand img{width:44px;height:44px}
+.watch-main{max-width:1080px;padding-top:22px}
+.watch-player{max-height:590px;border-radius:16px}
+.play-large{width:62px;height:62px;font-size:25px}
+.watch-title-block{padding:22px 4%}
+.watch-title-block h1{font-size:clamp(27px,4vw,42px)}
+.watch-title-block p:not(.watch-kicker){font-size:13px}
+.watch-kicker{font-size:10px}
+.watch-details{gap:25px;padding:24px 4%}
+.watch-details h3{font-size:19px}
+.watch-details p{font-size:12px}
+.detail-chips span{font-size:11px;padding:6px 10px}
+.related-section{padding:28px 0}
+.related-section h2{font-size:25px}
+.related-section .poster-row{grid-auto-columns:minmax(135px,16%);gap:12px}
+@media(max-width:700px){.watch-main{padding:14px 4% 90px}.watch-player{border-radius:11px}.watch-title-block h1{font-size:29px}.watch-details{padding:18px 2%}.related-section .poster-row{grid-auto-columns:minmax(125px,40%)}}
