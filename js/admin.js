@@ -190,10 +190,13 @@
       const episodeNo=start+i,title=type==="episode"?"Episode "+episodeNo+" — "+base:base;
       const row=document.createElement("div");row.className="bulk-progress-row";row.textContent=(i+1)+"/"+files.length+" · "+title+" — uploading…";$("#bulkProgress").appendChild(row);
       try{
+        const duplicate=findDuplicateTitle(title);
+        if(duplicate)throw new Error("Duplicate title: already exists as \""+duplicate.title+"\". Names are checked without case sensitivity.");
         if(!file.type.startsWith("video/"))throw new Error("Not a video file");
         const path=await uploadVideo(file,type,slug);
         const record={title,slug,content_type:type,genre:$("#bulkGenre").value,release_year:$("#bulkYear").value?Number($("#bulkYear").value):null,language:$("#bulkLanguage").value.trim()||"Kinyarwanda",video_path:path,download_url:null,featured:false,published:$("#bulkPublish").checked,created_by:state.session.user.id,series_id:type==="episode"?seriesId:null,season_number:type==="episode"?season:null,episode_number:type==="episode"?episodeNo:null,episode_title:type==="episode"?title:null};
-        const {error}=await db().from("movies").insert(record);if(error)throw error;
+        const {data:inserted,error}=await db().from("movies").insert(record).select("id,title,content_type,series_id,season_number,episode_number,genre,release_year,poster_url,backdrop_url,video_path,published,created_at").single();if(error)throw error;
+        if(inserted)state.catalogue.unshift(inserted);
         done++;row.classList.add("success");row.textContent=(i+1)+"/"+files.length+" · "+title+" — uploaded";
       }catch(err){failed++;row.classList.add("failed");row.textContent=(i+1)+"/"+files.length+" · "+title+" — "+err.message;}
     }
@@ -300,6 +303,8 @@
     try {
       const type=$("#contentType").value,title=$("#contentTitle").value.trim(),slug=slugify($("#contentSlug").value||title);
       if(!title||!slug)throw new Error("Enter a title and valid URL slug.");
+      const duplicate=findDuplicateTitle(title,state.editing?.id||null);
+      if(duplicate)throw new Error("This name is already used by \""+duplicate.title+"\". Choose a different title. Names are checked without case sensitivity.");
       const seriesId=type==="episode"?$("#seriesPicker").value:null;
       if(type==="episode"&&!seriesId)throw new Error("Choose the series this episode belongs to.");
       if(type==="episode"&&(!Number($("#seasonNumber").value)||!Number($("#episodeNumber").value)))throw new Error("Enter both season and episode numbers.");
