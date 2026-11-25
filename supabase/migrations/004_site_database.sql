@@ -81,7 +81,7 @@ begin
   delete from public.movie_categories where movie_id = new.id;
   for genre_item in
     select distinct lower(trim(value))
-    from regexp_split_to_table(coalesce(new.genre, ''), '[,/&|]+') as value
+    from regexp_split_to_table(coalesce(new.genre, ''), '[,/&|]+') as parts(value)
     where trim(value) <> ''
   loop
     insert into public.movie_categories (movie_id, category_id)
@@ -110,7 +110,7 @@ begin
     matched_count := 0;
     for genre_item in
       select distinct lower(trim(value))
-      from regexp_split_to_table(coalesce(movie_row.genre, ''), '[,/&|]+') as value
+      from regexp_split_to_table(coalesce(movie_row.genre, ''), '[,/&|]+') as parts(value)
       where trim(value) <> ''
     loop
       insert into public.movie_categories (movie_id, category_id)
