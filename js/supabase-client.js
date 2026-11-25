@@ -59,7 +59,9 @@
       const name=String(authorName||"").trim(),text=String(body||"").trim();
       if(name.length<1||name.length>80)throw new Error("Enter a name between 1 and 80 characters.");
       if(text.length<1||text.length>2000)throw new Error("Comment must be between 1 and 2000 characters.");
-      const row={user_id:null,author_name:name,body:text};
+      const {data:sessionData,error:sessionError}=await client.auth.getSession();
+      if(sessionError)throw sessionError;
+      const row={user_id:sessionData.session?.user?.id||null,author_name:name,body:text};
       if(target.episodeId)row.episode_id=target.episodeId;else row.movie_id=target.movieId;
       const {data,error}=await client.from("comments").insert(row).select("id,movie_id,episode_id,user_id,author_name,body,created_at").single();
       if(error)throw error;return data;
