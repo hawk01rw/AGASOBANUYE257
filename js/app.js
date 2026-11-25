@@ -187,7 +187,7 @@ $("#heroPrev").onclick = () => {
 $("#heroNext").onclick = () => {
   advanceFeature(1);
 };
-$("#menuButton").onclick = () => { const open = $(".top-links").classList.toggle("menu-open"); $("#menuButton").setAttribute("aria-expanded", String(open)); };
+// Shared responsive navigation behavior is handled by js/header.js.
 $("#profileButton").onclick = () => $("#profileDialog").showModal();
 $("#profileClose").onclick = () => $("#profileDialog").close();
 $("#profileOkay").onclick = () => $("#profileDialog").close();
