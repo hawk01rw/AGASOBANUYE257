@@ -380,3 +380,6 @@ body:has(.watch-main){
 .tmdb-credit-line p{margin:0;color:#b9c8db;font:12px/1.6 'DM Sans',sans-serif}
 .tmdb-credit-line b,.tmdb-production b{color:#e2bd70;margin-right:6px}
 .tmdb-production{margin:0}
+
+.tmdb-attribution{margin:20px 0 0;color:#8297b3;font:10px/1.6 'DM Sans',sans-serif}
+.tmdb-attribution a{color:#a9ceff;text-decoration:underline;text-underline-offset:3px}
