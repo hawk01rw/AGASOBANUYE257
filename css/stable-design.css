@@ -51,3 +51,37 @@ button,input,select,textarea{font:inherit!important}
 ::selection{background:rgba(115,155,200,.32);color:white}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
 @media(max-width:700px){:where(.admin-panel,.newsletter,.comment-form){border-radius:11px!important}}
+
+
+/* Consistent 2:3 poster artwork: no stretching, uniform card frames */
+.poster-card .poster-image,
+.catalog-grid .poster-image,
+.related-section .poster-image{
+  width:100%!important;
+  height:auto!important;
+  aspect-ratio:2/3!important;
+  overflow:hidden!important;
+  position:relative!important;
+  background:#0b131d!important;
+}
+.poster-card .poster-image>img,
+.catalog-grid .poster-image>img,
+.related-section .poster-image>img{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  object-position:center top!important;
+}
+.poster-card .poster-placeholder{
+  width:100%!important;height:100%!important;min-height:0!important;
+  display:grid!important;place-items:center!important;
+}
+.member-poster{aspect-ratio:2/3!important;height:auto!important;overflow:hidden!important}
+.member-poster img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center top!important;display:block!important}
+.poster-card .poster-image:after{pointer-events:none}
+@media(max-width:520px){
+ .poster-row .poster-image{aspect-ratio:2/3!important;height:auto!important}
+}
