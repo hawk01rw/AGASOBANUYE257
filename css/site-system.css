@@ -1,0 +1,94 @@
+/* AGASOBANUYE257 — shared visual system
+   One restrained palette, consistent type scale and predictable spacing. */
+:root{
+  color-scheme:dark;
+  --aga-ink:#071426;--aga-ink-2:#0a1b30;--aga-surface:#0e2037;--aga-surface-2:#122943;
+  --aga-blue:#4b91f0;--aga-blue-bright:#79aef8;--aga-gold:#d6a52e;
+  --aga-text:#f3f6fb;--aga-muted:#aebdd1;--aga-border:rgba(145,174,211,.18);
+  --aga-radius:14px;--aga-content:1240px;
+  --aga-shadow:0 14px 38px rgba(0,0,0,.22);
+}
+html{background:var(--aga-ink);scroll-padding-top:90px}
+body{font-family:"DM Sans",Arial,sans-serif;color:var(--aga-text);background:linear-gradient(180deg,#0b1c32 0%,#071426 38%,#050e1b 100%)!important;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body :where(h1,h2,h3,h4,p){overflow-wrap:break-word}
+body :where(h1,h2,h3){font-family:"DM Sans",Arial,sans-serif;letter-spacing:-.035em}
+body :where(button,input,textarea,select){font:inherit}
+body :where(a,button){-webkit-tap-highlight-color:transparent}
+main{width:min(100% - 40px,var(--aga-content));margin-inline:auto}
+.cineva-header,.member-header{padding-inline:max(20px,calc((100vw - 1360px)/2))!important}
+.premium-header{min-height:76px!important}
+.premium-header .cineva-brand img{width:44px!important;height:44px!important}
+.premium-header .cineva-brand b{font-size:18px!important}
+.premium-header .top-links a{font-size:12px!important}
+.premium-header .top-links a.active{color:#fff!important}
+.premium-header .premium-search{height:40px!important;border-radius:9px!important}
+.feature-hero{width:100%;max-width:var(--aga-content);margin:24px auto 34px;border-radius:18px;overflow:hidden}
+.feature-copy{max-width:620px}
+.feature-copy h1{font-size:clamp(34px,5vw,58px);line-height:1.04;letter-spacing:-.055em}
+.feature-copy>p:not(.feature-eyebrow){max-width:540px;color:#d0d9e7;font-size:15px;line-height:1.75}
+.cineva-section{max-width:var(--aga-content);margin:0 auto;padding:24px 0}
+.cineva-heading{margin-bottom:16px}
+.cineva-heading h2{font-size:clamp(19px,2.3vw,25px);font-weight:750;letter-spacing:-.04em}
+.cineva-heading p{color:var(--aga-muted);font-size:12px}
+.poster-row{gap:14px!important}
+.poster-card{border-radius:11px!important;overflow:hidden;box-shadow:0 8px 22px rgba(0,0,0,.16);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.poster-card:hover{transform:translateY(-3px)}
+.poster-info{padding:10px 11px!important}
+.poster-info h3,.poster-info h4{font-size:12px!important;line-height:1.4!important;font-weight:700!important}
+.poster-meta{font-size:10px!important;color:var(--aga-muted)!important}
+.catalog-main,.member-main,.watch-main{max-width:var(--aga-content)!important;margin-inline:auto!important}
+.catalog-main{padding:34px 0 80px!important}
+.catalog-hero{padding:30px 32px!important;border-radius:16px!important;background:linear-gradient(120deg,rgba(18,48,81,.92),rgba(9,25,44,.96))!important;border:1px solid var(--aga-border)!important;box-shadow:var(--aga-shadow)}
+.catalog-hero h1,.member-heading h1{font-size:clamp(30px,4vw,46px)!important;line-height:1.08!important;letter-spacing:-.05em!important}
+.catalog-hero>p:not(.member-kicker),.member-heading>p:not(.member-kicker){color:var(--aga-muted)!important;font-size:14px!important;line-height:1.7}
+.catalog-toolbar{margin:22px 0 18px!important;gap:14px!important}
+.catalog-filters{gap:8px!important}
+.filter-chip{border-radius:8px!important;font-size:11px!important;padding:9px 13px!important}
+.catalog-toolbar select{min-height:39px;border:1px solid var(--aga-border);border-radius:9px;background:#0d2038;color:var(--aga-text);padding:0 12px}
+.catalog-grid,.member-grid{gap:18px!important}
+.catalog-grid .poster-card,.member-grid .member-card{border-radius:12px!important}
+.member-main{padding:42px 20px 90px!important}
+.member-heading{margin-bottom:26px}
+.member-heading h1{margin:5px 0 10px}
+.member-card{border-radius:12px!important;overflow:hidden}
+.vip-page-card{border-radius:18px!important;box-shadow:var(--aga-shadow)}
+.vip-page-content{max-width:680px}
+.vip-page-content h1{font-size:clamp(34px,5vw,56px)!important;line-height:1.05!important;letter-spacing:-.05em!important}
+.vip-lead{max-width:590px;line-height:1.8!important}
+.watch-main{padding:28px 20px 90px!important}
+.watch-player{border-radius:14px!important}
+.watch-title-block h1{font-size:clamp(26px,3.6vw,40px)!important}
+.watch-title-block p:not(.watch-kicker){line-height:1.75!important}
+.watch-details h3,.related-section h2,.comments-heading h2{font-size:21px!important;letter-spacing:-.035em!important}
+.watch-details p{line-height:1.75!important}
+.episode-row,.comment-card,.comment-form{border-radius:11px!important}
+.agas-footer{margin-top:44px}
+.agas-footer-inner{max-width:var(--aga-content)!important}
+.agas-footer-intro,.agas-footer-note p{max-width:360px;line-height:1.75}
+.premium-button,.outline-button,.comment-submit,.episode-watch,.episode-download,.filter-chip{border-radius:9px!important;font-weight:700!important;letter-spacing:0!important}
+button,a{transition:background-color .18s ease,border-color .18s ease,color .18s ease,transform .18s ease}
+:focus-visible{outline:2px solid var(--aga-blue-bright)!important;outline-offset:3px}
+.site-loader-caption{letter-spacing:.02em}
+@media(max-width:849px){
+ main{width:min(100% - 28px,var(--aga-content))}
+ .catalog-main{padding-top:24px!important}
+ .catalog-hero{padding:24px 20px!important}
+ .catalog-toolbar{align-items:stretch;flex-direction:column}
+ .catalog-toolbar select{width:100%}
+ .member-main{padding:28px 14px 86px!important}
+ .watch-main{padding:14px 12px 84px!important}
+ .feature-hero{margin:14px auto 24px;border-radius:12px}
+ .cineva-section{padding:18px 0}
+}
+@media(max-width:520px){
+ .premium-header{padding-inline:12px!important}
+ .premium-header .cineva-brand img{width:36px!important;height:36px!important}
+ .premium-header .cineva-brand b{font-size:15px!important}
+ .catalog-hero h1,.member-heading h1{font-size:31px!important}
+ .catalog-grid,.member-grid{gap:11px!important}
+ .poster-row{gap:10px!important}
+ .feature-copy h1{font-size:34px}
+ .feature-copy>p:not(.feature-eyebrow){font-size:13px}
+ .watch-details{padding-inline:2px!important}
+}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation-duration:.01ms!important}}
