@@ -8,19 +8,21 @@ const dateLabel=v=>{try{return new Intl.DateTimeFormat(undefined,{dateStyle:"med
 function commentTarget(m){return m.type==="episode"&&m.episodeTableId?{episodeId:m.episodeTableId}:{movieId:m.id};}
 function renderComment(c,session){const own=session?.user?.id===c.user_id;return '<article class="comment-card"><div class="comment-avatar">'+esc((c.author_name||"M").slice(0,1).toUpperCase())+'</div><div class="comment-content"><div class="comment-byline"><strong>'+esc(c.author_name||"Member")+'</strong><time>'+esc(dateLabel(c.created_at))+'</time>'+(own?'<button class="comment-delete" data-delete-comment="'+esc(c.id)+'" type="button" aria-label="Delete your comment">Delete</button>':"")+'</div><p>'+esc(c.body)+'</p></div></article>'}
 async function loadComments(){
- const list=$("#commentsList"),status=$("#commentsStatus"),form=$("#commentForm");
- if(!window.AgasobanuyeDB?.configured||!title?.id){status.textContent="Comments are unavailable until this title is connected.";return}
+ const list=$("#commentsList"),status=$("#commentsStatus");
+ if(!window.AgasobanuyeDB?.configured||!title?.id){status.textContent="Comments are temporarily unavailable.";return}
  try{
-  const [rows,session]=await Promise.all([window.AgasobanuyeDB.getComments(commentTarget(title)),window.AgasobanuyeDB.getSession()]);
-  $("#commentAuthPanel").hidden=!!session;$("#commentForm").hidden=!session;
-  const target=commentTarget(title),channelKey=(target.episodeId?"episode_id":"movie_id")+"-"+(target.episodeId||target.movieId);
-  if(commentsChannelKey!==channelKey){if(commentsChannel)window.AgasobanuyeDB.client.removeChannel(commentsChannel);const column=target.episodeId?"episode_id":"movie_id",value=target.episodeId||target.movieId;commentsChannelKey=channelKey;commentsChannel=window.AgasobanuyeDB.client.channel("comments-"+String(value)).on("postgres_changes",{event:"*",schema:"public",table:"comments",filter:column+"=eq."+value},()=>loadComments()).subscribe();}
+  const rows=await window.AgasobanuyeDB.getComments(commentTarget(title));
+  const session=await window.AgasobanuyeDB.getSession();
   $("#commentsCount").textContent=rows.length+" comments";
-  list.innerHTML=rows.length?rows.map(c=>renderComment(c,session)).join(""):'<div class="comments-empty">No comments yet. Start the conversation.</div>';
-  status.textContent=session?"Share your thoughts with the community.":"Sign in or create a free account to join the discussion.";
+  list.innerHTML=rows.length?rows.map(c=>renderComment(c,session)).join(""):'<div class="comments-empty">No comments yet. Be the first to comment.</div>';
+  status.textContent="Join the discussion — no account required.";
   const target=commentTarget(title),channelKey=(target.episodeId?"episode_id":"movie_id")+"-"+(target.episodeId||target.movieId);
-  if(commentsChannelKey!==channelKey){if(commentsChannel)window.AgasobanuyeDB.client.removeChannel(commentsChannel);const column=target.episodeId?"episode_id":"movie_id",value=target.episodeId||target.movieId;commentsChannelKey=channelKey;commentsChannel=window.AgasobanuyeDB.client.channel("comments-"+String(value)).on("postgres_changes",{event:"*",schema:"public",table:"comments",filter:column+"=eq."+value},()=>loadComments()).subscribe();}
-  form.querySelector("textarea").disabled=!session;form.querySelector("button[type=submit]").disabled=!session;
+  if(commentsChannelKey!==channelKey){
+   if(commentsChannel)window.AgasobanuyeDB.client.removeChannel(commentsChannel);
+   const column=target.episodeId?"episode_id":"movie_id",value=target.episodeId||target.movieId;
+   commentsChannelKey=channelKey;
+   commentsChannel=window.AgasobanuyeDB.client.channel("comments-"+String(value)).on("postgres_changes",{event:"*",schema:"public",table:"comments",filter:column+"=eq."+value},()=>loadComments()).subscribe();
+  }
  }catch(e){status.textContent="Could not load comments. "+(e.message||"Please try again.");}
 }
 async function showTitle(m){
@@ -61,9 +63,7 @@ function renderRelated(){
  $("#relatedRow").innerHTML=related.map(m=>'<article class="poster-card" data-id="'+esc(m.id)+'" tabindex="0" role="button"><div class="poster-image"><img src="'+esc(m.poster||"assets/agasobanuye257-logo.svg")+'" alt="" loading="lazy"></div><div class="poster-info"><h3>'+esc(m.title)+'</h3><div class="poster-meta"><span>'+esc(m.genre)+'</span><span>'+esc(m.year)+'</span></div></div></article>').join("")||'<p class="comments-empty">More titles will appear here as the catalogue grows.</p>';
  $("#relatedRow").onclick=e=>{const c=e.target.closest("[data-id]");if(!c)return;const m=allTitles.find(x=>String(x.id)===c.dataset.id);if(m){sessionStorage.setItem("agasobanuyeSelectedTitle",JSON.stringify(m));location.href="watch.html?id="+encodeURIComponent(m.slug||m.id)}};
 }
-document.querySelectorAll("[data-auth-mode]").forEach(b=>b.addEventListener("click",()=>{authMode=b.dataset.authMode;document.querySelectorAll("[data-auth-mode]").forEach(x=>x.classList.toggle("active",x===b));$("#commentAuthName").hidden=authMode!=="signup";$("#commentAuthPassword").autocomplete=authMode==="signup"?"new-password":"current-password";$("#commentAuthSubmit").innerHTML=(authMode==="signup"?"Create account":"Sign in")+' <span>→</span>';$("#commentAuthMessage").textContent="";}));
-$("#commentAuthForm").addEventListener("submit",async e=>{e.preventDefault();const button=$("#commentAuthSubmit"),message=$("#commentAuthMessage");button.disabled=true;message.textContent="Please wait…";try{const email=$("#commentAuthEmail").value.trim(),password=$("#commentAuthPassword").value,name=$("#commentAuthName").value.trim();const result=authMode==="signup"?await window.AgasobanuyeDB.signUp(email,password,name||email.split("@")[0]):await window.AgasobanuyeDB.signIn(email,password);if(result.session){message.textContent="You're signed in. You can now comment.";await loadComments()}else{message.textContent=authMode==="signup"?"Account created. Check your email to confirm, then sign in.":"Sign in complete. Refresh if the discussion does not unlock.";}}catch(err){message.textContent=err.message||"Authentication failed."}finally{button.disabled=false;}});
-$("#commentForm").addEventListener("submit",async e=>{e.preventDefault();const input=$("#commentInput"),button=e.currentTarget.querySelector("button[type=submit]"),body=input.value.trim();if(!body)return;button.disabled=true;try{await window.AgasobanuyeDB.addComment(commentTarget(title),body);input.value="";await loadComments()}catch(err){$("#commentsStatus").textContent=err.message||"Could not post your comment."}finally{button.disabled=false}});
+$("#commentForm").addEventListener("submit",async e=>{e.preventDefault();const input=$("#commentInput"),name=$("#commentName"),button=e.currentTarget.querySelector("button[type=submit]"),message=$("#commentMessage"),body=input.value.trim(),author=name.value.trim();if(!body||!author)return;button.disabled=true;message.textContent="Posting…";try{await window.AgasobanuyeDB.addComment(commentTarget(title),author,body);input.value="";message.textContent="Your comment has been posted.";await loadComments()}catch(err){message.textContent=err.message||"Could not post your comment."}finally{button.disabled=false}});
 $("#commentsList").addEventListener("click",async e=>{const b=e.target.closest("[data-delete-comment]");if(!b)return;if(!confirm("Delete your comment?"))return;try{await window.AgasobanuyeDB.removeComment(b.dataset.deleteComment);await loadComments()}catch(err){alert(err.message)}});
 $("#seriesEpisodes").addEventListener("click",async e=>{const b=e.target.closest("[data-episode-download]");if(!b)return;const old=b.textContent;b.disabled=true;b.textContent="Preparing…";try{const url=await window.AgasobanuyeDB.getVideoUrl(b.dataset.episodeDownload,true);const a=document.createElement("a");a.href=url;a.download="";a.rel="noopener";document.body.appendChild(a);a.click();a.remove()}catch(err){alert(err.message||"Download unavailable")}finally{b.disabled=false;b.textContent=old}});
 $("#watchlistButton").onclick=async()=>{if(!window.AgasobanuyeDB?.configured||!title?.id){alert("Sign in and connect your account to save titles.");return}try{await window.AgasobanuyeDB.toggleWatchlist(title.id,false);$("#watchlistButton").textContent="✓ Saved"}catch(e){alert(e.message||"Please sign in to save titles.")}};
