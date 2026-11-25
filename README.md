@@ -12,10 +12,11 @@ Responsive movie-discovery website with a blue, metallic-gold and midnight-black
 
 1. Create a project at https://supabase.com/.
 2. Open **SQL Editor** and run `supabase/schema.sql` for a new database.
-3. If the original schema was already applied, run `supabase/migrations/002_tmdb_imagekit.sql` instead to add TMDB and ImageKit columns.
-4. In **Project Settings → API**, copy the Project URL and public publishable/anon key.
-5. Copy `supabase-config.example.js` to `supabase-config.js`; replace the two placeholders with your project values. The local config is ignored by Git.
-6. Register your own account in Supabase Auth. Copy that user's UUID from Authentication → Users and run the admin grant SQL comment at the bottom of `supabase/schema.sql` in SQL Editor. Only the project owner should grant admin access.
+3. If the original schema was already applied, run `supabase/migrations/002_tmdb_imagekit.sql` to add TMDB and ImageKit columns.
+4. Run `supabase/migrations/003_series_episodes.sql` in the same SQL Editor to add series, seasons and episode relationships. Existing movie records remain movies.
+5. In **Project Settings → API**, copy the Project URL and public publishable/anon key.
+6. Copy `supabase-config.example.js` to `supabase-config.js`; replace the two placeholders with your project values. The local config is ignored by Git.
+7. Register your own account in Supabase Auth. Copy that user's UUID from Authentication → Users and run the admin grant SQL comment at the bottom of `supabase/schema.sql` in SQL Editor. Only the project owner should grant admin access.
 
 The page loads Supabase JS v2 from its official CDN and reads `supabase-config.js` before `js/supabase-client.js`. The browser uses only a public publishable/anon key; Row Level Security protects the data. **Never put a service_role or secret key in browser code.**
 
@@ -41,9 +42,9 @@ Do not put TMDB private tokens or the ImageKit private key in browser code or co
 
 The existing schema creates a private `movie-videos` bucket for video files. Poster and backdrop images are intended for ImageKit, not Supabase Storage. Save the exact private video object path in `movies.video_path` and generate short-lived signed URLs for playback.
 
-## Current scope
+## Series and episodes
 
-The database and browser Supabase client are starter integrations. The admin dashboard, TMDB search/import UI, ImageKit upload UI, secure server-side signing functions and production playback interface still need to be implemented and tested.
+The additive migration `supabase/migrations/003_series_episodes.sql` adds `content_type` (`movie`, `series`, or `episode`), a parent `series_id`, season and episode numbers, and an episode title. It also prevents duplicate episode numbers within a season and validates that an episode points to a series record. Run this migration in Supabase SQL Editor before using series and episode management. The existing movie records remain compatible.
 
 ## Admin studio and TMDB import
 
