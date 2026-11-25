@@ -69,3 +69,99 @@
   .pro-admin .pro-main button:not(.password-visibility){min-height:28px;padding:6px 8px!important}
   .pro-admin .quick-actions button{min-height:88px;padding:9px!important}
 }
+
+
+/* Clearer content upload studio: visible sections, labels and upload controls. */
+.pro-admin #contentEditorCard,
+.pro-admin #view-bulk .pro-card{
+  border:1px solid rgba(115,170,235,.42);
+  background:linear-gradient(145deg,rgba(17,42,68,.98),rgba(7,19,34,.99));
+  box-shadow:0 18px 44px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.035);
+}
+.pro-admin #contentEditorCard{padding:clamp(18px,2.2vw,30px)}
+.pro-admin #contentEditorCard .pro-card-head{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:0 0 17px;margin:0 0 20px;border-bottom:1px solid rgba(141,187,255,.22);
+}
+.pro-admin #contentEditorCard .pro-card-head h2{font-size:clamp(20px,2vw,25px);color:#f3f7ff}
+.pro-admin #contentEditorCard .pro-card-head p{font-size:12px;line-height:1.6;color:#b3c4da}
+.pro-admin #contentEditorCard .admin-form{gap:18px}
+.pro-admin #contentEditorCard .form-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;
+  padding:18px;border:1px solid rgba(141,187,255,.19);border-radius:12px;
+  background:rgba(3,12,23,.34);
+}
+.pro-admin #contentEditorCard .form-grid>label,
+.pro-admin #bulkUploadForm .form-grid>label{
+  display:flex;flex-direction:column;align-items:stretch;gap:7px;
+  color:#e1ebf8;font-size:11px;font-weight:700;line-height:1.4;
+}
+.pro-admin #contentEditorCard .form-grid .full-field{grid-column:1/-1}
+.pro-admin #contentEditorCard .admin-form :is(input,select,textarea),
+.pro-admin #bulkUploadForm :is(input,select,textarea){
+  width:100%;min-width:0;min-height:43px;padding:10px 12px;
+  color:#f4f8ff;background:#061426;border:1px solid rgba(141,187,255,.32);
+  border-radius:8px;font-size:12px;
+}
+.pro-admin #contentEditorCard textarea{min-height:105px;line-height:1.55}
+.pro-admin #contentEditorCard .admin-form :is(input,select,textarea):focus,
+.pro-admin #bulkUploadForm :is(input,select,textarea):focus{
+  border-color:#8dbbff;box-shadow:0 0 0 3px rgba(93,157,239,.17);outline:0;
+}
+.pro-admin #contentEditorCard .artwork-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;
+}
+.pro-admin #contentEditorCard .upload-card,
+.pro-admin #contentEditorCard .video-upload{
+  display:flex;flex-direction:column;align-items:stretch;gap:10px;
+  min-width:0;padding:17px;border:1px solid rgba(141,187,255,.3);
+  border-radius:12px;background:linear-gradient(145deg,rgba(24,55,87,.78),rgba(5,17,31,.92));
+}
+.pro-admin #contentEditorCard .upload-card strong,
+.pro-admin #contentEditorCard .video-upload strong{
+  color:#f4f8ff;font-size:13px;font-weight:800;
+}
+.pro-admin #contentEditorCard .upload-card strong span{
+  margin-left:6px;color:#9fb5d0;font-size:10px;font-weight:500;
+}
+.pro-admin #contentEditorCard .upload-card .image-url-label{
+  color:#a9c3e2;font-size:10px;font-weight:700;
+}
+.pro-admin #contentEditorCard .upload-card input[type=file],
+.pro-admin #contentEditorCard .video-upload input[type=file],
+.pro-admin #bulkUploadForm input[type=file]{
+  padding:9px;background:#071629;border:1px dashed rgba(141,187,255,.48);
+  border-radius:8px;color:#dce9fa;font-size:11px;
+}
+.pro-admin #contentEditorCard .upload-card img{
+  display:block;width:auto;max-width:100%;max-height:190px;object-fit:contain;
+  align-self:flex-start;border:1px solid rgba(141,187,255,.25);border-radius:8px;
+  background:#030a12;
+}
+.pro-admin #contentEditorCard .upload-card small,
+.pro-admin #contentEditorCard .video-upload small,
+.pro-admin #bulkUploadForm small{
+  color:#a9bad0;font-size:10px;line-height:1.55;
+}
+.pro-admin #contentEditorCard .publish-row{
+  display:flex;flex-wrap:wrap;gap:18px;padding:14px 16px;
+  border:1px solid rgba(141,187,255,.24);border-radius:10px;background:rgba(5,17,31,.55);
+}
+.pro-admin #contentEditorCard .check-label{
+  display:flex;align-items:center;gap:9px;color:#e5edf8;font-size:11px;font-weight:700;
+}
+.pro-admin #contentEditorCard .check-label input{width:16px;min-height:16px;height:16px;accent-color:#79adf0}
+.pro-admin #contentEditorCard .save-button{min-width:170px;min-height:42px;font-size:11px!important}
+.pro-admin #contentEditorCard #saveMessage{padding:0 2px;font-size:11px}
+.pro-admin #view-bulk #bulkUploadForm .form-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;
+  padding:17px;border:1px solid rgba(141,187,255,.2);border-radius:11px;background:rgba(3,12,23,.32);
+}
+@media(max-width:760px){
+ .pro-admin #contentEditorCard .pro-card-head{align-items:flex-start;flex-direction:column}
+ .pro-admin #contentEditorCard .form-grid,
+ .pro-admin #contentEditorCard .artwork-grid,
+ .pro-admin #view-bulk #bulkUploadForm .form-grid{grid-template-columns:1fr;padding:13px}
+ .pro-admin #contentEditorCard .form-grid .full-field{grid-column:auto}
+ .pro-admin #contentEditorCard .publish-row{gap:12px;flex-direction:column}
+}
