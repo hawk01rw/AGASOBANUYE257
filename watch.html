@@ -17,6 +17,7 @@
 <section class="watch-player-section">
 <div class="watch-player" id="watchPlayer"><div class="player-placeholder"><div class="play-large">▶</div><h2 id="playerMessage">Your movie experience starts here</h2><p>Playback is available when an authorized video is added by the administrator.</p></div></div>
 <div class="watch-title-block"><div><p class="watch-kicker" id="watchMeta">AGASOBANUYE257 PREMIUM</p><h1 id="watchTitle">Loading title…</h1><p id="watchDescription"></p></div><div class="watch-actions"><button id="watchlistButton" class="outline-button">♡ Add to Saved</button><a id="movieDownloadButton" class="outline-button" href="#" hidden>↓ Download video</a></div></div>
+<section id="seriesEpisodesSection" class="related-section" hidden><h2>Episodes</h2><div id="seriesEpisodes" class="episode-list"></div></section>
 <div class="watch-details"><div><h3>About this title</h3><p id="watchSynopsis"></p><div class="detail-chips" id="watchChips"></div></div><aside><h3>More information</h3><p id="watchLanguage"></p><p id="watchDuration"></p><p id="watchRating"></p></aside></div>
 </section>
 <section class="comments-section" id="commentsSection">
@@ -29,7 +30,6 @@
 </form>
 <div id="commentsList" class="comments-list"><p class="comments-empty">Loading comments…</p></div>
 </section>
-<section id="seriesEpisodesSection" class="related-section" hidden><h2>Episodes</h2><div id="seriesEpisodes" class="episode-list"></div></section>
 <section class="related-section"><h2>You may also like</h2><div class="poster-row" id="relatedRow"></div></section>
 </main>
 <nav class="mobile-bottom-nav"><a href="index.html"><b>⌂</b><span>Home</span></a><a href="movies.html"><b>▦</b><span>Movies</span></a><a href="series.html"><b>▣</b><span>Series</span></a><a href="favorite.html"><b>♡</b><span>Saved</span></a><a href="vip.html"><b>✦</b><span>VIP</span></a></nav>
@@ -55,7 +55,6 @@
   <div class="agas-footer-bottom"><span>© <span data-footer-year>2026</span> AGASOBANUYE257. All rights reserved.</span><span class="agas-footer-credit">MADE FOR MOVIE LOVERS <i>✦</i></span></div>
 </footer>
 <script>document.querySelectorAll("[data-footer-year]").forEach(function(node){node.textContent=new Date().getFullYear();});</script>
-
 <script>document.getElementById("menuButton").onclick=()=>{const n=document.querySelector(".member-header .top-links");const o=n.classList.toggle("menu-open");document.getElementById("menuButton").setAttribute("aria-expanded",String(o));};</script>
 <a class="contact-float" href="https://wa.me/25767443807?text=Hello%20AGASOBANUYE257%2C%20I%20need%20help." target="_blank" rel="noopener noreferrer" aria-label="Chat with AGASOBANUYE257 on WhatsApp at +257 67 44 38 07">
   <span class="contact-float__label"><strong>Chat with us</strong><small>+257 67 44 38 07</small></span>
