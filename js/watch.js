@@ -46,7 +46,18 @@ async function loadSeriesEpisodes(seriesId){
  try{const episodes=await window.AgasobanuyeDB.getEpisodes(seriesId);renderEpisodeRows(episodes);return episodes;}
  catch(error){host.innerHTML='<div class="episode-empty"><strong>Episodes could not be loaded</strong><span>'+esc(error.message||'Please try again.')+'</span><button type="button" class="episode-retry" id="retryEpisodes">Try again</button></div>';const retry=$("#retryEpisodes");if(retry)retry.onclick=()=>loadSeriesEpisodes(seriesId);return [];}
 }
-async function showTitle(m){
+async function renderTmdbCredits(meta){
+ const host=$("#tmdbCredits");if(!host)return;
+ const cast=Array.isArray(meta.cast)?meta.cast:[],crew=Array.isArray(meta.crew)?meta.crew:[];
+ const directors=crew.filter(x=>x.job==="Director"),writers=crew.filter(x=>["Writer","Screenplay","Story","Teleplay"].includes(x.job));
+ const names=arr=>arr.map(x=>x.name).filter(Boolean).join(", ");
+ const parts=[];
+ if(cast.length)parts.push("<div class=\"tmdb-credit-group\"><h3>Top cast</h3><div class=\"tmdb-cast-grid\">"+cast.slice(0,12).map(p=>"<article class=\"tmdb-cast-card\"><strong>"+esc(p.name)+"</strong><span>"+esc(p.character||"Cast")+"</span></article>").join("")+"</div></div>");
+ if(directors.length||writers.length)parts.push("<div class=\"tmdb-credit-line\">"+(directors.length?"<p><b>Director</b> "+esc(names(directors))+"</p>":"")+(writers.length?"<p><b>Writers</b> "+esc(names(writers))+"</p>":"")+"</div>");
+ if(meta.production_companies?.length)parts.push("<p class=\"tmdb-production\"><b>Production</b> "+esc(meta.production_companies.join(", "))+"</p>");
+ host.innerHTML=parts.join("");host.hidden=!parts.length;
+}
+function showTitle(m){
  if(!m)return;title=m;document.title=m.title+" — AGASOBANUYE257";
  $("#watchTitle").textContent=m.title;$("#watchDescription").textContent=m.description||"Watch this title on AGASOBANUYE257.";
  $("#watchSynopsis").textContent=m.description||"No synopsis has been added yet.";
