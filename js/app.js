@@ -137,7 +137,7 @@ function renderFeature() {
   $("#featureDetails").onclick = event => { event.preventDefault(); openWatch(movie); };
   $("#heroCount").textContent = String(featuredIndex + 1).padStart(2, "0") +
     " / " + String(Math.min(movies.length, 10)).padStart(2, "0");
-  if (hero) { window.setTimeout(() => hero.classList.remove("hero-changing"), 380); }
+  if (hero) { window.setTimeout(() => hero.classList.remove("hero-changing"), 1100); }
 }
 
 function advanceFeature(direction = 1) {
