@@ -1,0 +1,4 @@
+project_id = "owpmwujpvtdfbcagffcm"
+
+[functions.imagekit-auth]
+verify_jwt = false
