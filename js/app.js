@@ -192,7 +192,7 @@ $("#menuButton").onclick = () => { const open = $(".top-links").classList.toggle
 $("#profileButton").onclick = () => $("#profileDialog").showModal();
 $("#profileClose").onclick = () => $("#profileDialog").close();
 $("#profileOkay").onclick = () => $("#profileDialog").close();
-$("#savedTop").onclick = () => $("#favorite").scrollIntoView({behavior:"smooth"});
+$("#savedTop").onclick = () => { location.href = "favorite.html"; };
 $("#backTop").onclick = () => window.scrollTo({top:0, behavior:"smooth"});
 const yearNode = $("#year");
 if (yearNode) yearNode.textContent = new Date().getFullYear();
