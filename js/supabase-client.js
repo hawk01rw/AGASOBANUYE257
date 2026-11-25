@@ -7,9 +7,9 @@
     client,
     async getMovies(){
       if(!client)return null;
-      const {data,error}=await client.from("movies").select("id,title,slug,synopsis,genre,release_year,poster_url,backdrop_url,imagekit_file_id,backdrop_imagekit_file_id,tmdb_id,tmdb_vote_average,tmdb_vote_count,video_path,trailer_url,duration_minutes,language,featured,content_type").eq("published",true).neq("content_type","episode").order("featured",{ascending:false}).order("created_at",{ascending:false});
+      const {data,error}=await client.from("movies").select("id,title,slug,synopsis,genre,release_year,poster_url,backdrop_url,imagekit_file_id,backdrop_imagekit_file_id,tmdb_id,tmdb_vote_average,tmdb_vote_count,video_path,download_url,trailer_url,duration_minutes,language,featured,content_type").eq("published",true).neq("content_type","episode").order("featured",{ascending:false}).order("created_at",{ascending:false});
       if(error)throw error;
-      return (data||[]).map(m=>({id:m.id,title:m.title,genre:m.genre,year:m.release_year||"—",rating:m.tmdb_vote_average!=null?Number(m.tmdb_vote_average).toFixed(1):"—",tag:m.featured?"FEATURED":(m.content_type==="series"?"SERIES":"MOVIE"),type:m.content_type||"movie",poster:m.poster_url||"",backdrop:m.backdrop_url||"",tmdbId:m.tmdb_id,voteAverage:m.tmdb_vote_average,voteCount:m.tmdb_vote_count,description:m.synopsis||"",videoPath:m.video_path,trailerUrl:m.trailer_url,duration:m.duration_minutes,language:m.language,slug:m.slug}));
+      return (data||[]).map(m=>({id:m.id,title:m.title,genre:m.genre,year:m.release_year||"—",rating:m.tmdb_vote_average!=null?Number(m.tmdb_vote_average).toFixed(1):"—",tag:m.featured?"FEATURED":(m.content_type==="series"?"SERIES":"MOVIE"),type:m.content_type||"movie",poster:m.poster_url||"",backdrop:m.backdrop_url||"",tmdbId:m.tmdb_id,voteAverage:m.tmdb_vote_average,voteCount:m.tmdb_vote_count,description:m.synopsis||"",videoPath:m.video_path,downloadUrl:m.download_url,trailerUrl:m.trailer_url,duration:m.duration_minutes,language:m.language,slug:m.slug}));
     },
     async signUp(email,password,displayName){
       if(!client)throw new Error("Supabase is not configured yet.");
