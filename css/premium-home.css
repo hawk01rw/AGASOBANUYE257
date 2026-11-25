@@ -121,3 +121,11 @@ body{font-family:'DM Sans',sans-serif;background:radial-gradient(ellipse at 50% 
 @media(min-width:1100px){.feature-hero{height:560px;max-height:68vh;margin-left:5%;margin-right:5%}.poster-row{grid-auto-columns:minmax(145px,16%)}}
 @media(max-width:849px){.feature-hero{height:520px;min-height:440px}.feature-copy{left:5%;right:5%;bottom:14%}.poster-row{grid-auto-columns:minmax(140px,29%)}.poster-image{height:215px}.cineva-section{padding:28px 4%}.newsletter{margin:35px 4%}}
 @media(max-width:480px){.cineva-brand img{width:42px;height:42px}.cineva-brand b{font-size:20px}.cineva-brand small{font-size:7px}.feature-hero{height:470px;min-height:420px;border-radius:15px}.feature-copy h1{font-size:34px}.feature-copy>p:not(.feature-eyebrow){font-size:12px}.feature-tags span{font-size:9px;padding:5px 8px}.feature-buttons .premium-button,.feature-buttons .outline-button{min-height:40px;padding:0 12px;font-size:11px}.heading-icon{width:38px;height:38px;font-size:18px}.cineva-heading h2{font-size:20px}.cineva-heading p{font-size:10px}.poster-row{grid-auto-columns:minmax(125px,42%);gap:10px}.poster-image{height:185px}.poster-info h3{font-size:12px;margin-bottom:14px}.poster-meta{font-size:9px}.newsletter h2{font-size:26px}.footer-logo b{font-size:22px}}
+
+
+/* Keep the footer at the true end of the page; on short pages it rests at viewport bottom. */
+html,body{min-height:100%}
+body{min-height:100vh;min-height:100svh;display:flex;flex-direction:column}
+body>main{flex:1 0 auto;width:100%}
+body>.cineva-footer{flex-shrink:0;margin-top:auto}
+@media(max-width:849px){body>.cineva-footer{padding-bottom:calc(85px + env(safe-area-inset-bottom))}}
