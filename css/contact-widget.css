@@ -1,0 +1,13 @@
+/* AGASOBANUYE257 floating WhatsApp contact with soft wave rings */
+.contact-float{position:fixed;right:25px;bottom:28px;z-index:120;display:flex;align-items:center;gap:11px;text-decoration:none;color:#fff;font-family:'DM Sans',sans-serif}
+.contact-float__label{display:flex;flex-direction:column;gap:3px;padding:11px 15px;border:1px solid rgba(87,220,145,.25);border-radius:14px;background:rgba(15,24,23,.94);box-shadow:0 9px 30px rgba(0,0,0,.35);backdrop-filter:blur(12px);transition:transform .2s,border-color .2s}
+.contact-float__label strong{font-size:12px;letter-spacing:.2px}.contact-float__label small{font-size:10px;color:#a9c9b7}
+.contact-float__button{position:relative;isolation:isolate;width:60px;height:60px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(145deg,#35df83,#079b59);border:1px solid rgba(255,255,255,.38);box-shadow:0 8px 28px rgba(20,190,100,.32);transition:transform .2s,filter .2s}
+.contact-float__button svg{position:relative;z-index:2;width:31px;height:31px;fill:#fff}
+.contact-float__button:before,.contact-float__button:after{content:"";position:absolute;inset:-7px;border:2px solid rgba(45,220,126,.55);border-radius:50%;z-index:-1;animation:contact-wave 2.4s ease-out infinite}
+.contact-float__button:after{animation-delay:1.2s}
+.contact-float:hover .contact-float__button{transform:translateY(-3px) scale(1.04);filter:brightness(1.08)}
+.contact-float:hover .contact-float__label{transform:translateX(-3px);border-color:rgba(87,220,145,.55)}
+@keyframes contact-wave{0%{transform:scale(.82);opacity:.85}100%{transform:scale(1.75);opacity:0}}
+@media(max-width:600px){.contact-float{right:16px;bottom:calc(88px + env(safe-area-inset-bottom));gap:0}.contact-float__label{display:none}.contact-float__button{width:56px;height:56px}}
+@media(prefers-reduced-motion:reduce){.contact-float__button:before,.contact-float__button:after{animation:none;opacity:0}.contact-float *{transition:none}}
