@@ -7,10 +7,20 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/agasobanuye.css"><link rel="stylesheet" href="css/cineva.css"><link rel="stylesheet" href="css/premium-home.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script defer src="js/supabase-client.js"></script><script defer src="js/imagekit-upload.js"></script><script defer src="js/app.js"></script></head>
-<body><header class="cineva-header"><a class="cineva-brand" href="index.html"><img src="assets/agasobanuye257-logo.svg" alt=""><span><b>AGASOBANUYE<span>257</span></b><small>POWERED BY IT HAWK RW</small></span></a>
-<nav class="top-links"><a href="#home">Home</a><a href="#movies">Movies</a><a href="#series">Series</a></nav>
-<div class="top-actions"><button class="icon-action" id="savedTop" aria-label="Saved movies">♡</button><button class="icon-action" aria-label="Notifications">♧</button><button class="icon-action theme-icon" aria-label="Theme">☼</button><button class="profile-action" id="profileButton" aria-label="Profile">♙</button><button class="menu-action" id="menuButton" aria-label="Menu">☰</button></div>
-<label class="cineva-search"><span>⌕</span><input id="searchInput" type="search" placeholder="Search movies and series..." aria-label="Search titles"></label>
+<body><header class="cineva-header">
+  <a class="cineva-brand" href="#home" aria-label="AGASOBANUYE257 home">
+    <img src="assets/agasobanuye257-logo.svg" alt="">
+    <span><b>AGASOBANUYE<span>257</span></b><small>YOUR ENTERTAINMENT DESTINATION</small></span>
+  </a>
+  <nav class="top-links" aria-label="Main navigation">
+    <a class="nav-home" href="#home">Discover</a><a href="#movies">Movies</a><a href="#series">Series</a>
+  </nav>
+  <label class="cineva-search"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Search movies, series..." aria-label="Search titles"></label>
+  <div class="top-actions">
+    <button class="icon-action saved-action" id="savedTop" type="button" aria-label="Saved movies" title="Saved movies">♡</button>
+    <button class="profile-action" id="profileButton" type="button" aria-label="Your profile" title="Your profile"><span>♙</span></button>
+    <button class="menu-action" id="menuButton" type="button" aria-label="Open navigation menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
 </header><main id="home">
 <section class="feature-hero" id="featureHero"><div class="feature-image" id="featureImage"></div><div class="feature-overlay"></div><div class="feature-copy"><p class="feature-eyebrow">✦ AGASOBANUYE257 FEATURED</p><div class="feature-tags" id="featureTags"></div><h1 id="featureTitle">Discover your next favorite story</h1><p id="featureDescription">Your destination for movies and series. Discover amazing stories and enjoy entertainment in one place.</p><div class="feature-buttons"><a class="premium-button" id="featureWatch" href="#movies">▶ Watch Now</a><a class="outline-button" id="featureDetails" href="#movies">More Details</a></div></div><div class="hero-pagination"><button id="heroPrev" aria-label="Previous featured title">‹</button><span id="heroCount">01 / 01</span><button id="heroNext" aria-label="Next featured title">›</button></div></section>
 
