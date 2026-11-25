@@ -28,3 +28,34 @@
 .episode-row>span:last-child{font-size:11px;color:#e8c46d}
 .episode-number{font-size:10px;color:#aebbd0;letter-spacing:.5px}
 @media(max-width:600px){.watch-actions{width:100%}.episode-row{grid-template-columns:75px 1fr;gap:8px;padding:12px}.episode-row>span:last-child{grid-column:2}}
+
+/* Pro watch layout, signature blue + gold */
+.watch-main{max-width:1240px;padding-top:30px}
+.watch-player{border:1px solid rgba(75,145,240,.34);border-radius:20px;box-shadow:0 28px 85px rgba(0,0,0,.55),0 0 32px rgba(23,105,210,.11)}
+.watch-backdrop{opacity:.28;filter:saturate(.8)}
+.play-large{background:linear-gradient(135deg,#4b91f0,#1769d2,#082b63);box-shadow:0 12px 36px rgba(23,105,210,.32)}
+.watch-kicker{color:#83b6ff}
+.watch-title-block,.watch-details{border-color:rgba(75,145,240,.2)}
+.detail-chips span{border-color:rgba(75,145,240,.3);background:rgba(23,105,210,.11);color:#c9ddfb}
+.related-section h2,.comments-heading h2{font:800 clamp(23px,3vw,30px)/1.2 'DM Sans',sans-serif;letter-spacing:-.7px}
+.episode-list{display:grid;gap:11px;margin-top:18px}
+.episode-row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:17px 19px;border:1px solid rgba(75,145,240,.2);border-radius:14px;background:linear-gradient(115deg,rgba(13,29,50,.96),rgba(7,15,27,.96));color:#f4f7ff;transition:.2s}
+.episode-row:hover{border-color:rgba(75,145,240,.7);transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,0,0,.2)}
+.episode-info{display:grid;gap:6px;min-width:0}.episode-info strong{font-size:14px}.episode-info small{font-size:12px;color:#a9b8ce;line-height:1.5}.episode-number{font-size:10px;color:#8dbbff;letter-spacing:1px;font-weight:800}
+.episode-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}.episode-watch,.episode-download{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:0 13px;border-radius:9px;text-decoration:none;font:700 11px 'DM Sans',sans-serif;cursor:pointer}
+.episode-download{background:rgba(214,165,46,.08)!important;border-color:rgba(214,165,46,.38)!important;color:#f0cc78!important}
+.comments-section{padding:34px 0 15px;border-top:1px solid rgba(75,145,240,.2)}
+.comments-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:20px}.comments-heading .watch-kicker{margin:0 0 8px}.comments-heading h2{margin:0 0 7px}.comments-heading p:not(.watch-kicker){color:#a9b8ce;font:13px/1.6 'DM Sans',sans-serif;margin:0}
+.comments-count{padding:8px 12px;border:1px solid rgba(75,145,240,.25);border-radius:99px;background:rgba(23,105,210,.1);color:#a9ceff;font:700 11px 'DM Sans',sans-serif;white-space:nowrap}
+.comment-form{padding:16px;border:1px solid rgba(75,145,240,.24);border-radius:16px;background:linear-gradient(135deg,rgba(14,30,51,.86),rgba(7,15,27,.9));margin-bottom:18px}
+.comment-form textarea{width:100%;resize:vertical;min-height:90px;padding:13px 14px;border:1px solid rgba(75,145,240,.23);border-radius:11px;background:rgba(2,8,16,.65);color:#f4f7ff;font:13px/1.6 'DM Sans',sans-serif;outline:none}
+.comment-form textarea:focus{border-color:#4b91f0;box-shadow:0 0 0 3px rgba(75,145,240,.12)}
+.comment-form-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}.comment-form-foot small{color:#8497b1;font:11px/1.5 'DM Sans',sans-serif}
+.comment-submit{display:inline-flex;align-items:center;gap:18px;padding:11px 15px;border-radius:9px;font:800 11px 'DM Sans',sans-serif;cursor:pointer}.comment-submit:disabled{opacity:.45;cursor:not-allowed}
+.comments-list{display:grid;gap:10px}.comment-card{display:flex;gap:12px;padding:15px;border:1px solid rgba(75,145,240,.14);border-radius:13px;background:rgba(10,21,36,.72)}
+.comment-avatar{width:36px;height:36px;flex:0 0 36px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(135deg,#1769d2,#082b63);color:#fff;font:800 13px 'DM Sans',sans-serif}
+.comment-content{min-width:0;flex:1}.comment-byline{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.comment-byline strong{font:700 12px 'DM Sans',sans-serif;color:#eaf2ff}.comment-byline time{font:10px 'DM Sans',sans-serif;color:#8297b3}.comment-byline .comment-delete{margin-left:auto;border:0;background:transparent;color:#91baff;font:600 10px 'DM Sans',sans-serif;cursor:pointer}.comment-content>p{margin:8px 0 0;color:#c3d0e2;font:13px/1.65 'DM Sans',sans-serif;white-space:pre-wrap;overflow-wrap:anywhere}
+.comments-empty{padding:24px 15px;text-align:center;color:#8799b2;border:1px dashed rgba(75,145,240,.22);border-radius:12px;font:12px 'DM Sans',sans-serif}
+.watch-search{width:min(240px,28vw)}
+@media(max-width:849px){.watch-search{width:100%;max-width:100%;grid-column:1/-1;grid-row:2}.member-header .top-actions{display:contents}.member-header .member-back{grid-column:2;grid-row:1}.member-header .menu-action{grid-column:3;grid-row:1}.member-header .cineva-search{grid-column:1/-1;grid-row:2}.episode-row{align-items:flex-start;flex-direction:column}.episode-actions{width:100%}}
+@media(max-width:520px){.comments-heading{align-items:flex-start;flex-direction:column}.comment-form{padding:12px}.comment-form-foot{align-items:flex-start;flex-direction:column}.comment-submit{width:100%;justify-content:space-between}.episode-actions a,.episode-actions button{flex:1}.watch-title-block{padding:20px 1%}}
