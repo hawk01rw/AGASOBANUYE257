@@ -14,3 +14,8 @@ grid.addEventListener("click",e=>{const card=e.target.closest(".movie-card");if(
 document.querySelector("#filterRow").addEventListener("click",e=>{const b=e.target.closest("[data-filter]");if(!b)return;activeFilter=b.dataset.filter;document.querySelectorAll(".filter-chip").forEach(c=>c.classList.toggle("selected",c===b));renderMovies()});
 document.querySelectorAll("[data-category]").forEach(b=>b.addEventListener("click",()=>{activeFilter=b.dataset.category;document.querySelectorAll(".filter-chip").forEach(c=>c.classList.toggle("selected",c.dataset.filter===activeFilter));document.querySelector("#movies").scrollIntoView({behavior:"smooth"});renderMovies()}));
 document.querySelector("#dialogClose").addEventListener("click",()=>detail.close());const profile=document.querySelector("#profileDialog");document.querySelector("#profileButton").addEventListener("click",()=>profile.showModal());document.querySelector("#profileClose").addEventListener("click",()=>profile.close());document.querySelector("#profileOkay").addEventListener("click",()=>profile.close());document.querySelector("#menuButton").addEventListener("click",()=>document.querySelector(".desktop-nav").classList.toggle("open"));document.querySelectorAll(".nav-link").forEach(a=>a.addEventListener("click",()=>document.querySelector(".desktop-nav").classList.remove("open")));document.querySelector("#year").textContent=new Date().getFullYear();renderMovies();
+if(window.AgasobanuyeDB?.configured){
+  window.AgasobanuyeDB.getMovies()
+    .then(rows=>{if(rows&&rows.length){movies.splice(0,movies.length,...rows);renderMovies();}})
+    .catch(error=>{console.error("AGASOBANUYE257 database connection:",error);});
+}
