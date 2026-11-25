@@ -11,3 +11,27 @@
 @keyframes contact-wave{0%{transform:scale(.82);opacity:.85}100%{transform:scale(1.75);opacity:0}}
 @media(max-width:600px){.contact-float{right:16px;bottom:calc(88px + env(safe-area-inset-bottom));gap:0}.contact-float__label{display:none}.contact-float__button{width:56px;height:56px}}
 @media(prefers-reduced-motion:reduce){.contact-float__button:before,.contact-float__button:after{animation:none;opacity:0}.contact-float *{transition:none}}
+
+/* AGASOBANUYE257 global premium controls, icons and floating back-to-top */
+:root{--ui-violet:#a95bd2;--ui-pink:#d04483;--ui-gold:#e8c48c;--ui-glass:rgba(22,17,34,.88)}
+button,.premium-button,.outline-button,.filter-chip,.icon-action,.profile-action,.menu-action{ -webkit-tap-highlight-color:transparent;transition:background .22s ease,border-color .22s ease,box-shadow .22s ease,transform .22s ease,color .22s ease}
+button{cursor:pointer}
+button:not(.dialog-close),.premium-button,.outline-button,.filter-chip{border-radius:14px}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #d58de8;outline-offset:3px}
+button:not(:disabled):active,.premium-button:active,.outline-button:active,.filter-chip:active{transform:translateY(1px) scale(.98)}
+button:disabled{opacity:.48;cursor:not-allowed}
+.premium-button,button[type=submit]{box-shadow:0 7px 22px rgba(169,91,210,.2)}
+.premium-button:hover,button[type=submit]:hover{filter:brightness(1.1);box-shadow:0 10px 30px rgba(169,91,210,.32);transform:translateY(-2px)}
+.outline-button:hover,.filter-chip:hover{border-color:rgba(213,141,232,.7);background:rgba(169,91,210,.14);transform:translateY(-2px)}
+.icon-action,.profile-action,.menu-action{border:1px solid rgba(191,137,219,.28)!important;border-radius:16px!important;background:linear-gradient(145deg,rgba(169,91,210,.16),rgba(208,68,131,.08))!important;box-shadow:inset 0 1px rgba(255,255,255,.07),0 5px 18px rgba(0,0,0,.18)}
+.icon-action:hover,.profile-action:hover,.menu-action:hover{border-color:rgba(213,141,232,.72)!important;box-shadow:0 0 22px rgba(169,91,210,.2);transform:translateY(-2px)}
+.heading-icon,.newsletter-icon,.category-tile>span,.agas-footer-social a,.mobile-bottom-nav a b{border-radius:16px;box-shadow:inset 0 1px rgba(255,255,255,.07)}
+.poster-card,.catalog-card,.favorite-card,.movie-card{border-radius:16px;overflow:hidden}
+input,select,textarea{border-radius:12px}
+.back-top-premium{position:fixed;right:28px;bottom:104px;z-index:110;width:52px;height:52px;display:grid;place-items:center;border:1px solid rgba(226,184,244,.5);border-radius:18px;background:linear-gradient(145deg,#a95bd2,#d04483);color:#fff;box-shadow:0 9px 28px rgba(169,91,210,.32),inset 0 1px rgba(255,255,255,.25);font:800 25px/1 'DM Sans',sans-serif;opacity:0;visibility:hidden;transform:translateY(12px);pointer-events:none;cursor:pointer}
+.back-top-premium.is-visible{opacity:1;visibility:visible;transform:translateY(0);pointer-events:auto}
+.back-top-premium:hover{filter:brightness(1.12);box-shadow:0 12px 34px rgba(208,68,131,.38);transform:translateY(-4px)}
+.back-top-premium:before,.back-top-premium:after{content:"";position:absolute;inset:-5px;border:1px solid rgba(213,141,232,.42);border-radius:21px;pointer-events:none}
+.back-top-premium:after{inset:-10px;opacity:.45}
+@media(max-width:600px){.back-top-premium{right:17px;bottom:calc(154px + env(safe-area-inset-bottom));width:46px;height:46px;border-radius:15px;font-size:22px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
