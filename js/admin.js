@@ -59,7 +59,7 @@
 
   async function loadCatalogue() {
     msg($("#catalogueMessage"),"Loading catalogue...");
-    const {data,error}=await db().from("movies").select("id,title,slug,synopsis,genre,release_year,poster_url,backdrop_url,imagekit_file_id,backdrop_imagekit_file_id,video_path,trailer_url,duration_minutes,language,featured,published,content_type,series_id,season_number,episode_number,episode_title,created_at").order("created_at",{ascending:false}).limit(500);
+    const {data,error}=await db().from("movies").select("id,title,slug,synopsis,genre,release_year,poster_url,backdrop_url,imagekit_file_id,backdrop_imagekit_file_id,video_path,download_url,trailer_url,duration_minutes,language,featured,published,content_type,series_id,season_number,episode_number,episode_title,created_at").order("created_at",{ascending:false}).limit(500);
     if(error) throw error;
     state.catalogue=data||[];
     $("#statMovies").textContent=state.catalogue.filter(x=>x.content_type==="movie"||!x.content_type).length;
@@ -95,7 +95,7 @@
     $("#contentTitle").value=m.title||"";$("#contentSlug").value=m.slug||"";
     $("#contentGenre").value=m.genre||"Drama";$("#contentYear").value=m.release_year||"";
     $("#contentLanguage").value=m.language||"Kinyarwanda";$("#contentDuration").value=m.duration_minutes||"";
-    $("#contentSynopsis").value=m.synopsis||"";$("#contentTrailer").value=m.trailer_url||"";
+    $("#contentSynopsis").value=m.synopsis||"";$("#contentTrailer").value=m.trailer_url||"";$("#contentDownloadUrl").value=m.download_url||"";
     $("#seasonNumber").value=m.season_number||"";$("#episodeNumber").value=m.episode_number||"";
     $("#contentFeatured").checked=!!m.featured;$("#contentPublished").checked=!!m.published;
     updateTypeFields();if(m.series_id)$("#seriesPicker").value=m.series_id;
@@ -109,7 +109,7 @@
   async function uploadArtwork(file,folder,status) {
     if(!file)return null;
     status.textContent="Uploading artwork to ImageKit...";
-    const result=await window.AgasobanuyeImageKit.uploadImage(file,{folder});
+    const result=await window.AgasobanuyeImageKit.uploadImage(file,{folder,client:db()});
     status.textContent="Artwork uploaded.";
     return result;
   }
@@ -144,6 +144,7 @@
         language:$("#contentLanguage").value.trim()||"Kinyarwanda",
         duration_minutes:type==="series"||!$("#contentDuration").value?null:Number($("#contentDuration").value),
         trailer_url:$("#contentTrailer").value.trim()||null,
+        download_url:$("#contentDownloadUrl").value.trim()||null,
         featured:type==="series"?false:$("#contentFeatured").checked,
         published:$("#contentPublished").checked,
         series_id:seriesId,
