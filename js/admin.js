@@ -19,7 +19,9 @@
   const db = () => adminClient || window.AgasobanuyeDB?.client;
   const msg = (node, value, error=false) => { node.textContent=value; node.classList.toggle("error",error); };
   const esc = value => String(value ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-  const slugify = value => String(value||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,190);\n  const normalizeTitle = value => String(value||"").normalize("NFKC").trim().replace(/\s+/g," ").toLocaleLowerCase();\n  const findDuplicateTitle = (title,excludeId=null) => state.catalogue.find(item=>item.id!==excludeId&&normalizeTitle(item.title)===normalizeTitle(title));
+  const slugify = value => String(value||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,190);
+  const normalizeTitle = value => String(value||"").normalize("NFKC").trim().replace(/\s+/g," ").toLocaleLowerCase();
+  const findDuplicateTitle = (title,excludeId=null) => state.catalogue.find(item=>item.id!==excludeId&&normalizeTitle(item.title)===normalizeTitle(title));
   const ownerEmail = "mrhawk2007@gmail.com";
 
   async function searchTmdb(event) {
