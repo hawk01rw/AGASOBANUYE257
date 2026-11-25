@@ -274,3 +274,31 @@ body.editor-modal-open{overflow:hidden}
     padding:8px 10px
   }
 }
+
+
+/* Admin image URL inputs + medium-density control sizing */
+.pro-admin #contentForm .image-url-label{display:block;margin:0;color:#9fb2cb;font:600 10px/1.4 'DM Sans',sans-serif;letter-spacing:.2px}
+.pro-admin #contentForm .image-url-input{width:100%;min-width:0;min-height:39px;padding:9px 11px!important;border:1px solid rgba(126,181,255,.24)!important;border-radius:8px!important;background:#081522!important;color:#eaf2fa!important;font:500 11px 'DM Sans',sans-serif!important}
+.pro-admin #contentForm .image-url-input::placeholder{color:#70839c}
+.pro-admin #contentForm .image-url-input:focus{border-color:#739bc8!important;box-shadow:0 0 0 3px rgba(115,155,200,.12)!important}
+.pro-admin #contentForm .upload-card{min-height:0;padding:15px;gap:9px;border-radius:11px}
+.pro-admin #contentForm .upload-card img{max-height:170px}
+.pro-admin #contentEditorCard.editor-open{width:min(920px,calc(100vw - 36px));padding:22px;}
+.pro-admin .pro-main{max-width:1420px;padding:22px clamp(16px,2.4vw,32px) 56px}
+.pro-admin .pro-card{padding:19px;margin-bottom:14px;border-radius:12px}
+.pro-admin .pro-card-head{margin-bottom:15px}
+.pro-admin .pro-card-head h2{font-size:18px}
+.pro-admin .pro-stats{gap:10px;margin-bottom:15px}
+.pro-admin .pro-stats article{min-height:108px;padding:15px;border-radius:11px}
+.pro-admin .pro-stats article strong{font-size:26px}
+.pro-admin .quick-actions{gap:9px}
+.pro-admin .quick-actions button{padding:13px;border-radius:10px}
+.pro-admin .admin-form{gap:13px}
+.pro-admin .admin-form label{font-size:11px;gap:6px}
+.pro-admin .admin-form input,.pro-admin .admin-form select,.pro-admin .admin-form textarea{min-height:38px;padding:9px 11px;font-size:12px}
+.pro-admin .admin-form textarea{min-height:76px}
+.pro-admin .admin-button{min-height:34px;padding:8px 11px;font-size:10px}
+.pro-admin .catalogue-item{padding:11px 3px}
+.pro-admin .catalogue-copy strong{font-size:12px}
+.pro-admin .catalogue-copy small{font-size:10px}
+@media(max-width:680px){.pro-admin #contentEditorCard.editor-open{width:calc(100vw - 16px);padding:14px}.pro-admin #contentForm .upload-card{padding:13px}}
