@@ -84,3 +84,14 @@ input,select,textarea{border-radius:12px}
  .contact-float__trigger:before,.contact-float__trigger:after{animation:none!important;opacity:0}
  .contact-float__trigger,.contact-float__number{transition:none!important}
 }
+
+/* Keep Back to Top beside WhatsApp, close to the lower screen edge. */
+.back-top,.back-top-premium{
+  right:96px!important;bottom:28px!important;
+}
+@media(max-width:600px){
+  .back-top,.back-top-premium{
+    right:84px!important;
+    bottom:calc(88px + env(safe-area-inset-bottom))!important;
+  }
+}
