@@ -1,0 +1,66 @@
+/* AGASOBANUYE257 — calm cinematic palette: low-glare navy, charcoal and muted gold */
+:root{
+  color-scheme:dark;
+  --aga-bg:#090d13;
+  --aga-panel:#101720;
+  --aga-panel-2:#151e29;
+  --aga-line:rgba(154,174,198,.13);
+  --aga-blue:#6f91b8;
+  --aga-blue-2:#496b91;
+  --aga-gold:#b99a5b;
+  --aga-muted:#9aa7b6;
+}
+html{background:#090d13!important}
+body{
+  background:#090d13!important;
+  color:#e7ebf0!important;
+}
+body:before,body:after{opacity:.12!important;filter:none!important}
+.ambient,.ambient-blue,.ambient-gold{opacity:.035!important;filter:blur(100px)!important}
+.cineva-header,.site-header,.member-header{
+  background:rgba(10,15,22,.97)!important;
+  border-color:rgba(154,174,198,.12)!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.2)!important;
+  backdrop-filter:blur(12px)!important;
+}
+.cineva-header:after,.cineva-footer:before{background:linear-gradient(90deg,transparent,rgba(185,154,91,.22),transparent)!important}
+.cineva-header .top-links a:hover,.cineva-header .top-links a.active{color:#d1b77f!important}
+.cineva-header .cineva-search,.search-box,.member-search{
+  background:#111923!important;border-color:rgba(154,174,198,.16)!important;box-shadow:none!important
+}
+.cineva-header .cineva-search:focus-within,.search-box:focus-within{
+  border-color:rgba(185,154,91,.42)!important;box-shadow:0 0 0 2px rgba(185,154,91,.08)!important
+}
+.feature-hero,.hero{background-color:#0b1119!important}
+.hero-shade{background:linear-gradient(90deg,rgba(5,9,14,.96),rgba(5,9,14,.52)),linear-gradient(0deg,#090d13,transparent 45%)!important}
+.hero-brand-stamp{opacity:.35!important}
+.cineva-section,.content-section,.category-section{background:transparent!important}
+.poster-card,.poster-info,.poster-image,.poster-placeholder{
+  box-shadow:none!important;
+}
+.poster-card{background:#111923!important;border-color:rgba(154,174,198,.12)!important}
+.poster-info{background:#111923!important}
+.poster-card:hover,.poster-card:focus-visible{
+  border-color:rgba(185,154,91,.42)!important;
+  box-shadow:0 10px 24px rgba(0,0,0,.24)!important;
+}
+.poster-meta span:last-child{color:#d1b77f!important;background:rgba(185,154,91,.08)!important;border-color:rgba(185,154,91,.15)!important}
+.premium-button,.button-gold,.comment-submit,.episode-watch{
+  background:#a88b51!important;color:#111!important;border:1px solid #b99a5b!important;box-shadow:none!important
+}
+.outline-button,.episode-download,.button-ghost{
+  background:#141d28!important;border:1px solid rgba(154,174,198,.2)!important;color:#c8d2df!important;box-shadow:none!important
+}
+.cineva-footer,.premium-footer{background:#0b1017!important;border-color:rgba(154,174,198,.12)!important;box-shadow:none!important}
+.pro-admin,.pro-sidebar,.pro-card,.pro-stats article,.pro-welcome,.pro-topbar{
+  background:#0d141d!important;background-image:none!important;box-shadow:none!important
+}
+.pro-sidebar,.pro-topbar,.pro-card,.pro-stats article,.pro-welcome{border-color:rgba(154,174,198,.13)!important}
+.pro-nav a.active{background:rgba(111,145,184,.12)!important;box-shadow:inset 3px 0 #7894b4!important}
+.pro-nav a:hover,.quick-actions button:hover{background:#17212c!important}
+.pro-welcome h2 span{background:none!important;color:#d1b77f!important}
+.quick-actions button,.pro-admin .admin-form input,.pro-admin .admin-form select,.pro-admin .admin-form textarea{
+  background:#111a24!important;border-color:rgba(154,174,198,.16)!important;box-shadow:none!important
+}
+.site-search-results{background:#101720!important;border-color:rgba(154,174,198,.18)!important;box-shadow:0 14px 35px rgba(0,0,0,.4)!important}
+:focus-visible{outline-color:#b99a5b!important}
