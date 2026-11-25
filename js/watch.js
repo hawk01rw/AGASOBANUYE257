@@ -13,6 +13,8 @@ async function loadComments(){
  try{
   const [rows,session]=await Promise.all([window.AgasobanuyeDB.getComments(commentTarget(title)),window.AgasobanuyeDB.getSession()]);
   $("#commentAuthPanel").hidden=!!session;$("#commentForm").hidden=!session;
+  const target=commentTarget(title),channelKey=(target.episodeId?"episode_id":"movie_id")+"-"+(target.episodeId||target.movieId);
+  if(commentsChannelKey!==channelKey){if(commentsChannel)window.AgasobanuyeDB.client.removeChannel(commentsChannel);const column=target.episodeId?"episode_id":"movie_id",value=target.episodeId||target.movieId;commentsChannelKey=channelKey;commentsChannel=window.AgasobanuyeDB.client.channel("comments-"+String(value)).on("postgres_changes",{event:"*",schema:"public",table:"comments",filter:column+"=eq."+value},()=>loadComments()).subscribe();}
   $("#commentsCount").textContent=rows.length+" comments";
   list.innerHTML=rows.length?rows.map(c=>renderComment(c,session)).join(""):'<div class="comments-empty">No comments yet. Start the conversation.</div>';
   status.textContent=session?"Share your thoughts with the community.":"Sign in or create a free account to join the discussion.";
