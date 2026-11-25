@@ -96,9 +96,18 @@ function renderFavorites() {
 }
 async function toggleFavorite(id) {
   const key = String(id);
-  if (savedIds.has(key)) savedIds.delete(key); else savedIds.add(key);
+  const wasSaved = savedIds.has(key);
+  if (wasSaved) savedIds.delete(key); else savedIds.add(key);
   persistFavorites();
   renderRows();
+  try {
+    if (window.AgasobanuyeDB?.configured) {
+      const session = await window.AgasobanuyeDB.getSession();
+      if (session) await window.AgasobanuyeDB.toggleWatchlist(id, wasSaved);
+    }
+  } catch (error) {
+    console.warn("Cloud favorites sync:", error);
+  }
 }
 function openWatch(movie) {
   try { sessionStorage.setItem("agasobanuyeSelectedTitle", JSON.stringify(movie)); } catch (_) {}
@@ -180,7 +189,7 @@ $("#heroNext").onclick = () => {
   renderFeature();
 };
 $("#menuButton").onclick = () => { const open = $(".top-links").classList.toggle("menu-open"); $("#menuButton").setAttribute("aria-expanded", String(open)); };
-$("#profileButton").onclick = $("#bottomProfile").onclick = () => $("#profileDialog").showModal();
+$("#profileButton").onclick = () => $("#profileDialog").showModal();
 $("#profileClose").onclick = () => $("#profileDialog").close();
 $("#profileOkay").onclick = () => $("#profileDialog").close();
 $("#savedTop").onclick = () => $("#favorite").scrollIntoView({behavior:"smooth"});
