@@ -60,22 +60,22 @@ const HOME_CATEGORIES = ["Action", "Drama", "Animation", "Erotic", "Romance", "H
 
 function genreMatches(movie, category) {
   const genres = String(movie.genre || "").split(/[,/&|]/).map(value => value.trim().toLowerCase()).filter(Boolean);
-  if (category === "Others") return !genres.some(value => HOME_CATEGORIES.slice(0, 7).some(name => name.toLowerCase() === value));
+  if (category === "Others") return !genres.some(value => HOME_CATEGORIES.slice(0, 8).some(name => name.toLowerCase() === value));
   return genres.includes(category.toLowerCase()) || genres.some(value => value.includes(category.toLowerCase()));
 }
 
 function renderRows() {
   const query = ($("#searchInput").value || "").trim().toLowerCase();
-  $("#latestRow").innerHTML = movies.slice(0, 12).map(card).join("") || '<p class="empty-state">No movies have been published yet. New titles will appear here.</p>';
+  $("#latestRow").innerHTML = movies.slice(0, 6).map(card).join("") || '<p class="empty-state">No movies have been published yet. New titles will appear here.</p>';
   const series = movies.filter(movie => movie.type === "series");
   $("#seriesRow").innerHTML = series.length
-    ? series.map(card).join("")
+    ? series.slice(0, 6).map(card).join("")
     : '<p class="empty-state">Series will appear here when added in Admin Studio.</p>';
   HOME_CATEGORIES.forEach(category => {
     const row = document.getElementById("category-row-" + category.toLowerCase());
     if (!row) return;
     const matches = movies.filter(movie => genreMatches(movie, category));
-    row.innerHTML = matches.length ? matches.map(card).join("") :
+    row.innerHTML = matches.length ? matches.slice(0, 6).map(card).join("") :
       '<p class="empty-state">No ' + escapeHTML(category.toLowerCase()) + ' titles published yet.</p>';
   });
   renderFavorites();
@@ -121,7 +121,7 @@ function renderFeature() {
     $("#heroCount").textContent = "00 / 00";
     return;
   }
-  const movie = movies[featuredIndex % movies.length];
+  const heroMovies = movies.slice(0, 10);\n  const movie = heroMovies[featuredIndex % heroMovies.length];
   const hero = $("#featureHero");
   if (hero) hero.classList.add("hero-changing");
   $("#featureTitle").textContent = movie.title || "Discover your next favourite";
@@ -135,7 +135,7 @@ function renderFeature() {
   $("#featureWatch").onclick = event => { event.preventDefault(); openWatch(movie); };
   $("#featureDetails").onclick = event => { event.preventDefault(); openWatch(movie); };
   $("#heroCount").textContent = String(featuredIndex + 1).padStart(2, "0") +
-    " / " + String(movies.length).padStart(2, "0");
+    " / " + String(Math.min(movies.length, 10)).padStart(2, "0");
   if (hero) { window.setTimeout(() => hero.classList.remove("hero-changing"), 380); }
 }
 
