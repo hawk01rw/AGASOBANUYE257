@@ -33,12 +33,12 @@
       const {data,error}=await client.from("comments").select("id,movie_id,episode_id,user_id,author_name,body,created_at").eq(column,value).eq("is_hidden",false).order("created_at",{ascending:false}).limit(100);
       if(error)throw error;return data||[];
     },
-    async addComment(target,body){
+    async addComment(target,authorName,body){
       if(!client)throw new Error("Supabase is not configured yet.");
-      const session=await api.getSession();if(!session)throw new Error("Sign in to join the discussion.");
-      const {data:profile}=await client.from("profiles").select("display_name").eq("id",session.user.id).maybeSingle();
-      const name=profile?.display_name||session.user.user_metadata?.display_name||session.user.email?.split("@")[0]||"Member";
-      const row={user_id:session.user.id,author_name:String(name).slice(0,80),body:String(body).trim()};
+      const name=String(authorName||"").trim(),text=String(body||"").trim();
+      if(name.length<1||name.length>80)throw new Error("Enter a name between 1 and 80 characters.");
+      if(text.length<1||text.length>2000)throw new Error("Comment must be between 1 and 2000 characters.");
+      const row={user_id:null,author_name:name,body:text};
       if(target.episodeId)row.episode_id=target.episodeId;else row.movie_id=target.movieId;
       const {data,error}=await client.from("comments").insert(row).select("id,movie_id,episode_id,user_id,author_name,body,created_at").single();
       if(error)throw error;return data;
