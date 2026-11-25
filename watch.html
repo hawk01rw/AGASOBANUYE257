@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="css/premium-footer.css">
 </head>
 <body>
-<header class="watch-header"><a class="cineva-brand" href="index.html"><img src="assets/agasobanuye257-logo.svg" alt=""><span><b>AGASOBANUYE<span>257</span></b><small>ALL IS HERE</small></span></a><a class="outline-button" href="index.html">← Back to Home</a></header>
+<header class="cineva-header member-header"><a class="cineva-brand" href="index.html"><img src="assets/agasobanuye257-logo.svg" alt=""><span><b>AGASOBANUYE<span>257</span></b><small>YOUR ENTERTAINMENT DESTINATION</small></span></a><nav class="top-links" aria-label="Main navigation"><a href="index.html">Home</a><a href="movies.html">Movies</a><a href="series.html">Series</a><a href="favorite.html">♡ Favorites</a><a class="vip-nav-link" href="vip.html">✦ VIP</a></nav><div class="top-actions"><a class="outline-button member-back" href="index.html">← Back to Home</a><button class="menu-action" id="menuButton" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div></header>
 <main class="watch-main">
 <div class="watch-backdrop" id="watchBackdrop"></div>
 <section class="watch-player-section">
@@ -44,4 +44,5 @@
 </footer>
 <script>document.querySelectorAll("[data-footer-year]").forEach(function(node){node.textContent=new Date().getFullYear();});</script>
 
+<script>document.getElementById("menuButton").onclick=()=>{const n=document.querySelector(".member-header .top-links");const o=n.classList.toggle("menu-open");document.getElementById("menuButton").setAttribute("aria-expanded",String(o));};</script>
 </body></html>
