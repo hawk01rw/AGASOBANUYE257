@@ -383,3 +383,53 @@ body:has(.watch-main){
 
 .tmdb-attribution{margin:20px 0 0;color:#8297b3;font:10px/1.6 'DM Sans',sans-serif}
 .tmdb-attribution a{color:#a9ceff;text-decoration:underline;text-underline-offset:3px}
+
+
+/* Episode library: six cards across on wide screens */
+#seriesEpisodesSection{max-width:1440px!important;width:calc(100% - 48px)!important}
+.episode-season-list{
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:14px!important;
+}
+.episode-row{
+  min-width:0!important;
+  height:100%!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  justify-content:flex-start!important;
+  gap:10px!important;
+  padding:11px!important;
+}
+.episode-thumb{
+  width:100%!important;
+  height:auto!important;
+  aspect-ratio:16/9!important;
+  flex:0 0 auto!important;
+}
+.episode-info{width:100%!important;flex:1 1 auto!important}
+.episode-info strong{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.episode-info small{min-height:0}
+.episode-actions{
+  width:100%!important;
+  display:flex!important;
+  flex-wrap:wrap!important;
+  justify-content:stretch!important;
+  gap:6px!important;
+}
+.episode-actions a,.episode-actions button{flex:1 1 100%!important;min-width:0!important;padding-inline:8px!important}
+@media(max-width:1100px){
+  .episode-season-list{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+}
+@media(max-width:760px){
+  #seriesEpisodesSection{width:calc(100% - 28px)!important}
+  .episode-season-list{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important}
+}
+@media(max-width:520px){
+  .episode-season-list{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+  .episode-row{padding:9px!important}
+  .episode-info strong{font-size:11px!important}
+  .episode-info small{font-size:10px!important}
+  .episode-status{font-size:7px!important}
+}
