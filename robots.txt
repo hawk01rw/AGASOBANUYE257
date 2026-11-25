@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /supabase-config.js
+
+Sitemap: https://agasobanuye257.hawk01rw-f2b.workers.dev/sitemap.xml
