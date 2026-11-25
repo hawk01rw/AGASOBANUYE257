@@ -46,7 +46,7 @@ async function loadSeriesEpisodes(seriesId){
  try{const episodes=await window.AgasobanuyeDB.getEpisodes(seriesId);renderEpisodeRows(episodes);return episodes;}
  catch(error){host.innerHTML='<div class="episode-empty"><strong>Episodes could not be loaded</strong><span>'+esc(error.message||'Please try again.')+'</span><button type="button" class="episode-retry" id="retryEpisodes">Try again</button></div>';const retry=$("#retryEpisodes");if(retry)retry.onclick=()=>loadSeriesEpisodes(seriesId);return [];}
 }
-async function renderTmdbCredits(meta){
+function renderTmdbCredits(meta){
  const host=$("#tmdbCredits");if(!host)return;
  const cast=Array.isArray(meta.cast)?meta.cast:[],crew=Array.isArray(meta.crew)?meta.crew:[];
  const directors=crew.filter(x=>x.job==="Director"),writers=crew.filter(x=>["Writer","Screenplay","Story","Teleplay"].includes(x.job));
@@ -56,6 +56,7 @@ async function renderTmdbCredits(meta){
  if(directors.length||writers.length)parts.push("<div class=\"tmdb-credit-line\">"+(directors.length?"<p><b>Director</b> "+esc(names(directors))+"</p>":"")+(writers.length?"<p><b>Writers</b> "+esc(names(writers))+"</p>":"")+"</div>");
  if(meta.production_companies?.length)parts.push("<p class=\"tmdb-production\"><b>Production</b> "+esc(meta.production_companies.join(", "))+"</p>");
  host.innerHTML=parts.join("");host.hidden=!parts.length;
+ const section=$("#tmdbCreditsSection");if(section)section.hidden=!parts.length;
 }
 function showTitle(m){
  if(!m)return;title=m;document.title=m.title+" — AGASOBANUYE257";
@@ -68,7 +69,10 @@ function showTitle(m){
  $("#watchChips").innerHTML=["HD EXPERIENCE",m.genre,m.year].filter(Boolean).map(x=>"<span>"+esc(x)+"</span>").join("");
  $("#watchLanguage").textContent="Language: "+(m.language||"Not specified");
  $("#watchDuration").textContent="Duration: "+(m.duration?m.duration+" minutes":"Not specified");
- $("#watchRating").textContent="Rating: "+(m.rating||m.voteAverage||"Not rated");
+ const tmdb= m.tmdbMetadata||{};
+ const score=Number(m.voteAverage||m.rating||0);
+ $("#watchRating").textContent=score>0?"TMDB Rating: ★ "+score.toFixed(1)+"/10 · "+Number(m.voteCount||0).toLocaleString()+" votes":"TMDB Rating: Not rated";
+ renderTmdbCredits(tmdb);
  const dl=$("#movieDownloadButton");dl.hidden=true;dl.removeAttribute("href");dl.removeAttribute("download");
  $("#seriesEpisodesSection").hidden=m.type!=="series";
  $("#commentsSection").hidden=false;
