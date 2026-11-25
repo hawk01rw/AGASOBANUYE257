@@ -1,63 +1,74 @@
+"use strict";
 const $=s=>document.querySelector(s);
-let title=null,allTitles=[];
+let title=null,allTitles=[],commentsChannel=null;
 try{title=JSON.parse(sessionStorage.getItem("agasobanuyeSelectedTitle")||"null")}catch(e){}
 const id=new URLSearchParams(location.search).get("id");
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const dateLabel=v=>{try{return new Intl.DateTimeFormat(undefined,{dateStyle:"medium",timeStyle:"short"}).format(new Date(v))}catch(_){return""}};
+function commentTarget(m){return m.type==="episode"&&m.episodeTableId?{episodeId:m.episodeTableId}:{movieId:m.id};}
+function renderComment(c,session){const own=session?.user?.id===c.user_id;return '<article class="comment-card"><div class="comment-avatar">'+esc((c.author_name||"M").slice(0,1).toUpperCase())+'</div><div class="comment-content"><div class="comment-byline"><strong>'+esc(c.author_name||"Member")+'</strong><time>'+esc(dateLabel(c.created_at))+'</time>'+(own?'<button class="comment-delete" data-delete-comment="'+esc(c.id)+'" type="button" aria-label="Delete your comment">Delete</button>':"")+'</div><p>'+esc(c.body)+'</p></div></article>'}
+async function loadComments(){
+ const list=$("#commentsList"),status=$("#commentsStatus"),form=$("#commentForm");
+ if(!window.AgasobanuyeDB?.configured||!title?.id){status.textContent="Comments are unavailable until this title is connected.";return}
+ try{
+  const [rows,session]=await Promise.all([window.AgasobanuyeDB.getComments(commentTarget(title)),window.AgasobanuyeDB.getSession()]);
+  $("#commentsCount").textContent=rows.length+" comments";
+  list.innerHTML=rows.length?rows.map(c=>renderComment(c,session)).join(""):'<div class="comments-empty">No comments yet. Start the conversation.</div>';
+  status.textContent=session?"Share your thoughts with the community.":"Sign in to post a comment. You can still read the discussion.";
+  form.querySelector("textarea").disabled=!session;form.querySelector("button[type=submit]").disabled=!session;
+ }catch(e){status.textContent="Could not load comments. "+(e.message||"Please try again.");}
+}
 async function showTitle(m){
-  if(!m)return;title=m;document.title=m.title+" — AGASOBANUYE257";
-  $("#watchTitle").textContent=m.title;$("#watchDescription").textContent=m.description||"Watch this title on AGASOBANUYE257.";
-  $("#watchSynopsis").textContent=m.description||"No synopsis has been added yet.";
-  const kind=m.type==="series"?"SERIES":m.type==="episode"?"EPISODE":"MOVIE";
-  $("#watchMeta").textContent=kind+" · "+(m.genre||"Entertainment")+" · "+(m.year||"");
-  $("#watchBackdrop").style.backgroundImage='url("'+(m.backdrop||m.poster||"")+'")';
-  $("#watchChips").innerHTML=["HD EXPERIENCE",m.genre,m.year].filter(Boolean).map(x=>"<span>"+esc(x)+"</span>").join("");
-  $("#watchLanguage").textContent="Language: "+(m.language||"Not specified");
-  $("#watchDuration").textContent="Duration: "+(m.duration?m.duration+" minutes":"Not specified");
-  $("#watchRating").textContent="Rating: "+(m.rating||m.voteAverage||"Not rated");
-  $("#movieDownloadButton").hidden=true;$("#movieDownloadButton").removeAttribute("href");
-  $("#seriesEpisodesSection").hidden=m.type!=="series";
-  if(m.type==="series"){
-    $("#watchPlayer").innerHTML='<div class="player-placeholder"><div class="play-large">▣</div><h2>Series library</h2><p>Select an episode below to start watching.</p></div>';
-    try{
-      const episodes=await window.AgasobanuyeDB.getEpisodes(m.id);
-      $("#seriesEpisodes").innerHTML=episodes.length?episodes.map(ep=>'<a class="episode-row" href="watch.html?id='+encodeURIComponent(ep.slug||ep.id)+'"><span class="episode-number">S'+ep.season_number+' · E'+ep.episode_number+'</span><strong>'+esc(ep.episode_title||ep.title)+'</strong><span>Watch →</span></a>').join(""):'<p class="admin-hint">No published episodes yet.</p>';
-    }catch(e){$("#seriesEpisodes").textContent="Episodes could not be loaded.";}
-    return;
-  }
-  if(m.downloadUrl){
-    $("#movieDownloadButton").href=m.downloadUrl;
-    $("#movieDownloadButton").hidden=false;
-    $("#movieDownloadButton").target="_blank";
-    $("#movieDownloadButton").rel="noopener noreferrer";
-  }
-  if(m.videoPath&&window.AgasobanuyeDB?.configured){
-    try{
-      const [playUrl,downloadUrl]=await Promise.all([window.AgasobanuyeDB.getVideoUrl(m.videoPath),window.AgasobanuyeDB.getVideoUrl(m.videoPath,true)]);
-      const v=document.createElement("video");v.controls=true;v.playsInline=true;v.preload="metadata";v.src=playUrl;
-      $("#watchPlayer").replaceChildren(v);
-      if(!m.downloadUrl){$("#movieDownloadButton").href=downloadUrl;$("#movieDownloadButton").hidden=false;}
-      $("#movieDownloadButton").setAttribute("download","");
-    }catch(e){$("#playerMessage").textContent="Video is not available right now";}
-  }else if(m.trailerUrl){
-    const p=document.createElement("p");p.textContent="A trailer is available, but full movie playback requires an authorized video file.";
-    const placeholder=$("#watchPlayer").querySelector(".player-placeholder");if(placeholder)placeholder.appendChild(p);
-  }
+ if(!m)return;title=m;document.title=m.title+" — AGASOBANUYE257";
+ $("#watchTitle").textContent=m.title;$("#watchDescription").textContent=m.description||"Watch this title on AGASOBANUYE257.";
+ $("#watchSynopsis").textContent=m.description||"No synopsis has been added yet.";
+ const kind=m.type==="series"?"SERIES":m.type==="episode"?"EPISODE":"MOVIE";
+ $("#watchMeta").textContent=kind+" · "+(m.genre||"Entertainment")+" · "+(m.year||"");
+ $("#watchBackdrop").style.backgroundImage=m.backdrop||m.poster?'url("'+String(m.backdrop||m.poster).replace(/["\\]/g,"")+'")':"none";
+ $("#watchChips").innerHTML=["HD EXPERIENCE",m.genre,m.year].filter(Boolean).map(x=>"<span>"+esc(x)+"</span>").join("");
+ $("#watchLanguage").textContent="Language: "+(m.language||"Not specified");
+ $("#watchDuration").textContent="Duration: "+(m.duration?m.duration+" minutes":"Not specified");
+ $("#watchRating").textContent="Rating: "+(m.rating||m.voteAverage||"Not rated");
+ const dl=$("#movieDownloadButton");dl.hidden=true;dl.removeAttribute("href");dl.removeAttribute("download");
+ $("#seriesEpisodesSection").hidden=m.type!=="series";
+ $("#commentsSection").hidden=false;
+ if(m.type==="series"){
+  $("#watchPlayer").innerHTML='<div class="player-placeholder"><div class="play-large">▣</div><h2>Series library</h2><p>Select an episode below to start watching.</p></div>';
+  try{
+   const episodes=await window.AgasobanuyeDB.getEpisodes(m.id);
+   $("#seriesEpisodes").innerHTML=episodes.length?episodes.map(ep=>'<article class="episode-row"><div class="episode-info"><span class="episode-number">S'+Number(ep.season_number||1)+' · E'+Number(ep.episode_number||0)+'</span><strong>'+esc(ep.episode_title||ep.title)+'</strong><small>'+esc(ep.description||"")+'</small></div><div class="episode-actions"><a class="episode-watch" href="watch.html?id='+encodeURIComponent(ep.slug||ep.id)+'">▶ Watch</a>'+(ep.downloadUrl?'<a class="episode-download" href="'+esc(ep.downloadUrl)+'" target="_blank" rel="noopener noreferrer">↓ Download</a>':ep.videoPath?'<button class="episode-download" data-episode-download="'+esc(ep.videoPath)+'" type="button">↓ Download</button>':'')+'</div></article>').join(""):'<p class="admin-hint">No published episodes yet.</p>';
+  }catch(e){$("#seriesEpisodes").textContent="Episodes could not be loaded: "+e.message}
+  await loadComments();return;
+ }
+ if(m.downloadUrl){dl.href=m.downloadUrl;dl.hidden=false;dl.target="_blank";dl.rel="noopener noreferrer"}
+ if(m.videoPath&&window.AgasobanuyeDB?.configured){
+  try{const [playUrl,downloadUrl]=await Promise.all([window.AgasobanuyeDB.getVideoUrl(m.videoPath),window.AgasobanuyeDB.getVideoUrl(m.videoPath,true)]);const v=document.createElement("video");v.controls=true;v.playsInline=true;v.preload="metadata";v.src=playUrl;$("#watchPlayer").replaceChildren(v);if(!m.downloadUrl){dl.href=downloadUrl;dl.hidden=false;dl.setAttribute("download","")}}
+  catch(e){const p=$("#watchPlayer .player-placeholder");if(p){p.querySelector("h2").textContent="Video is not available right now";p.querySelector("p").textContent=e.message||"Please contact support."}}
+ }else if(m.trailerUrl){const p=document.createElement("p");p.textContent="A trailer is available, but full playback requires an authorized video file.";const placeholder=$("#watchPlayer").querySelector(".player-placeholder");if(placeholder)placeholder.appendChild(p)}
+ await loadComments();
 }
 function renderRelated(){
-  const related=allTitles.filter(x=>x.type!=="episode"&&String(x.id)!==String(title?.id)).slice(0,8);
-  $("#relatedRow").innerHTML=related.map(m=>'<article class="poster-card" data-id="'+esc(m.id)+'"><div class="poster-image"><img src="'+esc(m.poster||"assets/agasobanuye257-logo.svg")+'" alt="" loading="lazy"></div><div class="poster-info"><h3>'+esc(m.title)+'</h3><div class="poster-meta"><span>'+esc(m.genre)+'</span><span>'+esc(m.year)+'</span></div></div></article>').join("");
-  $("#relatedRow").onclick=e=>{const c=e.target.closest("[data-id]");if(!c)return;const m=allTitles.find(x=>String(x.id)===c.dataset.id);if(m){sessionStorage.setItem("agasobanuyeSelectedTitle",JSON.stringify(m));location.href="watch.html?id="+encodeURIComponent(m.slug||m.id)}};
+ const current=String(title?.id||"");
+ const categories=String(title?.genre||"").split(/[,/&|]/).map(x=>x.trim().toLowerCase()).filter(Boolean);
+ let related=allTitles.filter(x=>x.type!=="episode"&&x.type!=="series"&&String(x.id)!==current);
+ if(categories.length){const matched=related.filter(x=>String(x.genre||"").split(/[,/&|]/).some(g=>categories.some(c=>g.trim().toLowerCase()===c||g.trim().toLowerCase().includes(c))));related=[...matched,...related.filter(x=>!matched.includes(x))]}
+ related=related.slice(0,8);
+ $("#relatedRow").innerHTML=related.map(m=>'<article class="poster-card" data-id="'+esc(m.id)+'" tabindex="0" role="button"><div class="poster-image"><img src="'+esc(m.poster||"assets/agasobanuye257-logo.svg")+'" alt="" loading="lazy"></div><div class="poster-info"><h3>'+esc(m.title)+'</h3><div class="poster-meta"><span>'+esc(m.genre)+'</span><span>'+esc(m.year)+'</span></div></div></article>').join("")||'<p class="comments-empty">More titles will appear here as the catalogue grows.</p>';
+ $("#relatedRow").onclick=e=>{const c=e.target.closest("[data-id]");if(!c)return;const m=allTitles.find(x=>String(x.id)===c.dataset.id);if(m){sessionStorage.setItem("agasobanuyeSelectedTitle",JSON.stringify(m));location.href="watch.html?id="+encodeURIComponent(m.slug||m.id)}};
 }
-showTitle(title);
-if(window.AgasobanuyeDB?.configured){
-  window.AgasobanuyeDB.getMovies().then(rows=>{
-    allTitles=rows||[];const found=allTitles.find(m=>String(m.id)===id||String(m.slug)===id);
-    if(found)showTitle(found);else if(!title)$("#watchTitle").textContent="Title not found";
-    renderRelated();
-  }).catch(()=>{allTitles=title?[title]:[];renderRelated()});
-}else{allTitles=title?[title]:[];renderRelated()}
-$("#watchlistButton").onclick=async()=>{
-  if(!window.AgasobanuyeDB?.configured||!title?.id){alert("Sign in and connect your account to save titles.");return}
-  try{await window.AgasobanuyeDB.toggleWatchlist(title.id,false);$("#watchlistButton").textContent="✓ Saved"}
-  catch(e){alert(e.message||"Please sign in to save titles.")}
-};
+$("#commentForm").addEventListener("submit",async e=>{e.preventDefault();const input=$("#commentInput"),button=e.currentTarget.querySelector("button[type=submit]"),body=input.value.trim();if(!body)return;button.disabled=true;try{await window.AgasobanuyeDB.addComment(commentTarget(title),body);input.value="";await loadComments()}catch(err){$("#commentsStatus").textContent=err.message||"Could not post your comment."}finally{button.disabled=false}});
+$("#commentsList").addEventListener("click",async e=>{const b=e.target.closest("[data-delete-comment]");if(!b)return;if(!confirm("Delete your comment?"))return;try{await window.AgasobanuyeDB.removeComment(b.dataset.deleteComment);await loadComments()}catch(err){alert(err.message)}});
+$("#seriesEpisodes").addEventListener("click",async e=>{const b=e.target.closest("[data-episode-download]");if(!b)return;const old=b.textContent;b.disabled=true;b.textContent="Preparing…";try{const url=await window.AgasobanuyeDB.getVideoUrl(b.dataset.episodeDownload,true);const a=document.createElement("a");a.href=url;a.download="";a.rel="noopener";document.body.appendChild(a);a.click();a.remove()}catch(err){alert(err.message||"Download unavailable")}finally{b.disabled=false;b.textContent=old}});
+$("#watchlistButton").onclick=async()=>{if(!window.AgasobanuyeDB?.configured||!title?.id){alert("Sign in and connect your account to save titles.");return}try{await window.AgasobanuyeDB.toggleWatchlist(title.id,false);$("#watchlistButton").textContent="✓ Saved"}catch(e){alert(e.message||"Please sign in to save titles.")}};
+async function init(){
+ if(!window.AgasobanuyeDB?.configured){if(title)await showTitle(title);return}
+ try{
+  const rows=await window.AgasobanuyeDB.getMovies();allTitles=rows||[];
+  let found=allTitles.find(m=>String(m.id)===id||String(m.slug)===id);
+  if(!found&&id)found=await window.AgasobanuyeDB.getTitleById(id);
+  if(found){await showTitle(found);if(found.type==="episode"&&found.seriesId){const parent=allTitles.find(x=>String(x.id)===found.seriesId);if(parent){$("#seriesEpisodesSection").hidden=false;const episodes=await window.AgasobanuyeDB.getEpisodes(parent.id);$("#seriesEpisodes").innerHTML=episodes.map(ep=>'<article class="episode-row"><div class="episode-info"><span class="episode-number">S'+Number(ep.season_number||1)+' · E'+Number(ep.episode_number||0)+'</span><strong>'+esc(ep.episode_title||ep.title)+'</strong></div><div class="episode-actions"><a class="episode-watch" href="watch.html?id='+encodeURIComponent(ep.slug||ep.id)+'">▶ Watch</a>'+(ep.downloadUrl?'<a class="episode-download" href="'+esc(ep.downloadUrl)+'" target="_blank" rel="noopener noreferrer">↓ Download</a>':ep.videoPath?'<button class="episode-download" data-episode-download="'+esc(ep.videoPath)+'">↓ Download</button>':"")+'</div></article>').join("")}}}
+  else if(title&&String(title.id)===id)await showTitle(title);else $("#watchTitle").textContent="Title not found";
+  renderRelated();
+ }catch(e){console.error("Watch page:",e);if(title)await showTitle(title);else $("#watchTitle").textContent="Unable to load this title"}
+}
+init();
