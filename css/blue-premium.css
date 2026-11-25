@@ -33,3 +33,12 @@ input,textarea,select{accent-color:var(--aga-blue)}
 .admin-page{background:radial-gradient(ellipse at 15% -10%,rgba(23,105,210,.13),transparent 34%),#05070c!important}
 
 .site-search-host{overflow:visible!important;z-index:150!important}.site-search-results{z-index:700!important}
+
+
+/* Signature palette refresh across the public site: logo blue + gold + white on midnight navy */
+:root{--aga-bg:#071426;--aga-panel:#0d2038;--aga-panel-2:#112b49;--aga-line:rgba(121,174,248,.22);--aga-muted:#b6c7df}
+body{background:radial-gradient(ellipse at 14% -8%,rgba(23,105,210,.2),transparent 36%),radial-gradient(ellipse at 92% 38%,rgba(214,165,46,.075),transparent 28%),linear-gradient(145deg,#0b1c35 0%,#071426 52%,#040b17 100%)!important;color:#f7f9ff}
+.cineva-header,.member-header{background:rgba(6,18,35,.94)!important;border-bottom-color:rgba(75,145,240,.28)!important}
+.poster-card,.poster-info,.poster-image{background-color:#0d2038!important}
+.mobile-bottom-nav{background:rgba(6,18,35,.97)!important}
+.admin-page{background:linear-gradient(145deg,#0b1c35 0%,#071426 52%,#040b17 100%)!important}
