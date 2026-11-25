@@ -56,3 +56,39 @@ img,video{max-width:100%}
  .catalog-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
  .agas-footer-inner{padding-left:16px;padding-right:16px}
 }
+
+
+/* Netflix-inspired brand, typography and content-card proportions */
+.cineva-header .cineva-brand{gap:10px;white-space:nowrap}
+.cineva-header .cineva-brand img{width:46px!important;height:46px!important;border:0!important;border-radius:8px!important;box-shadow:none!important;object-fit:contain}
+.cineva-header .cineva-brand b{font:800 clamp(17px,1.5vw,21px)/1 'DM Sans',sans-serif!important;letter-spacing:-.65px!important}
+.cineva-header .cineva-brand small{font:700 7px 'DM Sans',sans-serif!important;letter-spacing:1.15px!important}
+.cineva-header .top-links a{font:600 12px 'DM Sans',sans-serif!important}
+.cineva-header .cineva-search{height:38px!important;border-radius:7px!important}
+.cineva-section .cineva-heading h2,.related-section>h2,.comments-heading h2{font:750 clamp(19px,1.8vw,25px)/1.2 'DM Sans',sans-serif;letter-spacing:-.35px}
+.poster-card,.member-card{border-radius:10px!important}
+.poster-row{grid-auto-columns:clamp(145px,14.5vw,190px);gap:12px}
+.poster-image{aspect-ratio:2/2.8!important}
+.poster-info{padding:10px 11px 12px!important}
+.poster-info h3,.member-card-info h2{font:700 13px/1.35 'DM Sans',sans-serif!important;letter-spacing:-.15px;min-height:34px;margin-bottom:7px}
+.poster-meta{font:500 10px 'DM Sans',sans-serif}
+.catalog-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px}
+.catalog-grid .poster-info h3{font-size:13px}
+.member-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px}
+.member-card-info h2{min-height:0}
+.catalog-hero h1,.member-heading h1,.vip-page-content h1{letter-spacing:-1.1px}
+@media(max-width:849px){
+ .cineva-header .cineva-brand img{width:40px!important;height:40px!important}
+ .cineva-header .cineva-brand b{font-size:18px!important}
+ .poster-row{grid-auto-columns:clamp(140px,26vw,175px)}
+ .catalog-grid,.member-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:560px){
+ .cineva-header .cineva-brand img{width:35px!important;height:35px!important}
+ .cineva-header .cineva-brand b{font-size:16px!important}
+ .cineva-header .cineva-brand small{font-size:6px!important;letter-spacing:.7px!important}
+ .poster-row{grid-auto-columns:clamp(128px,39vw,155px);gap:9px}
+ .poster-info h3,.member-card-info h2{font-size:11px!important;min-height:30px}
+ .catalog-grid,.member-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .catalog-grid .poster-info h3{font-size:11px}
+}
