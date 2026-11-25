@@ -1,7 +1,7 @@
 /* AGASOBANUYE257 shared Lucide icon system. */
 (() => {
   const icon = (node, name) => {
-    if (!node || node.querySelector(":scope > [data-lucide]")) return;
+    if (!node || node.querySelector(":scope > [data-lucide], :scope > svg")) return;
     node.replaceChildren();
     const el = document.createElement("i");
     el.setAttribute("data-lucide", name);
@@ -9,7 +9,7 @@
     node.appendChild(el);
   };
   const leading = (node, name) => {
-    if (!node || node.querySelector("[data-lucide]")) return;
+    if (!node || node.querySelector("[data-lucide], svg")) return;
     const first = node.firstChild;
     if (first && first.nodeType === Node.TEXT_NODE) {
       first.textContent = first.textContent.replace(/^\s*[⌂▣▤▦✦◉◷⚙⇧◎↪]+\s*/, "");
@@ -46,7 +46,7 @@
     });
     document.querySelectorAll(".row-heading>a,.agas-footer-note>a").forEach(n => {
       const text = n.textContent.trim();
-      if (/view all|explore the collection/i.test(text)) {
+      if (/view all|explore the collection/i.test(text) && !n.querySelector("[data-lucide], svg")) {
         const span = document.createElement("i"); span.setAttribute("data-lucide","arrow-right"); span.setAttribute("aria-hidden","true"); n.appendChild(span);
       }
     });
