@@ -186,12 +186,48 @@
     if(!file)return null;
     if(!file.type.startsWith("video/"))throw new Error("Choose a valid video file.");
     const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"-");
-    const path=kind+"/"+slug+"/"+Date.now()+"-"+safeName;
-    $("#videoStatus").textContent="Uploading video to private Supabase storage...";
-    const {data,error}=await db().storage.from("movie-videos").upload(path,file,{contentType:file.type,upsert:false});
-    if(error)throw error;
-    $("#videoStatus").textContent="Video uploaded successfully.";
-    return data.path;
+    // A stable path lets TUS resume an interrupted upload of the same file.
+    const path=kind+"/"+slug+"/"+(file.lastModified||0)+"-"+file.size+"-"+safeName;
+    const status=$("#videoStatus");
+    status.textContent="Preparing secure video upload...";
+    const client=db();
+    if(file.size>6*1024*1024){
+      if(!window.tus?.Upload)throw new Error("The resumable upload service did not load. Refresh Admin Studio and try again.");
+      const {data:{session},error:sessionError}=await client.auth.getSession();
+      if(sessionError)throw sessionError;
+      if(!session?.access_token)throw new Error("Your administrator session expired. Sign in again.");
+      const config=window.AGASOBANUYE257_CONFIG||{};
+      const projectId=(new URL(config.supabaseUrl)).hostname.split(".")[0];
+      status.textContent="Uploading large video with resumable transfer...";
+      await new Promise((resolve,reject)=>{
+        const upload=new window.tus.Upload(file,{
+          endpoint:"https://"+projectId+".storage.supabase.co/storage/v1/upload/resumable",
+          retryDelays:[0,3000,5000,10000,20000],
+          headers:{authorization:"Bearer "+session.access_token,apikey:config.supabaseAnonKey,"x-upsert":"true"},
+          uploadDataDuringCreation:true,
+          removeFingerprintOnSuccess:true,
+          chunkSize:6*1024*1024,
+          allowedMetaFields:["bucketName","objectName","contentType","cacheControl"],
+          metadata:{bucketName:"movie-videos",objectName:path,contentType:file.type||"application/octet-stream",cacheControl:"3600"},
+          onError:error=>reject(error),
+          onProgress:(uploaded,total)=>{
+            const percent=total?Math.round(uploaded/total*100):0;
+            status.textContent="Uploading video · "+percent+"%";
+          },
+          onSuccess:()=>resolve()
+        });
+        upload.findPreviousUploads().then(previous=>{
+          if(previous.length)upload.resumeFromPreviousUpload(previous[0]);
+          upload.start();
+        }).catch(reject);
+      });
+    }else{
+      status.textContent="Uploading video...";
+      const {data,error}=await client.storage.from("movie-videos").upload(path,file,{contentType:file.type,cacheControl:"3600",upsert:true});
+      if(error)throw error;
+    }
+    status.textContent="Video uploaded successfully.";
+    return path;
   }
 
   async function saveContent(e) {
