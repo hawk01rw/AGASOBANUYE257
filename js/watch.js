@@ -5,6 +5,31 @@ try{title=JSON.parse(sessionStorage.getItem("agasobanuyeSelectedTitle")||"null")
 const id=new URLSearchParams(location.search).get("id");
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function imageKitAsset(value,transform="w-420,h-630,fo-auto,q-82"){try{const u=new URL(value,location.href);if(u.protocol!=="https:"||!(u.hostname==="ik.imagekit.io"||u.hostname.endsWith(".imagekit.io")))return"";if(!u.searchParams.has("tr"))u.searchParams.set("tr",transform);return u.href;}catch(_){return"";}}
+function customPlayerUrl(value){
+ try{
+  const u=new URL(String(value||""),location.href);
+  if(!["https:","http:"].includes(u.protocol))return "";
+  const host=u.hostname.toLowerCase();
+  if(host==="youtu.be"){const key=u.pathname.split("/").filter(Boolean)[0];return key?"https://www.youtube-nocookie.com/embed/"+encodeURIComponent(key):u.href;}
+  if(["youtube.com","www.youtube.com","m.youtube.com"].includes(host)){
+   const key=u.searchParams.get("v")||u.pathname.match(/\/(?:embed|shorts|live)\/([^/?]+)/)?.[1];
+   return key?"https://www.youtube-nocookie.com/embed/"+encodeURIComponent(key):u.href;
+  }
+  if(["vimeo.com","www.vimeo.com"].includes(host)){const key=u.pathname.split("/").filter(Boolean).pop();return key&&/^\d+$/.test(key)?"https://player.vimeo.com/video/"+key:u.href;}
+  return u.href;
+ }catch(_){return "";}
+}
+function mountCustomPlayer(value){
+ const url=customPlayerUrl(value);if(!url)return false;
+ const host=$("#watchPlayer");
+ if(/\.(mp4|webm|ogg|m3u8)(?:$|[?#])/i.test(url)){
+  const video=document.createElement("video");video.controls=true;video.playsInline=true;video.preload="metadata";video.src=url;host.replaceChildren(video);
+ }else{
+  const frame=document.createElement("iframe");frame.src=url;frame.title="Video player";frame.allow="autoplay; encrypted-media; picture-in-picture; fullscreen";frame.allowFullscreen=true;frame.loading="eager";frame.referrerPolicy="strict-origin-when-cross-origin";host.replaceChildren(frame);
+ }
+ return true;
+}
+
 const dateLabel=v=>{try{return new Intl.DateTimeFormat(undefined,{dateStyle:"medium",timeStyle:"short"}).format(new Date(v))}catch(_){return""}};
 function commentTarget(m){return m.type==="episode"&&m.episodeTableId?{episodeId:m.episodeTableId}:{movieId:m.id};}
 function renderComment(c,session){const own=session?.user?.id===c.user_id;return '<article class="comment-card"><div class="comment-avatar">'+esc((c.author_name||"M").slice(0,1).toUpperCase())+'</div><div class="comment-content"><div class="comment-byline"><strong>'+esc(c.author_name||"Member")+'</strong><time>'+esc(dateLabel(c.created_at))+'</time>'+(own?'<button class="comment-delete" data-delete-comment="'+esc(c.id)+'" type="button" aria-label="Delete your comment">Delete</button>':"")+'</div><p>'+esc(c.body)+'</p></div></article>'}
@@ -92,7 +117,7 @@ async function showTitle(m){
   await loadComments();return;
  }
  if(m.downloadUrl){dl.href=m.downloadUrl;dl.hidden=false;dl.target="_blank";dl.rel="noopener noreferrer"}
- let movieParts=[];
+ if(m.watchUrl&&mountCustomPlayer(m.watchUrl)){await loadComments();return;}\n  let movieParts=[];
  if(m.type==="movie"&&window.AgasobanuyeDB?.configured){try{movieParts=await window.AgasobanuyeDB.getMovieParts(m.id)}catch(error){console.warn("Movie parts could not be loaded:",error)}}
  const partsSection=$("#moviePartsSection"),partsList=$("#moviePartsList");
  if(partsSection)partsSection.hidden=!movieParts.length;
@@ -119,7 +144,7 @@ function renderRelated(){
  if(categories.length){const matched=related.filter(x=>String(x.genre||"").split(/[,/&|]/).some(g=>categories.some(c=>g.trim().toLowerCase()===c||g.trim().toLowerCase().includes(c))));related=[...matched,...related.filter(x=>!matched.includes(x))]}
  related=related.slice(0,8);
  $("#relatedRow").innerHTML=related.map(m=>'<article class="poster-card" data-id="'+esc(m.id)+'" tabindex="0" role="button"><div class="poster-image"><img src="'+esc(imageKitAsset(m.poster)||"assets/agasobanuye257-logo.svg")+'" alt="" loading="lazy" decoding="async"></div><div class="poster-info"><h3>'+esc(m.title)+'</h3><div class="poster-meta"><span>'+esc(m.genre)+'</span><span>'+esc(m.year)+'</span></div></div></article>').join("")||'<p class="comments-empty">More titles will appear here as the catalogue grows.</p>';
- $("#relatedRow").onclick=e=>{const c=e.target.closest("[data-id]");if(!c)return;const m=allTitles.find(x=>String(x.id)===c.dataset.id);if(m){sessionStorage.setItem("agasobanuyeSelectedTitle",JSON.stringify(m));location.href=m.watchUrl||("watch.html?id="+encodeURIComponent(m.slug||m.id))}};
+ $("#relatedRow").onclick=e=>{const c=e.target.closest("[data-id]");if(!c)return;const m=allTitles.find(x=>String(x.id)===c.dataset.id);if(m){sessionStorage.setItem("agasobanuyeSelectedTitle",JSON.stringify(m));location.href="watch.html?id="+encodeURIComponent(m.slug||m.id)}};
 }
 $("#commentForm").addEventListener("submit",async e=>{e.preventDefault();const input=$("#commentInput"),name=$("#commentName"),button=e.currentTarget.querySelector("button[type=submit]"),message=$("#commentMessage"),body=input.value.trim(),author=name.value.trim();if(!body||!author)return;button.disabled=true;message.textContent="Posting…";try{await window.AgasobanuyeDB.addComment(commentTarget(title),author,body);input.value="";message.textContent="Your comment has been posted.";await loadComments()}catch(err){message.textContent=err.message||"Could not post your comment."}finally{button.disabled=false}});
 $("#commentsList").addEventListener("click",async e=>{const b=e.target.closest("[data-delete-comment]");if(!b)return;if(!confirm("Delete your comment?"))return;try{await window.AgasobanuyeDB.removeComment(b.dataset.deleteComment);await loadComments()}catch(err){alert(err.message)}});
