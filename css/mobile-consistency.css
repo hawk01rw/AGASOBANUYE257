@@ -54,3 +54,8 @@
  .pro-search-results{padding:8px 12px 20px}
 }
 @media(max-width:420px){.poster-meta{font-size:9px!important}.agas-footer-inner{gap:18px!important}.agas-footer-column h2,.agas-footer-note h2{font-size:14px!important}}
+
+
+/* Pro Search creator credit */
+.pro-search-footer .pro-search-credit{display:inline-block;margin-left:10px;color:#b77aff;font-weight:800;letter-spacing:.09em;text-shadow:0 0 12px rgba(183,122,255,.28)}
+@media(max-width:600px){.pro-search-footer .pro-search-credit{display:block;margin:7px 0 0;font-size:10px}}
