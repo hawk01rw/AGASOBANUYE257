@@ -499,3 +499,8 @@ body:has(.watch-main){
 .movie-part-button small{color:#93a9c5;font:10px 'DM Sans',sans-serif}
 .movie-part-button.active{border-color:#80b5f5;background:linear-gradient(135deg,#1c4772,#102943);box-shadow:0 0 0 2px rgba(128,181,245,.1)}
 @media(max-width:520px){.movie-parts-section{padding:13px}.movie-part-button{flex:1;min-width:calc(50% - 6px);justify-content:space-between}}
+
+/* Keep custom and external players inside the responsive cinema frame */
+.watch-player{position:relative!important;display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;min-height:0!important;height:auto!important;aspect-ratio:16/9!important;max-height:min(78vh,820px)!important;overflow:hidden!important;isolation:isolate;background:#020408!important}
+.watch-player iframe,.watch-player video{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;min-width:0!important;min-height:0!important;border:0!important;object-fit:contain!important;background:#020408!important}
+@media(max-width:700px){.watch-player{aspect-ratio:16/9!important;max-height:none!important;border-radius:11px!important}}
