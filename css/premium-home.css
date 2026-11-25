@@ -524,3 +524,66 @@ body>.cineva-footer{flex-shrink:0;margin-top:auto}
  .feature-hero.hero-changing .feature-copy>p:not(.feature-eyebrow),
  .feature-hero.hero-changing .feature-tags{animation:none!important}
 }
+
+
+/* Cinevaa-inspired cinematic hero refinement — adapted for AGASOBANUYE257 */
+.feature-hero{
+  width:min(calc(100% - 48px),1720px)!important;
+  height:clamp(540px, min(62vw, 740px), 740px)!important;
+  min-height:540px!important;
+  margin:22px auto 38px!important;
+  border-radius:18px!important;
+  border-color:rgba(190,205,225,.2)!important;
+  box-shadow:0 34px 90px rgba(0,0,0,.48),0 0 55px rgba(31,91,151,.12),inset 0 1px rgba(255,255,255,.07)!important;
+}
+.feature-image{
+  background-position:center 32%!important;
+  transform:scale(1.045);
+  filter:saturate(.94) contrast(1.08)!important;
+}
+.feature-overlay{
+  background:
+    linear-gradient(90deg,rgba(3,9,18,.98) 0%,rgba(4,13,26,.88) 24%,rgba(5,16,31,.52) 49%,rgba(5,16,31,.08) 82%),
+    linear-gradient(0deg,rgba(3,8,16,.88) 0%,rgba(3,8,16,.12) 42%,rgba(3,8,16,.10) 100%)!important;
+}
+.feature-copy{
+  left:clamp(28px,6vw,96px)!important;
+  bottom:clamp(76px,10%,108px)!important;
+  max-width:min(700px,62%)!important;
+}
+.feature-eyebrow{
+  border-radius:5px!important;
+  text-transform:uppercase;
+  box-shadow:0 8px 28px rgba(0,0,0,.18);
+}
+.feature-copy h1{
+  font-size:clamp(38px,5.4vw,76px)!important;
+  line-height:.99!important;
+  letter-spacing:-2.8px!important;
+  max-width:690px!important;
+}
+.feature-tags span{
+  border-radius:5px!important;
+  text-transform:uppercase;
+  letter-spacing:.65px!important;
+}
+.feature-buttons .premium-button,.feature-buttons .outline-button{
+  min-height:50px!important;
+  border-radius:6px!important;
+  padding-inline:24px!important;
+}
+.hero-pagination{
+  border-radius:7px!important;
+}
+.hero-pagination button{border-radius:5px!important}
+@media(max-width:849px){
+ .feature-hero{width:calc(100% - 28px)!important;height:590px!important;min-height:590px!important;margin:16px auto 28px!important}
+ .feature-overlay{background:linear-gradient(0deg,rgba(3,8,16,.98) 0%,rgba(3,8,16,.76) 43%,rgba(3,8,16,.10) 100%)!important}
+ .feature-copy{max-width:720px!important;bottom:88px!important}
+}
+@media(max-width:520px){
+ .feature-hero{width:calc(100% - 20px)!important;height:545px!important;min-height:545px!important;margin:12px auto 22px!important}
+ .feature-copy{bottom:76px!important}
+ .feature-copy h1{font-size:clamp(30px,8.5vw,43px)!important;letter-spacing:-1.5px!important}
+ .feature-buttons .premium-button,.feature-buttons .outline-button{padding-inline:14px!important}
+}
