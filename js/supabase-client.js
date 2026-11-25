@@ -47,7 +47,7 @@
       rows=rows.filter(row=>row.content_type==="episode"||row.series_id===seriesId);
       return rows.map(mapMovie);
     },
-    async getVideoUrl(path,download=false){if(!client||!path)throw new Error("No video file has been configured for this title.");const {data,error}=await client.storage.from("movie-videos").createSignedUrl(path,3600,download?{download:true}:{});if(error)throw error;return data.signedUrl;},
+    async getVideoUrl(path,download=false){if(!client||!path)throw new Error("No video file has been configured for this title.");const {data,error}=await client.storage.from("movie-videos").createSignedUrl(path,21600,download?{download:true}:{});if(error)throw error;return data.signedUrl;},
     async getComments(target){
       if(!client)throw new Error("Supabase is not configured yet.");
       const column=target.episodeId?"episode_id":"movie_id",value=target.episodeId||target.movieId;
