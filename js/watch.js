@@ -58,8 +58,18 @@ function renderTmdbCredits(meta){
  host.innerHTML=parts.join("");host.hidden=!parts.length;
  const section=$("#tmdbCreditsSection");if(section)section.hidden=!parts.length;
 }
+
+function updateWatchSeo(movie){
+ const clean=String(movie.description||"Watch "+movie.title+" on AGASOBANUYE257.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim().slice(0,300);
+ const canonical=location.origin+location.pathname+location.search;
+ document.title=movie.title+" — Watch on AGASOBANUYE257";
+ const set=(kind,key,value)=>{let el=document.head.querySelector('meta['+kind+'="'+key+'"]');if(!el){el=document.createElement("meta");el.setAttribute(kind,key);document.head.appendChild(el);}el.setAttribute("content",value);};
+ set("name","description",clean);set("property","og:title",document.title);set("property","og:description",clean);set("property","og:url",canonical);set("name","twitter:title",document.title);set("name","twitter:description",clean);
+ const link=document.querySelector('link[rel="canonical"]');if(link)link.href=canonical;
+}
+
 async function showTitle(m){
- if(!m)return;title=m;document.title=m.title+" — AGASOBANUYE257";
+ if(!m)return;title=m;updateWatchSeo(m);
  $("#watchTitle").textContent=m.title;$("#watchDescription").textContent=m.description||"Watch this title on AGASOBANUYE257.";
  $("#watchSynopsis").textContent=m.description||"No synopsis has been added yet.";
  const kind=m.type==="series"?"SERIES":m.type==="episode"?"EPISODE":"MOVIE";
