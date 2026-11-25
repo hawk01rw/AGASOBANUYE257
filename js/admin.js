@@ -247,7 +247,7 @@
     try{const {error}=await db().rpc("admin_studio_manage_admin",{target_email:email,make_admin:false});if(error)throw error;msg($("#adminMessage"),"Admin access revoked.");await loadAdmins();}
     catch(error){msg($("#adminMessage"),error.message,true);}
   });
-  $("#year").textContent=new Date().getFullYear();updateTypeFields();
+  const yearNode=$("#year");if(yearNode)yearNode.textContent=new Date().getFullYear();updateTypeFields();
   // A fresh page load always starts at the sign-in screen. The isolated
   // sessionStorage auth client prevents this from signing out public-site users.
   if (!db()) {
