@@ -10,8 +10,26 @@
     if (!file.type?.startsWith("image/")) throw new Error("Please choose an image file.");
     if (file.size > 15 * 1024 * 1024) throw new Error("Image must be 15 MB or smaller.");
 
-    const { data: auth, error: authError } = await client.functions.invoke("imagekit-auth", { body: {} });
-    if (authError) throw new Error(authError.message || "Could not authorize ImageKit upload.");
+    let authResult;
+    try {
+      authResult = await client.functions.invoke("imagekit-auth", { body: {} });
+    } catch (error) {
+      throw new Error("ImageKit authorization request failed. Confirm that the imagekit-auth Edge Function is deployed in this Supabase project. Details: " + (error?.message || "network error"));
+    }
+    const { data: auth, error: authError } = authResult || {};
+    if (authError) {
+      let detail = authError.message || "Could not authorize ImageKit upload.";
+      try {
+        const response = authError.context;
+        if (response && typeof response.clone === "function") {
+          const body = await response.clone().json().catch(() => null);
+          if (body?.error) detail = body.error;
+          else if (body?.message) detail = body.message;
+          else if (response.status) detail += " (HTTP " + response.status + ")";
+        }
+      } catch (_) {}
+      throw new Error("ImageKit authorization failed: " + detail + " Check Supabase Edge Functions → imagekit-auth → Logs and confirm IMAGEKIT_PRIVATE_KEY is set.");
+    }
     if (!auth?.token || !auth?.signature || !auth?.expire) throw new Error("ImageKit authorization response was incomplete.");
 
     const form = new FormData();
