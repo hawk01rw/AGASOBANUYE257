@@ -1,0 +1,103 @@
+/* AGASOBANUYE257 — compact display scale, especially the homepage */
+html{font-size:14px}
+@media(min-width:1100px){
+  .feature-hero{
+    width:min(calc(100% - 64px),1480px)!important;
+    height:clamp(390px,36vw,500px)!important;
+    min-height:390px!important;
+    margin:16px auto 24px!important;
+    border-radius:14px!important;
+  }
+  .feature-copy{left:clamp(28px,4.5vw,68px)!important;bottom:68px!important;max-width:560px!important}
+  .feature-copy h1{font-size:clamp(34px,3.6vw,54px)!important;letter-spacing:-1.8px!important;line-height:1.02!important}
+  .feature-copy>p:not(.feature-eyebrow){font-size:13px!important;line-height:1.55!important;max-width:470px!important;margin:12px 0 16px!important}
+  .feature-eyebrow{font-size:10px!important;letter-spacing:1.6px!important}
+  .feature-tags{gap:7px!important;margin:12px 0!important}
+  .feature-tags span{font-size:10px!important;padding:5px 9px!important}
+  .feature-buttons{gap:9px!important;margin-top:15px!important}
+  .feature-buttons .premium-button,.feature-buttons .outline-button{min-height:39px!important;padding-inline:17px!important;font-size:12px!important}
+  .feature-hero .hero-pagination{bottom:14px!important}
+  .feature-hero .hero-pagination button{width:30px!important;height:30px!important;font-size:17px!important}
+  .cineva-section{max-width:1500px;margin:0 auto;padding:25px 3% 15px!important}
+  .cineva-heading{gap:10px!important;margin-bottom:14px!important}
+  .heading-icon{width:34px!important;height:34px!important;border-radius:9px!important;font-size:14px!important}
+  .cineva-heading h2{font-size:19px!important}
+  .cineva-heading p{font-size:10px!important;margin-top:3px!important}
+  .poster-row{grid-auto-columns:minmax(130px,16.5%)!important;gap:12px!important;padding-bottom:12px!important}
+  .poster-image{height:190px!important}
+  .poster-card{border-radius:11px!important}
+  .poster-info{padding:9px!important}
+  .poster-info h3{font-size:12px!important;margin-bottom:17px!important}
+  .poster-meta{font-size:10px!important}
+  .category-cards{gap:11px!important}
+  .category-tile{height:150px!important;padding:15px!important;border-radius:12px!important}
+  .category-tile b{font-size:18px!important}
+  .category-tile small{font-size:11px!important}
+  .newsletter{max-width:900px!important;margin:36px auto!important;padding:26px 32px!important;border-radius:14px!important}
+  .newsletter h2{font-size:23px!important;margin:10px 0 6px!important}
+  .newsletter p{font-size:12px!important}
+  .newsletter input,.newsletter button{height:42px!important;font-size:12px!important}
+  .cineva-footer{padding:34px 3% 70px!important}
+  .footer-main{gap:24px!important}
+  .footer-logo img{width:52px!important;height:52px!important}
+  .footer-logo b{font-size:24px!important}
+  .footer-about p,.footer-column p{font-size:12px!important}
+  .footer-column h3{font-size:15px!important}
+  .footer-column a{font-size:11px!important}
+  .social-links a{width:34px!important;height:34px!important}
+}
+@media(min-width:850px) and (max-width:1099px){
+  .feature-hero{height:430px!important;min-height:430px!important}
+  .feature-copy h1{font-size:42px!important}
+  .cineva-section{padding:24px 3% 14px!important}
+  .poster-row{grid-auto-columns:minmax(135px,20%)!important}
+  .poster-image{height:190px!important}
+  .heading-icon{width:36px!important;height:36px!important}
+  .cineva-heading h2{font-size:20px!important}
+}
+@media(max-width:849px){
+  .feature-hero{width:calc(100% - 28px)!important;height:430px!important;min-height:430px!important;margin:12px auto 18px!important;border-radius:13px!important}
+  .feature-copy{left:18px!important;right:18px!important;bottom:62px!important;max-width:620px!important}
+  .feature-copy h1{font-size:clamp(27px,6vw,40px)!important;letter-spacing:-1px!important}
+  .feature-copy>p:not(.feature-eyebrow){font-size:12px!important;line-height:1.5!important;margin:10px 0 13px!important}
+  .feature-eyebrow{font-size:9px!important;letter-spacing:1.3px!important}
+  .feature-tags{gap:6px!important;margin:9px 0!important}
+  .feature-tags span{font-size:9px!important;padding:4px 8px!important}
+  .feature-buttons{gap:8px!important;margin-top:12px!important}
+  .feature-buttons .premium-button,.feature-buttons .outline-button{min-height:36px!important;padding-inline:13px!important;font-size:11px!important}
+  .feature-hero .hero-pagination{bottom:10px!important}
+  .feature-hero .hero-pagination button{width:28px!important;height:28px!important}
+  .cineva-section{padding:22px 3% 12px!important}
+  .cineva-heading{gap:9px!important;margin-bottom:13px!important}
+  .heading-icon{width:33px!important;height:33px!important;border-radius:8px!important;font-size:14px!important}
+  .cineva-heading h2{font-size:18px!important}
+  .cineva-heading p{font-size:10px!important}
+  .poster-row{grid-auto-columns:minmax(125px,27%)!important;gap:10px!important}
+  .poster-image{height:175px!important}
+  .poster-info{padding:8px!important}
+  .poster-info h3{font-size:12px!important;margin-bottom:14px!important}
+  .poster-meta{font-size:9px!important}
+  .category-tile{height:140px!important;padding:13px!important}
+  .category-tile b{font-size:17px!important}
+  .newsletter{margin:26px 3%!important;padding:23px 18px!important;border-radius:14px!important}
+  .newsletter h2{font-size:22px!important;margin:10px 0 6px!important}
+  .newsletter p{font-size:12px!important}
+  .newsletter input,.newsletter button{height:42px!important;font-size:12px!important}
+  .cineva-footer{padding:28px 3% 88px!important}
+}
+@media(max-width:520px){
+  .feature-hero{width:calc(100% - 20px)!important;height:390px!important;min-height:390px!important;margin:10px auto 14px!important}
+  .feature-copy{bottom:55px!important}
+  .feature-copy h1{font-size:clamp(25px,7.5vw,34px)!important}
+  .feature-copy>p:not(.feature-eyebrow){font-size:11px!important;max-width:100%!important}
+  .feature-tags span{font-size:8px!important}
+  .feature-buttons .premium-button,.feature-buttons .outline-button{min-height:34px!important;padding-inline:11px!important;font-size:10px!important}
+  .poster-row{grid-auto-columns:minmax(112px,39%)!important;gap:9px!important}
+  .poster-image{height:158px!important}
+  .poster-info h3{font-size:11px!important;margin-bottom:12px!important}
+  .category-tile{height:125px!important}
+  .category-tile b{font-size:15px!important}
+  .cineva-section{padding-top:18px!important;padding-bottom:10px!important}
+  .cineva-heading h2{font-size:16px!important}
+  .newsletter{padding:20px 15px!important}
+}
