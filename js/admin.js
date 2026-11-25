@@ -19,7 +19,7 @@
   const db = () => adminClient || window.AgasobanuyeDB?.client;
   const msg = (node, value, error=false) => { node.textContent=value; node.classList.toggle("error",error); };
   const esc = value => String(value ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-  const slugify = value => String(value||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,190);
+  const slugify = value => String(value||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,190);\n  const normalizeTitle = value => String(value||"").normalize("NFKC").trim().replace(/\\s+/g," ").toLocaleLowerCase();\n  const findDuplicateTitle = (title,excludeId=null) => state.catalogue.find(item=>item.id!==excludeId&&normalizeTitle(item.title)===normalizeTitle(title));
   const ownerEmail = "mrhawk2007@gmail.com";
 
   async function searchTmdb(event) {
@@ -118,7 +118,7 @@
 
   async function loadCatalogue() {
     msg($("#catalogueMessage"),"Loading catalogue...");
-    const {data,error}=await db().from("movies").select("id,title,slug,synopsis,genre,release_year,poster_url,backdrop_url,imagekit_file_id,backdrop_imagekit_file_id,video_path,download_url,trailer_url,duration_minutes,language,featured,published,content_type,series_id,season_number,episode_number,episode_title,created_at").order("created_at",{ascending:false}).limit(500);
+    const {data,error}=await db().from("movies").select("id,title,slug,synopsis,genre,release_year,poster_url,backdrop_url,imagekit_file_id,backdrop_imagekit_file_id,video_path,download_url,trailer_url,duration_minutes,language,featured,published,content_type,series_id,season_number,episode_number,episode_title,created_at").order("created_at",{ascending:false}).limit(5000);
     if(error) throw error;
     state.catalogue=data||[];
     $("#statMovies").textContent=state.catalogue.filter(x=>x.content_type==="movie"||!x.content_type).length;
