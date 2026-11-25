@@ -31,13 +31,13 @@
     if (!subscribers.length) { status("There are no subscribers to export.", true); return; }
     const quote = value => {
       let text = String(value ?? "");
-      if (/^[=+@\\-\\t\\r]/.test(text)) text = "'" + text;
+      if (/^[=+@\-\t\r]/.test(text)) text = "'" + text;
       return '"' + text.replace(/"/g, '""') + '"';
     };
     const lines = [["Email","Subscribed at","Active"], ...subscribers.map(row => [
       row.email, row.subscribed_at, row.is_active ? "Yes" : "No"
     ])];
-    const csv = "\\uFEFF" + lines.map(row => row.map(quote).join(",")).join("\\r\\n");
+    const csv = "\uFEFF" + lines.map(row => row.map(quote).join(",")).join("\r\n");
     const url = URL.createObjectURL(new Blob([csv], {type:"text/csv;charset=utf-8"}));
     const link = document.createElement("a");
     link.href = url;
@@ -48,7 +48,8 @@
     URL.revokeObjectURL(url);
     status(subscribers.length + " subscriber records exported.");
   }
-\n  async function loadSubscribers() {
+
+  async function loadSubscribers() {
     if(loading)return;
     loading=true;
     const list=$("#newsletterAdminList");
