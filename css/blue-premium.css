@@ -42,3 +42,34 @@ body{background:radial-gradient(ellipse at 14% -8%,rgba(23,105,210,.2),transpare
 .poster-card,.poster-info,.poster-image{background-color:#0d2038!important}
 .mobile-bottom-nav{background:rgba(6,18,35,.97)!important}
 .admin-page{background:linear-gradient(145deg,#0b1c35 0%,#071426 52%,#040b17 100%)!important}
+
+
+/* Global icon polish and purple removal: only AGASOBANUYE logo blue, gold and white */
+:root{--cv-purple:var(--aga-blue);--cv-pink:var(--aga-gold)}
+.cineva-header .top-links a:hover,.cineva-header .top-links a.nav-home,.cineva-header .top-links a.active{color:#a9ceff!important}
+.cineva-header .top-links a.active:after,.cineva-header .top-links a.nav-home:after{background:linear-gradient(90deg,#4b91f0,#d6a52e)!important}
+.cineva-header .cineva-search:focus-within{border-color:#4b91f0!important;box-shadow:0 0 0 3px rgba(75,145,240,.16)!important}
+.cineva-header .icon-action:hover{background:rgba(23,105,210,.2)!important;border-color:#4b91f0!important}
+.cineva-header .profile-action{background:linear-gradient(135deg,#1769d2,#082b63)!important;color:#fff!important}
+.premium-button,.member-watch{background:linear-gradient(115deg,#4b91f0,#1769d2 65%,#082b63)!important;color:#fff!important;border:1px solid rgba(121,174,248,.55)!important}
+.filter-chip.selected{background:linear-gradient(110deg,#1769d2,#082b63)!important;border-color:#79aef8!important;color:#fff!important}
+.heading-icon{background:linear-gradient(145deg,rgba(23,105,210,.2),rgba(214,165,46,.08))!important;border:1px solid rgba(75,145,240,.34)!important;color:#9bc5ff!important}
+.row-heading>a,.member-home-link{color:#a9ceff!important}
+.poster-card:hover{border-color:rgba(75,145,240,.78)!important}
+.poster-info .poster-meta span:last-child{color:#f0cc78!important}
+.newsletter,.vip-page-card{border-color:rgba(75,145,240,.28)!important;background:linear-gradient(125deg,#102b4d,#0b1c35 58%,#182b42)!important}
+.newsletter-icon{color:#f0cc78!important}
+.vip-page-content h1 span,.member-heading h1 span{background:linear-gradient(100deg,#79aef8,#f0cc78)!important;background-clip:text!important;color:transparent!important}
+.vip-page-glow{background:#1769d2!important;opacity:.25!important}
+.member-kicker{color:#f0cc78!important}
+.saved-count{color:#b8d5ff!important;border-color:rgba(75,145,240,.3)!important;background:rgba(23,105,210,.1)!important}
+.member-card{background:linear-gradient(155deg,#102b4d,#0b1c35)!important;border-color:rgba(75,145,240,.22)!important}
+.member-remove{background:rgba(23,105,210,.1)!important;color:#b8d5ff!important;border-color:rgba(75,145,240,.35)!important}
+.agas-footer{background:radial-gradient(ellipse at 16% 0%,rgba(23,105,210,.18),transparent 38%),linear-gradient(180deg,#0c2039 0%,#061326 100%)!important;border-top-color:rgba(75,145,240,.28)!important}
+.agas-footer-brand span span,.agas-footer-credit i{color:#f0cc78!important}
+.agas-footer-social a{border-color:rgba(75,145,240,.3)!important;color:#b8d5ff!important}
+.agas-footer-social a:hover{background:linear-gradient(130deg,#1769d2,#082b63)!important}
+.agas-footer-column a:hover,.agas-footer-note>a{color:#a9ceff!important}
+.agas-footer-spark{background:rgba(214,165,46,.12)!important;color:#f0cc78!important}
+[data-lucide]{width:1em;height:1em;stroke-width:2;vertical-align:-.14em;flex:0 0 auto}
+.heading-icon [data-lucide]{width:21px;height:21px}.pro-nav [data-lucide]{width:17px;height:17px}.quick-actions [data-lucide]{width:22px;height:22px}.saved-action [data-lucide],.favorite-toggle [data-lucide]{width:18px;height:18px}.newsletter-icon [data-lucide]{width:27px;height:27px}
