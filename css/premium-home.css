@@ -289,3 +289,22 @@ body>.cineva-footer{flex-shrink:0;margin-top:auto}
   .poster-info h3{font-size:12px;min-height:33px;margin-bottom:8px}
   .poster-meta{font-size:9px}
 }
+
+
+/* Medium-sized catalogue cards: balanced width and poster height */
+.poster-row{grid-auto-columns:minmax(148px,16.5%);gap:13px}
+.poster-image{aspect-ratio:2/2.55}
+.poster-info{padding:10px 11px 12px}
+.poster-info h3{font-size:13px;min-height:34px;margin-bottom:8px}
+.poster-meta{font-size:10px}
+@media(max-width:849px){
+  .poster-row{grid-auto-columns:minmax(145px,25%);gap:11px}
+  .poster-image{aspect-ratio:2/2.55}
+}
+@media(max-width:480px){
+  .poster-row{grid-auto-columns:minmax(128px,39%);gap:9px}
+  .poster-image{aspect-ratio:2/2.55}
+  .poster-info{padding:8px 9px 10px}
+  .poster-info h3{font-size:11px;min-height:30px;margin-bottom:7px}
+  .poster-meta{font-size:9px}
+}
