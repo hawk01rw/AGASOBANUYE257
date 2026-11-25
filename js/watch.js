@@ -24,12 +24,18 @@ async function showTitle(m){
     }catch(e){$("#seriesEpisodes").textContent="Episodes could not be loaded.";}
     return;
   }
+  if(m.downloadUrl){
+    $("#movieDownloadButton").href=m.downloadUrl;
+    $("#movieDownloadButton").hidden=false;
+    $("#movieDownloadButton").target="_blank";
+    $("#movieDownloadButton").rel="noopener noreferrer";
+  }
   if(m.videoPath&&window.AgasobanuyeDB?.configured){
     try{
       const [playUrl,downloadUrl]=await Promise.all([window.AgasobanuyeDB.getVideoUrl(m.videoPath),window.AgasobanuyeDB.getVideoUrl(m.videoPath,true)]);
       const v=document.createElement("video");v.controls=true;v.playsInline=true;v.preload="metadata";v.src=playUrl;
       $("#watchPlayer").replaceChildren(v);
-      $("#movieDownloadButton").href=downloadUrl;$("#movieDownloadButton").hidden=false;
+      if(!m.downloadUrl){$("#movieDownloadButton").href=downloadUrl;$("#movieDownloadButton").hidden=false;}
       $("#movieDownloadButton").setAttribute("download","");
     }catch(e){$("#playerMessage").textContent="Video is not available right now";}
   }else if(m.trailerUrl){
