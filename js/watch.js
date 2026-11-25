@@ -58,7 +58,7 @@ function renderTmdbCredits(meta){
  host.innerHTML=parts.join("");host.hidden=!parts.length;
  const section=$("#tmdbCreditsSection");if(section)section.hidden=!parts.length;
 }
-function showTitle(m){
+async function showTitle(m){
  if(!m)return;title=m;document.title=m.title+" — AGASOBANUYE257";
  $("#watchTitle").textContent=m.title;$("#watchDescription").textContent=m.description||"Watch this title on AGASOBANUYE257.";
  $("#watchSynopsis").textContent=m.description||"No synopsis has been added yet.";
