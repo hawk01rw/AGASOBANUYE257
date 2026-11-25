@@ -24,7 +24,7 @@
 }
 .cineva-header{isolation:isolate}
 .cineva-header:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,rgba(190,126,224,.42),rgba(227,79,145,.3),transparent);pointer-events:none}
-.cineva-header .top-links a{font-family:'DM Sans',sans-serif;font-weight:700;letter-spacing:.1px}
+.cineva-header .top-links a{font-family:;font-weight:700;letter-spacing:.1px}
 .cineva-header .top-links a:hover{color:#f0c9ff}
 .cineva-header .cineva-search{transition:background .2s,border-color .2s,box-shadow .2s}
 .cineva-header .cineva-search:focus-within{background:rgba(255,255,255,.09);border-color:#bd72e5;box-shadow:0 0 0 3px rgba(189,114,229,.16),0 8px 25px rgba(0,0,0,.2)}
@@ -120,8 +120,8 @@ body>.cineva-footer{flex-shrink:0;margin-top:auto}
   border:1px solid rgba(203,139,231,.48);
   box-shadow:0 0 22px rgba(169,91,210,.17);
 }
-.cineva-header .cineva-brand b{font-family:'DM Sans',sans-serif;font-weight:800;letter-spacing:-1px}
-.cineva-header .cineva-brand small{font-family:'DM Sans',sans-serif;font-size:8px;letter-spacing:1.35px;color:#a69ab4}
+.cineva-header .cineva-brand b{font-family:;font-weight:800;letter-spacing:-1px}
+.cineva-header .cineva-brand small{font-family:;font-size:8px;letter-spacing:1.35px;color:#a69ab4}
 .cineva-header .top-links{align-items:center}
 .cineva-header .top-links a{
   position:relative;padding:10px 3px;color:#bcb4c9;
@@ -252,7 +252,7 @@ body>.cineva-footer{flex-shrink:0;margin-top:auto}
 .poster-meta{
   align-items:center;
   color:#a9a0b7;
-  font:500 10px/1.4 'DM Sans',sans-serif;
+  font:500 10px/1.4 ;
   gap:8px;
 }
 .poster-meta span:first-child{
