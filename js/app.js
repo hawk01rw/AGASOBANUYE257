@@ -54,7 +54,7 @@ function card(movie) {
     '</span><span>★ ' + rating + '</span></div></div></article>';
 }
 
-const HOME_CATEGORIES = ["Action", "Drama", "Animation", "Erotic", "Romance", "Horror", "Comedy", "Others"];
+const HOME_CATEGORIES = ["Action", "Drama", "Animation", "Erotic", "Romance", "Horror", "Comedy", "HighSchool", "Others"];
 
 function genreMatches(movie, category) {
   const genres = String(movie.genre || "").split(/[,/&|]/).map(value => value.trim().toLowerCase()).filter(Boolean);
@@ -64,11 +64,6 @@ function genreMatches(movie, category) {
 
 function renderRows() {
   const query = ($("#searchInput").value || "").trim().toLowerCase();
-  const filtered = movies.filter(movie =>
-    (activeFilter === "All" || genreMatches(movie, activeFilter)) &&
-    (!query || (String(movie.title) + " " + String(movie.genre)).toLowerCase().includes(query))
-  );
-  $("#movieRow").innerHTML = filtered.map(card).join("");
   $("#latestRow").innerHTML = movies.slice(0, 12).map(card).join("") || '<p class="empty-state">No movies have been published yet. New titles will appear here.</p>';
   const series = movies.filter(movie => movie.type === "series");
   $("#seriesRow").innerHTML = series.length
@@ -81,8 +76,6 @@ function renderRows() {
     row.innerHTML = matches.length ? matches.map(card).join("") :
       '<p class="empty-state">No ' + escapeHTML(category.toLowerCase()) + ' titles published yet.</p>';
   });
-  $("#emptyState").textContent = query ? "No titles found. Try another search." : "No published movies yet. Add and publish a movie in Admin Studio to show it here.";
-  $("#emptyState").hidden = filtered.length > 0;
   renderFavorites();
 }
 
@@ -146,7 +139,7 @@ function applyFilter(category) {
   document.querySelectorAll(".filter-chip").forEach(button =>
     button.classList.toggle("selected", button.dataset.filter === category)
   );
-  const target = category === "All" ? $("#movies") : document.getElementById("genre-" + category.toLowerCase());
+  const target = category === "All" ? $("#latest") : document.getElementById("genre-" + category.toLowerCase());
   (target || $("#movies")).scrollIntoView({behavior:"smooth"});
   renderRows();
 }
@@ -179,10 +172,6 @@ document.addEventListener("keydown", event => {
 });
 
 $("#searchInput").addEventListener("input", renderRows);
-$("#filterRow").addEventListener("click", event => {
-  const button = event.target.closest("[data-filter]");
-  if (button) applyFilter(button.dataset.filter);
-});
 $("#heroPrev").onclick = () => {
   featuredIndex = (featuredIndex - 1 + movies.length) % movies.length;
   renderFeature();
