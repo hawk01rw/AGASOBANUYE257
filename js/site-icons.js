@@ -52,8 +52,8 @@
     });
     if (window.lucide?.createIcons) window.lucide.createIcons({attrs:{"stroke-width":2}});
   };
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", refresh, {once:true}); else refresh();
-  const observer = new MutationObserver(() => refresh());
-  observer.observe(document.documentElement, {childList:true,subtree:true});
-  window.setTimeout(() => observer.disconnect(), 15000);
+  // Run once only. A subtree MutationObserver here caused expensive repeated full-page scans
+  // while other scripts update the catalogue, which could freeze slower mobile browsers.
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", refresh, {once:true});
+  else refresh();
 })();
