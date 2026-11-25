@@ -11,7 +11,7 @@
 html{background:var(--aga-ink);scroll-padding-top:90px}
 body{font-family:"DM Sans",Arial,sans-serif;color:var(--aga-text);background:linear-gradient(180deg,#0b1c32 0%,#071426 38%,#050e1b 100%)!important;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 body :where(h1,h2,h3,h4,p){overflow-wrap:break-word}
-body :where(h1,h2,h3){font-family:"DM Sans",Arial,sans-serif;letter-spacing:-.035em}
+body :where(h1,h2,h3){font-family:"Playfair Display",Georgia,serif;letter-spacing:-.025em;font-weight:700}
 body :where(button,input,textarea,select){font:inherit}
 body :where(a,button){-webkit-tap-highlight-color:transparent}
 main{width:min(100% - 40px,var(--aga-content));margin-inline:auto}
