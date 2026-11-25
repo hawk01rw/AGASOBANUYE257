@@ -1,12 +1,6 @@
 // AGASOBANUYE257 homepage catalogue
 // Demo entries are text-only until real titles and ImageKit artwork are added.
-const demoMovies = [
-  {id:"demo-1",title:"Your Next Favourite",genre:"Action",year:"2026",rating:"—",tag:"WELCOME",description:"Your next great movie experience starts here."},
-  {id:"demo-2",title:"Stories Worth Sharing",genre:"Drama",year:"2026",rating:"—",tag:"DISCOVER",description:"Discover stories from every genre."},
-  {id:"demo-3",title:"A Night of Mystery",genre:"Thriller",year:"2026",rating:"—",tag:"EXPLORE",description:"Explore the catalogue and find something new."},
-  {id:"demo-4",title:"Made for Movie Night",genre:"Comedy",year:"2026",rating:"—",tag:"FEATURED",description:"Entertainment for your next movie night."}
-];
-let movies = [...demoMovies];
+let movies = [];
 let activeFilter = "All";
 let featuredIndex = 0;
 const $ = selector => document.querySelector(selector);
@@ -59,11 +53,12 @@ function renderRows() {
     (!query || (String(movie.title) + " " + String(movie.genre)).toLowerCase().includes(query))
   );
   $("#movieRow").innerHTML = filtered.map(card).join("");
-  $("#latestRow").innerHTML = movies.slice(0, 12).map(card).join("");
+  $("#latestRow").innerHTML = movies.slice(0, 12).map(card).join("") || '<p class="empty-state">No movies have been published yet. New titles will appear here.</p>';
   const series = movies.filter(movie => movie.type === "series");
   $("#seriesRow").innerHTML = series.length
     ? series.map(card).join("")
     : '<p class="empty-state">Series will appear here when added in Admin Studio.</p>';
+  $("#emptyState").textContent = query ? "No titles found. Try another search." : "No published movies yet. Add and publish a movie in Admin Studio to show it here.";
   $("#emptyState").hidden = filtered.length > 0;
 }
 
@@ -73,7 +68,14 @@ function openWatch(movie) {
 }
 
 function renderFeature() {
-  if (!movies.length) return;
+  if (!movies.length) {
+    $("#featureTitle").textContent = "Discover your next favourite story";
+    $("#featureDescription").textContent = "New movies and series will appear here as soon as they are published.";
+    $("#featureTags").innerHTML = "<span>AGASOBANUYE257</span><span>Movies & Series</span>";
+    $("#featureImage").style.backgroundImage = "none";
+    $("#heroCount").textContent = "00 / 00";
+    return;
+  }
   const movie = movies[featuredIndex % movies.length];
   $("#featureTitle").textContent = movie.title || "Discover your next favourite";
   $("#featureDescription").textContent = movie.description || "Discover this title on AGASOBANUYE257.";
@@ -146,10 +148,8 @@ renderFeature();
 
 if (window.AgasobanuyeDB?.configured) {
   window.AgasobanuyeDB.getMovies().then(rows => {
-    if (rows?.length) {
-      movies = rows;
-      renderRows();
-      renderFeature();
-    }
+    movies = Array.isArray(rows) ? rows : [];
+    renderRows();
+    renderFeature();
   }).catch(error => console.error("Catalogue:", error));
 }
