@@ -1,26 +1,155 @@
-const fallbackMovies=[
-{id:"sample-1",title:"The Last Horizon",genre:"Action",year:2026,rating:"8.7",tag:"FEATURED",poster:"https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",backdrop:"https://image.tmdb.org/t/p/w1280/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",description:"A daring expedition uncovers a secret that could change the future."},
-{id:"sample-2",title:"City of Echoes",genre:"Drama",year:2025,rating:"8.3",tag:"EDITOR'S PICK",poster:"https://image.tmdb.org/t/p/w500/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg",description:"Two lives cross paths in a city that never forgets."},
-{id:"sample-3",title:"Midnight Run",genre:"Horror",year:2026,rating:"8.1",tag:"NEW",poster:"https://image.tmdb.org/t/p/w500/4HodYYKEIsGOdinkGi2Ucz6X9i0.jpg",description:"One night. One decision. Nothing will ever be the same."},
-{id:"sample-4",title:"Summer Again",genre:"Romance",year:2025,rating:"7.9",tag:"POPULAR",poster:"https://image.tmdb.org/t/p/w500/5qGIxdEO841C0tdY8vOdLoRVrr0.jpg",description:"A warm story about unexpected connections and second chances."},
-{id:"sample-5",title:"Laugh Track",genre:"Comedy",year:2026,rating:"7.8",tag:"TRENDING",poster:"https://image.tmdb.org/t/p/w500/2uNW4WbgBXL25BAbXGLnLqX71Sw.jpg",description:"A chaotic plan turns into the funniest week of their lives."},
-{id:"sample-6",title:"Blue Frontier",genre:"Adventure",year:2025,rating:"8.5",tag:"TOP RATED",poster:"https://image.tmdb.org/t/p/w500/8b8R8l88Qje9dn9OE8PY05Nxl1X.jpg",description:"A crew races against time across a world on the edge."},
-{id:"sample-7",title:"Quiet Fire",genre:"Drama",year:2024,rating:"8.0",tag:"COLLECTION",poster:"https://image.tmdb.org/t/p/w500/5qGIxdEO841C0tdY8vOdLoRVrr0.jpg",description:"A family learns that the hardest truths can bring people together."},
-{id:"sample-8",title:"The Hidden Room",genre:"Thriller",year:2026,rating:"8.2",tag:"JUST ADDED",poster:"https://image.tmdb.org/t/p/w500/4HodYYKEIsGOdinkGi2Ucz6X9i0.jpg",description:"A discovery behind a locked door raises more questions than answers."}
+// AGASOBANUYE257 homepage catalogue
+// Demo entries are text-only until real titles and ImageKit artwork are added.
+const demoMovies = [
+  {id:"demo-1",title:"Your Next Favourite",genre:"Action",year:"2026",rating:"—",tag:"WELCOME",description:"Your next great movie experience starts here."},
+  {id:"demo-2",title:"Stories Worth Sharing",genre:"Drama",year:"2026",rating:"—",tag:"DISCOVER",description:"Discover stories from every genre."},
+  {id:"demo-3",title:"A Night of Mystery",genre:"Thriller",year:"2026",rating:"—",tag:"EXPLORE",description:"Explore the catalogue and find something new."},
+  {id:"demo-4",title:"Made for Movie Night",genre:"Comedy",year:"2026",rating:"—",tag:"FEATURED",description:"Entertainment for your next movie night."}
 ];
-let movies=[...fallbackMovies],activeFilter="All",featuredIndex=0;
-const $=s=>document.querySelector(s);
-function card(m){return '<article class="poster-card" data-id="'+String(m.id).replace(/"/g,"&quot;")+'" tabindex="0" role="button" aria-label="Open '+m.title+'"><div class="poster-image"><img src="'+(m.poster||"assets/agasobanuye257-logo.svg")+'" alt="'+m.title+' poster" loading="lazy" onerror="this.style.opacity=.15"><span class="poster-label">'+(m.tag||"MOVIE")+'</span></div><div class="poster-info"><h3>'+m.title+'</h3><div class="poster-meta"><span>'+m.genre+' · '+m.year+'</span><span>★ '+(m.rating||m.voteAverage||"—")+'</span></div></div></article>'}
-function renderRows(){const q=($("#searchInput").value||"").trim().toLowerCase();const filtered=movies.filter(m=>(activeFilter==="All"||String(m.genre).toLowerCase()===activeFilter.toLowerCase())&&(!q||(m.title+" "+m.genre).toLowerCase().includes(q)));$("#movieRow").innerHTML=filtered.map(card).join("");$("#latestRow").innerHTML=movies.slice(0,12).map(card).join("");$("#seriesRow").innerHTML=movies.filter(m=>m.type==="series").map(card).join("")||'<p class="empty-state">Series will appear here when added in Admin Studio.</p>';$("#emptyState").hidden=filtered.length>0;}
-function openWatch(m){try{sessionStorage.setItem("agasobanuyeSelectedTitle",JSON.stringify(m));}catch(e){}location.href="watch.html?id="+encodeURIComponent(m.slug||m.id)}
-function onCardClick(e){const c=e.target.closest(".poster-card");if(!c)return;const m=movies.find(x=>String(x.id)===c.dataset.id);if(m)openWatch(m)}
-function renderFeature(){if(!movies.length)return;const m=movies[featuredIndex%movies.length];$("#featureTitle").textContent=m.title;$("#featureDescription").textContent=m.description||"Discover this title on AGASOBANUYE257.";$("#featureTags").innerHTML='<span>'+(m.type==="series"?"Series":"Movie")+'</span><span>'+m.genre+'</span><span>'+m.year+'</span>';$("#featureImage").style.backgroundImage='url("'+(m.backdrop||m.poster)+'")';$("#featureWatch").onclick=e=>{e.preventDefault();openWatch(m)};$("#featureDetails").onclick=e=>{e.preventDefault();openWatch(m)};$("#heroCount").textContent=String(featuredIndex+1).padStart(2,"0")+" / "+String(movies.length).padStart(2,"0")}
-function applyFilter(category){activeFilter=category;document.querySelectorAll(".filter-chip").forEach(b=>b.classList.toggle("selected",b.dataset.filter===category));$("#movies").scrollIntoView({behavior:"smooth"});renderRows()}
-document.addEventListener("click",e=>{const c=e.target.closest(".poster-card");if(c)onCardClick(e);const cat=e.target.closest("[data-category]");if(cat)applyFilter(cat.dataset.category)});
-document.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.matches(".poster-card")){e.preventDefault();const m=movies.find(x=>String(x.id)===e.target.dataset.id);if(m)openWatch(m)}});
-$("#searchInput").addEventListener("input",renderRows);$("#filterRow").addEventListener("click",e=>{const b=e.target.closest("[data-filter]");if(b)applyFilter(b.dataset.filter)});
-$("#heroPrev").onclick=()=>{featuredIndex=(featuredIndex-1+movies.length)%movies.length;renderFeature()};$("#heroNext").onclick=()=>{featuredIndex=(featuredIndex+1)%movies.length;renderFeature()};
-$("#menuButton").onclick=()=>{$(".top-links").classList.toggle("menu-open")};$("#profileButton").onclick=$("#bottomProfile").onclick=()=>$("#profileDialog").showModal();$("#profileClose").onclick=$("#profileOkay").onclick=()=>$("#profileDialog").close();$("#savedTop").onclick=()=>$("#latest").scrollIntoView({behavior:"smooth"});$("#backTop").onclick=()=>window.scrollTo({top:0,behavior:"smooth"});$("#year").textContent=new Date().getFullYear();
-$("#newsletterForm").onsubmit=e=>{e.preventDefault();$("#newsletterMessage").textContent="Thanks for subscribing!";e.target.reset()};
-renderRows();renderFeature();
-if(window.AgasobanuyeDB?.configured){window.AgasobanuyeDB.getMovies().then(rows=>{if(rows?.length){movies=rows;renderRows();renderFeature()}}).catch(err=>console.error("Catalogue:",err))}
+let movies = [...demoMovies];
+let activeFilter = "All";
+let featuredIndex = 0;
+const $ = selector => document.querySelector(selector);
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  })[char]);
+}
+
+// Only display artwork hosted by ImageKit. TMDB is used for metadata, not images.
+function imageKitURL(value) {
+  if (!value) return "";
+  try {
+    const url = new URL(value, window.location.href);
+    const config = window.AGASOBANUYE257_CONFIG || {};
+    const endpoint = config.imagekitUrlEndpoint || "";
+    const endpointHost = endpoint ? new URL(endpoint).hostname : "";
+    const allowed = url.protocol === "https:" &&
+      (url.hostname === "ik.imagekit.io" || url.hostname.endsWith(".imagekit.io") ||
+       (endpointHost && url.hostname === endpointHost));
+    return allowed ? url.href : "";
+  } catch (_) {
+    return "";
+  }
+}
+
+function card(movie) {
+  const poster = imageKitURL(movie.poster);
+  const title = escapeHTML(movie.title || "Untitled");
+  const genre = escapeHTML(movie.genre || "Uncategorised");
+  const year = escapeHTML(movie.year || "—");
+  const rating = escapeHTML(movie.rating || movie.voteAverage || "—");
+  const tag = escapeHTML(movie.tag || "MOVIE");
+  const artwork = poster
+    ? '<img src="' + escapeHTML(poster) + '" alt="' + title + ' poster" loading="lazy">'
+    : '<div class="poster-placeholder" aria-hidden="true"><span>AGASOBANUYE<span>257</span></span></div>';
+  return '<article class="poster-card" data-id="' + escapeHTML(movie.id) +
+    '" tabindex="0" role="button" aria-label="Open ' + title + '">' +
+    '<div class="poster-image">' + artwork + '<span class="poster-label">' + tag +
+    '</span></div><div class="poster-info"><h3>' + title +
+    '</h3><div class="poster-meta"><span>' + genre + ' · ' + year +
+    '</span><span>★ ' + rating + '</span></div></div></article>';
+}
+
+function renderRows() {
+  const query = ($("#searchInput").value || "").trim().toLowerCase();
+  const filtered = movies.filter(movie =>
+    (activeFilter === "All" || String(movie.genre).toLowerCase() === activeFilter.toLowerCase()) &&
+    (!query || (String(movie.title) + " " + String(movie.genre)).toLowerCase().includes(query))
+  );
+  $("#movieRow").innerHTML = filtered.map(card).join("");
+  $("#latestRow").innerHTML = movies.slice(0, 12).map(card).join("");
+  const series = movies.filter(movie => movie.type === "series");
+  $("#seriesRow").innerHTML = series.length
+    ? series.map(card).join("")
+    : '<p class="empty-state">Series will appear here when added in Admin Studio.</p>';
+  $("#emptyState").hidden = filtered.length > 0;
+}
+
+function openWatch(movie) {
+  try { sessionStorage.setItem("agasobanuyeSelectedTitle", JSON.stringify(movie)); } catch (_) {}
+  location.href = "watch.html?id=" + encodeURIComponent(movie.slug || movie.id);
+}
+
+function renderFeature() {
+  if (!movies.length) return;
+  const movie = movies[featuredIndex % movies.length];
+  $("#featureTitle").textContent = movie.title || "Discover your next favourite";
+  $("#featureDescription").textContent = movie.description || "Discover this title on AGASOBANUYE257.";
+  $("#featureTags").innerHTML =
+    "<span>" + escapeHTML(movie.type === "series" ? "Series" : "Movie") +
+    "</span><span>" + escapeHTML(movie.genre || "Discover") +
+    "</span><span>" + escapeHTML(movie.year || "—") + "</span>";
+  const backdrop = imageKitURL(movie.backdrop || movie.poster);
+  $("#featureImage").style.backgroundImage = backdrop ? 'url("' + backdrop.replace(/["\\\\]/g, "") + '")' : "none";
+  $("#featureWatch").onclick = event => { event.preventDefault(); openWatch(movie); };
+  $("#featureDetails").onclick = event => { event.preventDefault(); openWatch(movie); };
+  $("#heroCount").textContent = String(featuredIndex + 1).padStart(2, "0") +
+    " / " + String(movies.length).padStart(2, "0");
+}
+
+function applyFilter(category) {
+  activeFilter = category;
+  document.querySelectorAll(".filter-chip").forEach(button =>
+    button.classList.toggle("selected", button.dataset.filter === category)
+  );
+  $("#movies").scrollIntoView({behavior:"smooth"});
+  renderRows();
+}
+
+document.addEventListener("click", event => {
+  const cardElement = event.target.closest(".poster-card");
+  if (cardElement) {
+    const movie = movies.find(item => String(item.id) === cardElement.dataset.id);
+    if (movie) openWatch(movie);
+  }
+  const category = event.target.closest("[data-category]");
+  if (category) applyFilter(category.dataset.category);
+});
+
+document.addEventListener("keydown", event => {
+  if ((event.key === "Enter" || event.key === " ") && event.target.matches(".poster-card")) {
+    event.preventDefault();
+    const movie = movies.find(item => String(item.id) === event.target.dataset.id);
+    if (movie) openWatch(movie);
+  }
+});
+
+$("#searchInput").addEventListener("input", renderRows);
+$("#filterRow").addEventListener("click", event => {
+  const button = event.target.closest("[data-filter]");
+  if (button) applyFilter(button.dataset.filter);
+});
+$("#heroPrev").onclick = () => {
+  featuredIndex = (featuredIndex - 1 + movies.length) % movies.length;
+  renderFeature();
+};
+$("#heroNext").onclick = () => {
+  featuredIndex = (featuredIndex + 1) % movies.length;
+  renderFeature();
+};
+$("#menuButton").onclick = () => $(".top-links").classList.toggle("menu-open");
+$("#profileButton").onclick = $("#bottomProfile").onclick = () => $("#profileDialog").showModal();
+$("#profileClose").onclick = $("#profileOkay").onclick = () => $("#profileDialog").close();
+$("#savedTop").onclick = () => $("#latest").scrollIntoView({behavior:"smooth"});
+$("#backTop").onclick = () => window.scrollTo({top:0, behavior:"smooth"});
+$("#year").textContent = new Date().getFullYear();
+$("#newsletterForm").onsubmit = event => {
+  event.preventDefault();
+  $("#newsletterMessage").textContent = "Thanks for subscribing!";
+  event.target.reset();
+};
+
+renderRows();
+renderFeature();
+
+if (window.AgasobanuyeDB?.configured) {
+  window.AgasobanuyeDB.getMovies().then(rows => {
+    if (rows?.length) {
+      movies = rows;
+      renderRows();
+      renderFeature();
+    }
+  }).catch(error => console.error("Catalogue:", error));
+}
