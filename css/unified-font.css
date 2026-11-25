@@ -4,3 +4,15 @@ html, body, body *,
 html body :is(input, textarea, select, button, option, optgroup) {
   font-family: "Playfair Display", Georgia, serif !important;
 }
+
+
+/* Stronger final override: component font shorthands in headers/admin were
+   outranking the earlier body-wide family rule. */
+html body .premium-header *,
+html body .premium-header *::before,
+html body .premium-header *::after,
+html body .admin-page *,
+html body .admin-page *::before,
+html body .admin-page *::after {
+  font-family: "Playfair Display", Georgia, serif !important;
+}
