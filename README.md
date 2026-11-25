@@ -60,3 +60,22 @@ supabase functions deploy tmdb-search
 Set the TMDB API Read Access Token as a Supabase Edge Function secret named `TMDB_API_READ_ACCESS_TOKEN`. The ImageKit private key must remain in the `IMAGEKIT_PRIVATE_KEY` Edge Function secret. Do not add either private value to `supabase-config.js`, frontend code, or Git.
 
 The browser config copied from `supabase-config.example.js` must include the Supabase project URL/public key plus the ImageKit public key and URL endpoint. The public ImageKit key and URL endpoint are not private credentials.
+
+
+## Cloudflare Worker runtime configuration (recommended for the hosted site)
+
+The Worker serves `/supabase-config.js` dynamically, so the public website can connect to Supabase without committing a config file to GitHub. In Cloudflare Dashboard:
+
+1. Open **Workers & Pages → agasobanuye257 → Settings → Variables and Secrets**.
+2. Add these four **Variables** (not secrets; they are public browser configuration):
+   - `SUPABASE_URL` — your Supabase Project URL.
+   - `SUPABASE_ANON_KEY` — your Supabase publishable/anon public key.
+   - `IMAGEKIT_PUBLIC_KEY` — your ImageKit public key.
+   - `IMAGEKIT_URL_ENDPOINT` — your ImageKit URL endpoint, such as `https://ik.imagekit.io/your_imagekit_id`.
+3. Save the settings and redeploy the Worker from the latest `main` branch.
+4. Open `https://YOUR-WEBSITE-DOMAIN/supabase-config.js`. It should return a small JavaScript config containing those four public values. It must not contain any private key.
+5. Open the homepage. It will query `public.movies` for published records only and show each record's ImageKit poster/backdrop URL.
+
+**Never add** `SUPABASE_SERVICE_ROLE_KEY`, an ImageKit private key, or the TMDB Read Access Token to these Worker Variables or the browser config. Keep those private values only in the appropriate server-side Supabase Edge Function Secrets.
+
+If the Worker variables are missing, the homepage will remain in its empty-catalogue state rather than showing invented demo movies. Add a movie in `/admin.html`, upload its poster to ImageKit, and mark it Published for it to appear on the homepage.
