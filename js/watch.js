@@ -25,6 +25,26 @@ async function loadComments(){
   }
  }catch(e){status.textContent="Could not load comments. "+(e.message||"Please try again.");}
 }
+function renderEpisodeRows(episodes){
+ const host=$("#seriesEpisodes");
+ if(!episodes.length){host.innerHTML='<div class="episode-empty"><strong>No episodes published yet</strong><span>Published episodes for this series will appear here.</span></div>';return;}
+ const seasons=[...new Set(episodes.map(ep=>Number(ep.season_number||1)))];
+ host.innerHTML=seasons.map(season=>{
+  const items=episodes.filter(ep=>Number(ep.season_number||1)===season);
+  return '<section class="episode-season"><div class="episode-season-heading"><span>SEASON '+season+'</span><small>'+items.length+' '+(items.length===1?'EPISODE':'EPISODES')+'</small></div><div class="episode-season-list">'+items.map(ep=>{
+   const number=String(Number(ep.episode_number||0)).padStart(2,'0');
+   const name=ep.episode_title||ep.title||('Episode '+number);
+   const ready=!!ep.videoPath;
+   return '<article class="episode-row"><div class="episode-thumb">'+(ep.poster?'<img src="'+esc(ep.poster)+'" alt="" loading="lazy">':'<span>▶</span>')+'</div><div class="episode-info"><span class="episode-number">EPISODE '+number+'</span><strong>'+esc(name)+'</strong><small>'+esc(ep.description||'')+'</small><em class="episode-status '+(ready?'is-ready':'is-pending')+'">'+(ready?'READY TO WATCH':'VIDEO NOT UPLOADED')+'</em></div><div class="episode-actions">'+(ready?'<a class="episode-watch" href="watch.html?id='+encodeURIComponent(ep.id)+'">▶ Watch</a>':'<span class="episode-unavailable">Coming soon</span>')+(ep.downloadUrl?'<a class="episode-download" href="'+esc(ep.downloadUrl)+'" target="_blank" rel="noopener noreferrer">↓ Download</a>':ep.videoPath?'<button class="episode-download" data-episode-download="'+esc(ep.videoPath)+'" type="button">↓ Download</button>':'')+'</div></article>';
+  }).join('')+'</div></section>';
+ }).join('');
+}
+async function loadSeriesEpisodes(seriesId){
+ const host=$("#seriesEpisodes");
+ host.innerHTML='<div class="episode-empty"><span class="episode-loading-dot"></span><strong>Loading episodes</strong><span>Getting the latest episodes for this series…</span></div>';
+ try{const episodes=await window.AgasobanuyeDB.getEpisodes(seriesId);renderEpisodeRows(episodes);return episodes;}
+ catch(error){host.innerHTML='<div class="episode-empty"><strong>Episodes could not be loaded</strong><span>'+esc(error.message||'Please try again.')+'</span><button type="button" class="episode-retry" id="retryEpisodes">Try again</button></div>';const retry=$("#retryEpisodes");if(retry)retry.onclick=()=>loadSeriesEpisodes(seriesId);return [];}
+}
 async function showTitle(m){
  if(!m)return;title=m;document.title=m.title+" — AGASOBANUYE257";
  $("#watchTitle").textContent=m.title;$("#watchDescription").textContent=m.description||"Watch this title on AGASOBANUYE257.";
@@ -41,10 +61,7 @@ async function showTitle(m){
  $("#commentsSection").hidden=false;
  if(m.type==="series"){
   $("#watchPlayer").innerHTML='<div class="player-placeholder"><div class="play-large">▣</div><h2>Series library</h2><p>Select an episode below to start watching.</p></div>';
-  try{
-   const episodes=await window.AgasobanuyeDB.getEpisodes(m.id);
-   $("#seriesEpisodes").innerHTML=episodes.length?episodes.map(ep=>'<article class="episode-row"><div class="episode-info"><span class="episode-number">S'+Number(ep.season_number||1)+' · E'+Number(ep.episode_number||0)+'</span><strong>'+esc(ep.episode_title||ep.title)+'</strong><small>'+esc(ep.description||"")+'</small></div><div class="episode-actions"><a class="episode-watch" href="watch.html?id='+encodeURIComponent(ep.slug||ep.id)+'">▶ Watch</a>'+(ep.downloadUrl?'<a class="episode-download" href="'+esc(ep.downloadUrl)+'" target="_blank" rel="noopener noreferrer">↓ Download</a>':ep.videoPath?'<button class="episode-download" data-episode-download="'+esc(ep.videoPath)+'" type="button">↓ Download</button>':'')+'</div></article>').join(""):'<p class="admin-hint">No published episodes yet.</p>';
-  }catch(e){$("#seriesEpisodes").textContent="Episodes could not be loaded: "+e.message}
+  await loadSeriesEpisodes(m.id);
   await loadComments();return;
  }
  if(m.downloadUrl){dl.href=m.downloadUrl;dl.hidden=false;dl.target="_blank";dl.rel="noopener noreferrer"}
@@ -73,7 +90,7 @@ async function init(){
   const rows=await window.AgasobanuyeDB.getMovies();allTitles=rows||[];
   let found=allTitles.find(m=>String(m.id)===id||String(m.slug)===id);
   if(!found&&id)found=await window.AgasobanuyeDB.getTitleById(id);
-  if(found){await showTitle(found);if(found.type==="episode"&&found.seriesId){const parent=allTitles.find(x=>String(x.id)===found.seriesId);if(parent){$("#seriesEpisodesSection").hidden=false;const episodes=await window.AgasobanuyeDB.getEpisodes(parent.id);$("#seriesEpisodes").innerHTML=episodes.map(ep=>'<article class="episode-row"><div class="episode-info"><span class="episode-number">S'+Number(ep.season_number||1)+' · E'+Number(ep.episode_number||0)+'</span><strong>'+esc(ep.episode_title||ep.title)+'</strong></div><div class="episode-actions"><a class="episode-watch" href="watch.html?id='+encodeURIComponent(ep.slug||ep.id)+'">▶ Watch</a>'+(ep.downloadUrl?'<a class="episode-download" href="'+esc(ep.downloadUrl)+'" target="_blank" rel="noopener noreferrer">↓ Download</a>':ep.videoPath?'<button class="episode-download" data-episode-download="'+esc(ep.videoPath)+'">↓ Download</button>':"")+'</div></article>').join("")}}}
+  if(found){await showTitle(found);if(found.type==="episode"&&found.seriesId){const parent=allTitles.find(x=>String(x.id)===found.seriesId);if(parent){$("#seriesEpisodesSection").hidden=false;await loadSeriesEpisodes(parent.id)}}}
   else if(title&&String(title.id)===id)await showTitle(title);else $("#watchTitle").textContent="Title not found";
   renderRelated();
  }catch(e){console.error("Watch page:",e);if(title)await showTitle(title);else $("#watchTitle").textContent="Unable to load this title"}
