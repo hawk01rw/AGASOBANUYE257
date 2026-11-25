@@ -203,9 +203,9 @@
 
   function resetEditor() {
     state.editing=null;$("#contentForm").reset();$("#contentId").value="";$("#contentTmdbId").value="";$("#contentTmdbVoteAverage").value="";$("#contentTmdbVoteCount").value="";$("#contentTmdbMetadata").value="";state.tmdbMetadata=null;$("#contentType").value="movie";$("#contentLanguage").value="Kinyarwanda";
-    $("#posterPreview").hidden=true;$("#backdropPreview").hidden=true;
-    $("#posterStatus").textContent="Choose an image to upload to ImageKit.";
-    $("#backdropStatus").textContent="Choose a wide image to upload to ImageKit.";
+    $("#posterPreview").hidden=true;$("#backdropPreview").hidden=true;$("#posterUrl").value="";$("#backdropUrl").value="";
+    $("#posterStatus").textContent="Upload an image or paste a direct image URL.";
+    $("#backdropStatus").textContent="Upload a wide image or paste a direct image URL."
     $("#videoStatus").textContent="Choose your authorized video. It will be uploaded to the private Supabase movie-videos bucket.";
     $("#saveContentButton").textContent="Save content";$("#editorHeading").textContent="Add new content";
     updateTypeFields();
@@ -222,8 +222,8 @@
     $("#contentFeatured").checked=!!m.featured;$("#contentPublished").checked=!!m.published;
     updateTypeFields();if(m.series_id)$("#seriesPicker").value=m.series_id;
     $("#videoStatus").textContent=m.video_path?"Current video: "+m.video_path+" (choose a file only to replace it).":"No video uploaded yet.";
-    if(m.poster_url){$("#posterPreview").src=m.poster_url;$("#posterPreview").hidden=false;$("#posterStatus").textContent="Current poster is saved. Choose a file to replace it.";}
-    if(m.backdrop_url){$("#backdropPreview").src=m.backdrop_url;$("#backdropPreview").hidden=false;$("#backdropStatus").textContent="Current backdrop is saved. Choose a file to replace it.";}
+    $("#posterUrl").value=m.poster_url||"";if(m.poster_url){$("#posterPreview").src=m.poster_url;$("#posterPreview").hidden=false;$("#posterStatus").textContent="Current poster loaded. Upload a file or change the URL to replace it.";}
+    $("#backdropUrl").value=m.backdrop_url||"";if(m.backdrop_url){$("#backdropPreview").src=m.backdrop_url;$("#backdropPreview").hidden=false;$("#backdropStatus").textContent="Current backdrop loaded. Upload a file or change the URL to replace it.";}
     $("#saveContentButton").textContent="Save changes";$("#editorHeading").textContent="Edit "+(m.content_type||"movie");
     openEditor();
   }
@@ -292,8 +292,12 @@
       const seriesId=type==="episode"?$("#seriesPicker").value:null;
       if(type==="episode"&&!seriesId)throw new Error("Choose the series this episode belongs to.");
       if(type==="episode"&&(!Number($("#seasonNumber").value)||!Number($("#episodeNumber").value)))throw new Error("Enter both season and episode numbers.");
-      const poster=await uploadArtwork($("#posterFile").files[0],"/agasobanuye257/posters",$("#posterStatus"));
-      const backdrop=await uploadArtwork($("#backdropFile").files[0],"/agasobanuye257/backdrops",$("#backdropStatus"));
+      const posterFile=$("#posterFile").files[0],backdropFile=$("#backdropFile").files[0];
+      const posterUrl=$("#posterUrl").value.trim(),backdropUrl=$("#backdropUrl").value.trim();
+      const validImageUrl=value=>{if(!value)return true;try{const u=new URL(value);return u.protocol==="https:"||u.protocol==="http:";}catch(_){return false;}};
+      if(!validImageUrl(posterUrl)||!validImageUrl(backdropUrl))throw new Error("Enter a valid http:// or https:// image URL.");
+      const poster=await uploadArtwork(posterFile,"/agasobanuye257/posters",$("#posterStatus"));
+      const backdrop=await uploadArtwork(backdropFile,"/agasobanuye257/backdrops",$("#backdropStatus"));
       const video=type==="series"?null:await uploadVideo($("#videoFile").files[0],type,slug);
       const record={
         title,slug,content_type:type,
@@ -315,9 +319,13 @@
         episode_title:type==="episode"?title:null
       };
       if(poster){record.poster_url=poster.url;record.imagekit_file_id=poster.fileId;}
+      else if(posterUrl){record.poster_url=posterUrl;record.imagekit_file_id=null;}
       else if(state.editing?.poster_url){record.poster_url=state.editing.poster_url;record.imagekit_file_id=state.editing.imagekit_file_id;}
+      else {record.poster_url=null;record.imagekit_file_id=null;}
       if(backdrop){record.backdrop_url=backdrop.url;record.backdrop_imagekit_file_id=backdrop.fileId;}
+      else if(backdropUrl){record.backdrop_url=backdropUrl;record.backdrop_imagekit_file_id=null;}
       else if(state.editing?.backdrop_url){record.backdrop_url=state.editing.backdrop_url;record.backdrop_imagekit_file_id=state.editing.backdrop_imagekit_file_id;}
+      else {record.backdrop_url=null;record.backdrop_imagekit_file_id=null;}
       if(video)record.video_path=video;
       else if(state.editing?.video_path)record.video_path=state.editing.video_path;
       if(state.editing){
@@ -418,11 +426,13 @@
     if(b.dataset.action==="delete")deleteContent(id);
     if(b.dataset.action==="publish")setPublished(id);
   });
-  function imagePreview(input,preview,status){
-    input.addEventListener("change",()=>{const file=input.files?.[0];if(!file)return;if(!file.type.startsWith("image/")||file.size>15*1024*1024){msg(status,"Choose an image up to 15 MB.",true);input.value="";return;}preview.src=URL.createObjectURL(file);preview.hidden=false;status.textContent=file.name+" ready to upload.";});
+  function imagePreview(input,preview,status,urlInput){
+    input.addEventListener("change",()=>{const file=input.files?.[0];if(!file)return;if(!file.type.startsWith("image/")||file.size>15*1024*1024){msg(status,"Choose an image up to 15 MB.",true);input.value="";return;}urlInput.value="";preview.src=URL.createObjectURL(file);preview.hidden=false;status.textContent=file.name+" ready to upload.";});
+    urlInput.addEventListener("input",()=>{const value=urlInput.value.trim();if(!value){if(!input.files?.length)preview.hidden=true;return;}try{const u=new URL(value);if(!["http:","https:"].includes(u.protocol))throw new Error();input.value="";preview.src=value;preview.hidden=false;status.textContent="Image URL ready. The image will be saved as a remote URL."; }catch(_){preview.hidden=true;status.textContent="Enter a valid http:// or https:// image URL.";}});
+    preview.addEventListener("error",()=>{preview.hidden=true;status.textContent="Image preview could not load. Check the URL or use another image.";});
   }
-  imagePreview($("#posterFile"),$("#posterPreview"),$("#posterStatus"));
-  imagePreview($("#backdropFile"),$("#backdropPreview"),$("#backdropStatus"));
+  imagePreview($("#posterFile"),$("#posterPreview"),$("#posterStatus"),$("#posterUrl"));
+  imagePreview($("#backdropFile"),$("#backdropPreview"),$("#backdropStatus"),$("#backdropUrl"));
 
   $("#adminGrantForm").addEventListener("submit",async e=>{
     e.preventDefault();const button=e.submitter;button.disabled=true;
