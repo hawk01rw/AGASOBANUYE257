@@ -1,15 +1,17 @@
-/* Hide the initial loader once the page and its assets have loaded. */
+/* Short, fail-safe branded loader. Never wait for every image or third-party script. */
 (() => {
-  const loader = document.getElementById("siteLoader");
-  if (!loader) return;
-  let hidden = false;
   const hide = () => {
-    if (hidden) return;
-    hidden = true;
+    const loader = document.getElementById("siteLoader");
+    if (!loader || loader.dataset.dismissed === "true") return;
+    loader.dataset.dismissed = "true";
     loader.classList.add("is-hidden");
-    window.setTimeout(() => loader.remove(), 550);
+    window.setTimeout(() => loader.remove(), 500);
   };
-  if (document.readyState === "complete") window.setTimeout(hide, 450);
-  else window.addEventListener("load", () => window.setTimeout(hide, 450), { once: true });
-  window.setTimeout(hide, 10000);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => window.setTimeout(hide, 700), { once: true });
+  } else {
+    window.setTimeout(hide, 700);
+  }
+  // Independent JS failsafe; CSS also contains its own timeout.
+  window.setTimeout(hide, 4000);
 })();
