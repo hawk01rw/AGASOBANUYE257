@@ -1,0 +1,20 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "agasobanuye257",
+  "main": "worker.js",
+  "compatibility_date": "2026-11-25",
+  "assets": {
+    "directory": "./",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash",
+    "exclude": [
+      "supabase/**",
+      "README.md",
+      ".gitignore",
+      "wrangler.jsonc",
+      "worker.js",
+      "supabase-config.example.js"
+    ]
+  }
+}
