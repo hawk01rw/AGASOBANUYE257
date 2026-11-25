@@ -16,7 +16,16 @@
 html{font-size:14px;background:var(--aga-bg)!important;scroll-behavior:smooth}
 body,body *{font-family:"DM Sans",Arial,sans-serif!important}
 body{background:var(--aga-bg)!important;color:var(--aga-text)!important;line-height:1.55;-webkit-font-smoothing:antialiased}
-h1,h2,h3,h4,h5,h6,strong,b{font-family:"DM Sans",Arial,sans-serif!important;letter-spacing:-.025em}
+/* Restore the original Playfair Display title style; keep interface text in DM Sans. */
+h1,h2,h3,h4,h5,h6,
+.hero-title,.hero-content h1,.watch-title,.watch-title-block h1,
+.series-title,.movie-title,.poster-title,.section-title,
+.cineva-heading h2,.related-section h2,.comments-heading h2,
+.pro-brand,.brand-logo,.logo-text,.editor-heading,.pro-card-head h2{
+  font-family:"Playfair Display",Georgia,serif!important;
+  letter-spacing:-.025em;
+}
+strong,b{font-family:"DM Sans",Arial,sans-serif!important}
 p{color:inherit}
 a{transition:color .18s ease,border-color .18s ease,background .18s ease}
 button,input,select,textarea{font:inherit!important}
