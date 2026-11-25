@@ -6,9 +6,19 @@
     const client = options.client || window.AgasobanuyeDB?.client;
     if (!client) throw new Error("Supabase is not configured.");
     if (!config.imagekitPublicKey) throw new Error("Add imagekitPublicKey to supabase-config.js.");
-    if (!file) throw new Error("Choose an image to upload.");
-    if (!file.type?.startsWith("image/")) throw new Error("Please choose an image file.");
-    if (file.size > 15 * 1024 * 1024) throw new Error("Image must be 15 MB or smaller.");
+    if (!file) throw new Error("Choose an image or provide a public image URL.");
+    const isRemoteUrl = typeof file === "string";
+    if (isRemoteUrl) {
+      let remote;
+      try { remote = new URL(file); } catch (_) { throw new Error("Enter a valid public image URL."); }
+      if (!["http:", "https:"].includes(remote.protocol) || remote.username || remote.password) {
+        throw new Error("Image URL must be a public http:// or https:// address.");
+      }
+      if (file.length > 3000) throw new Error("Image URL is too long.");
+    } else {
+      if (!file.type?.startsWith("image/")) throw new Error("Please choose an image file.");
+      if (file.size > 15 * 1024 * 1024) throw new Error("Image must be 15 MB or smaller.");
+    }
 
     let authResult;
     try {
