@@ -44,3 +44,18 @@ The existing schema creates a private `movie-videos` bucket for video files. Pos
 ## Current scope
 
 The database and browser Supabase client are starter integrations. The admin dashboard, TMDB search/import UI, ImageKit upload UI, secure server-side signing functions and production playback interface still need to be implemented and tested.
+
+## Admin studio and TMDB import
+
+Open `/admin.html` on your deployed website. Sign in with a Supabase Auth account whose `profiles.is_admin` value is `true`. The admin studio lets administrators search TMDB, select a movie, upload a poster (required) and backdrop (optional) to ImageKit, and save the movie record to Supabase as a draft or published title.
+
+Deploy both Edge Functions from the repository root after installing and linking the Supabase CLI:
+
+```bash
+supabase functions deploy imagekit-auth
+supabase functions deploy tmdb-search
+```
+
+Set the TMDB API Read Access Token as a Supabase Edge Function secret named `TMDB_API_READ_ACCESS_TOKEN`. The ImageKit private key must remain in the `IMAGEKIT_PRIVATE_KEY` Edge Function secret. Do not add either private value to `supabase-config.js`, frontend code, or Git.
+
+The browser config copied from `supabase-config.example.js` must include the Supabase project URL/public key plus the ImageKit public key and URL endpoint. The public ImageKit key and URL endpoint are not private credentials.
