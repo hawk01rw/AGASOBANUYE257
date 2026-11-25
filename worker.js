@@ -20,7 +20,9 @@ function applySecurityAndCacheHeaders(response, pathname) {
   headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=()");
   headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
 
-  if (/\.(?:html?)$/i.test(pathname) || pathname === "/") {
+  if (pathname === "/supabase-config.js") {
+    headers.set("Cache-Control", "no-store");
+  } else if (/\.(?:html?)$/i.test(pathname) || pathname === "/") {
     headers.set("Cache-Control", "no-cache, max-age=0, must-revalidate");
   } else if (/\.(?:css|js|mjs|json|webmanifest)$/i.test(pathname)) {
     headers.set("Cache-Control", "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800");
