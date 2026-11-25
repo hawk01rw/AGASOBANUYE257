@@ -1,6 +1,6 @@
 (()=>{"use strict";
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const cleanURL=value=>{try{const u=new URL(value,location.href);return u.protocol==="https:"?u.href:""}catch(_){return""}};
+const cleanURL=value=>{try{const u=new URL(value,location.href);if(u.protocol!=="https:"||!(u.hostname==="ik.imagekit.io"||u.hostname.endsWith(".imagekit.io")))return"";if(!u.searchParams.has("tr"))u.searchParams.set("tr","w-84,h-112,fo-auto,q-75");return u.href}catch(_){return""}};
 const init=()=>{
  const inputs=[...document.querySelectorAll("[data-site-search],#searchInput,#catalogSearch")];
  if(!inputs.length)return;
