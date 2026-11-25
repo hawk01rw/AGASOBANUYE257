@@ -152,7 +152,8 @@ $("#profileButton").onclick = $("#bottomProfile").onclick = () => $("#profileDia
 $("#profileClose").onclick = $("#profileOkay").onclick = () => $("#profileDialog").close();
 $("#savedTop").onclick = () => $("#latest").scrollIntoView({behavior:"smooth"});
 $("#backTop").onclick = () => window.scrollTo({top:0, behavior:"smooth"});
-$("#year").textContent = new Date().getFullYear();
+const yearNode = $("#year");
+if (yearNode) yearNode.textContent = new Date().getFullYear();
 $("#newsletterForm").onsubmit = event => {
   event.preventDefault();
   $("#newsletterMessage").textContent = "Thanks for subscribing!";
