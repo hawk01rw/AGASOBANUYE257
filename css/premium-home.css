@@ -376,3 +376,17 @@ body>.cineva-footer{flex-shrink:0;margin-top:auto}
  .cineva-header .profile-action,.cineva-header .icon-action{width:32px!important;height:32px!important}
 }
 .vip-coming{display:inline-flex;align-items:center;padding:13px 18px;border:1px solid rgba(229,190,119,.45);border-radius:10px;color:#f0d59e;background:rgba(229,190,119,.08);font:800 11px 'DM Sans',sans-serif;letter-spacing:1px}
+
+
+/* Automatic featured hero carousel polish */
+.feature-hero{position:relative;overflow:hidden}
+.feature-image{transition:opacity .38s ease,transform 6.5s ease;will-change:opacity,transform}
+.feature-hero.hero-changing .feature-image{opacity:.55;transform:scale(1.025)}
+.feature-copy h1,.feature-copy>p:not(.feature-eyebrow),.feature-tags{transition:opacity .25s ease,transform .25s ease}
+.feature-hero.hero-changing .feature-copy h1,.feature-hero.hero-changing .feature-copy>p:not(.feature-eyebrow){opacity:.45;transform:translateY(5px)}
+.hero-pagination{z-index:5}
+.hero-pagination button{cursor:pointer;transition:background .2s,transform .2s}
+.hero-pagination button:hover{transform:scale(1.08)}
+@media(prefers-reduced-motion:reduce){
+ .feature-image,.feature-copy h1,.feature-copy>p:not(.feature-eyebrow),.feature-tags{transition:none!important}
+}
