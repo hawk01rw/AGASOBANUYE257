@@ -488,3 +488,14 @@ body:has(.watch-main){
  .watch-details{padding-inline:1%!important}
  .comments-section,.related-section{padding-inline:0}
 }
+
+/* Movie parts selector */
+.movie-parts-section{margin:18px 0 8px;padding:17px;border:1px solid rgba(121,174,248,.22);border-radius:14px;background:linear-gradient(135deg,rgba(15,35,58,.92),rgba(7,16,29,.94))}
+.movie-parts-heading h2{margin:3px 0 4px;font:700 19px 'DM Sans',sans-serif;color:#edf4ff}
+.movie-parts-heading p{margin:0;color:#9fb2cc;font:11px/1.5 'DM Sans',sans-serif}
+.movie-parts-list{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}
+.movie-part-button{display:flex;align-items:center;gap:10px;min-width:118px;padding:10px 13px;border:1px solid rgba(121,174,248,.24);border-radius:9px;background:#0b1b2d;color:#eaf2ff;cursor:pointer;text-align:left}
+.movie-part-button span{font:800 12px 'DM Sans',sans-serif}
+.movie-part-button small{color:#93a9c5;font:10px 'DM Sans',sans-serif}
+.movie-part-button.active{border-color:#80b5f5;background:linear-gradient(135deg,#1c4772,#102943);box-shadow:0 0 0 2px rgba(128,181,245,.1)}
+@media(max-width:520px){.movie-parts-section{padding:13px}.movie-part-button{flex:1;min-width:calc(50% - 6px);justify-content:space-between}}
