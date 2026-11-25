@@ -16,7 +16,13 @@ create table if not exists public.movies (
   synopsis text not null default '',
   genre text not null default 'Drama',
   release_year integer,
-  poster_url text,
+  poster_url text, -- ImageKit delivery URL
+  backdrop_url text, -- ImageKit delivery URL
+  imagekit_file_id text,
+  backdrop_imagekit_file_id text,
+  tmdb_id bigint unique,
+  tmdb_vote_average numeric(3,1),
+  tmdb_vote_count integer,
   video_path text,
   trailer_url text,
   duration_minutes integer,
@@ -32,6 +38,7 @@ create table if not exists public.movies (
 
 create index if not exists movies_published_created_idx on public.movies (published, created_at desc);
 create index if not exists movies_genre_idx on public.movies (genre);
+create index if not exists movies_tmdb_id_idx on public.movies (tmdb_id);
 create index if not exists movies_featured_idx on public.movies (featured) where featured = true;
 
 create table if not exists public.watchlist (
