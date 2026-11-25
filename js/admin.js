@@ -15,7 +15,7 @@
         }
       })
     : null;
-  const state = { catalogue: [], editing: null, session: null, selectedSeries: null, categories: [], translators: [], announcements: [], tmdbResults: [] };
+  const state = { catalogue: [], editing: null, session: null, selectedSeries: null, categories: [], translators: [], announcements: [], tmdbResults: [], tmdbMetadata: null };
   const db = () => adminClient || window.AgasobanuyeDB?.client;
   const msg = (node, value, error=false) => { node.textContent=value; node.classList.toggle("error",error); };
   const esc = value => String(value ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -44,21 +44,34 @@
     finally{button.disabled=false;}
   }
 
-  function chooseTmdbResult(index) {
+  async function chooseTmdbResult(index) {
     const item=state.tmdbResults[Number(index)];
     if(!item)return;
     resetEditor();
+    msg($("#tmdbSearchMessage"),"Fetching full TMDB details, cast and crew...");
+    try{
+      const {data,error}=await db().functions.invoke("tmdb-search",{body:{tmdb_id:item.tmdb_id,content_type:item.content_type,details:true}});
+      if(error)throw error;
+      if(data?.error)throw new Error(data.error);
+      state.tmdbMetadata=data.metadata||null;
+    }catch(error){
+      state.tmdbMetadata=null;
+      msg($("#tmdbSearchMessage"),"Basic details loaded; full credits could not be fetched: "+(error.message||"Try again."),true);
+    }
     $("#contentType").value=item.content_type==="series"?"series":"movie";
     $("#contentTitle").value=item.title||"";
     $("#contentSlug").value=slugify(item.title||"");
     $("#contentSlug").dataset.edited="true";
-    $("#contentSynopsis").value=item.synopsis||"";
+    $("#contentSynopsis").value=state.tmdbMetadata?.overview||item.synopsis||"";
     $("#contentYear").value=item.release_year||"";
+    if(state.tmdbMetadata?.genres?.length)$("#contentGenre").value=state.tmdbMetadata.genres[0];
+    if(state.tmdbMetadata?.runtime)$("#contentDuration").value=state.tmdbMetadata.runtime;
+    $("#contentTmdbMetadata").value=JSON.stringify(state.tmdbMetadata||{});
     $("#contentTmdbId").value=item.tmdb_id||"";
     $("#contentTmdbVoteAverage").value=Number(item.vote_average)||"";
     $("#contentTmdbVoteCount").value=Number(item.vote_count)||"";
     updateTypeFields();
-    msg($("#tmdbSearchMessage"),"Metadata added to the editor. Add your authorized artwork and video before publishing.");
+    msg($("#tmdbSearchMessage"),"Full TMDB details added, including rating, genres and available cast/crew. Add your authorized artwork and video before publishing.");
     openEditor();
   }
 
@@ -189,7 +202,7 @@
   }
 
   function resetEditor() {
-    state.editing=null;$("#contentForm").reset();$("#contentId").value="";$("#contentTmdbId").value="";$("#contentTmdbVoteAverage").value="";$("#contentTmdbVoteCount").value="";$("#contentType").value="movie";$("#contentLanguage").value="Kinyarwanda";
+    state.editing=null;$("#contentForm").reset();$("#contentId").value="";$("#contentTmdbId").value="";$("#contentTmdbVoteAverage").value="";$("#contentTmdbVoteCount").value="";$("#contentTmdbMetadata").value="";state.tmdbMetadata=null;$("#contentType").value="movie";$("#contentLanguage").value="Kinyarwanda";
     $("#posterPreview").hidden=true;$("#backdropPreview").hidden=true;
     $("#posterStatus").textContent="Choose an image to upload to ImageKit.";
     $("#backdropStatus").textContent="Choose a wide image to upload to ImageKit.";
@@ -200,7 +213,7 @@
 
   function editContent(id) {
     const m=state.catalogue.find(x=>x.id===id);if(!m)return;
-    state.editing=m;$("#contentId").value=m.id;$("#contentTmdbId").value=m.tmdb_id||"";$("#contentTmdbVoteAverage").value=m.tmdb_vote_average??"";$("#contentTmdbVoteCount").value=m.tmdb_vote_count??"";$("#contentType").value=m.content_type||"movie";
+    state.editing=m;$("#contentId").value=m.id;$("#contentTmdbId").value=m.tmdb_id||"";$("#contentTmdbVoteAverage").value=m.tmdb_vote_average??"";$("#contentTmdbVoteCount").value=m.tmdb_vote_count??"";$("#contentTmdbMetadata").value=JSON.stringify(m.tmdb_metadata||{});state.tmdbMetadata=m.tmdb_metadata||null;$("#contentType").value=m.content_type||"movie";
     $("#contentTitle").value=m.title||"";$("#contentSlug").value=m.slug||"";
     $("#contentGenre").value=m.genre||"Drama";$("#contentYear").value=m.release_year||"";
     $("#contentLanguage").value=m.language||"Kinyarwanda";$("#contentDuration").value=m.duration_minutes||"";
@@ -287,6 +300,7 @@
         tmdb_id:$("#contentTmdbId").value?Number($("#contentTmdbId").value):null,
         tmdb_vote_average:$("#contentTmdbVoteAverage").value?Number($("#contentTmdbVoteAverage").value):null,
         tmdb_vote_count:$("#contentTmdbVoteCount").value?Number($("#contentTmdbVoteCount").value):null,
+        tmdb_metadata:$("#contentTmdbMetadata").value?JSON.parse($("#contentTmdbMetadata").value):{},
         synopsis:$("#contentSynopsis").value.trim(),genre:$("#contentGenre").value,
         release_year:$("#contentYear").value?Number($("#contentYear").value):null,
         language:$("#contentLanguage").value.trim()||"Kinyarwanda",
@@ -388,7 +402,7 @@
   });
   $("#signOutButton").addEventListener("click",async()=>{await db()?.auth.signOut();location.reload();});
   $("#tmdbSearchForm").addEventListener("submit",searchTmdb);
-  $("#tmdbSearchResults").addEventListener("click",e=>{const b=e.target.closest("[data-tmdb-select]");if(b)chooseTmdbResult(b.dataset.tmdbSelect);});
+  $("#tmdbSearchResults").addEventListener("click",e=>{const b=e.target.closest("[data-tmdb-select]");if(b){b.disabled=true;b.textContent="Loading…";chooseTmdbResult(b.dataset.tmdbSelect).catch(err=>msg($("#tmdbSearchMessage"),err.message||"Could not load details.",true));}});
   $("#contentForm").addEventListener("submit",saveContent);
   $("#contentType").addEventListener("change",updateTypeFields);
   $("#contentTitle").addEventListener("input",()=>{if(!$("#contentSlug").dataset.edited)$("#contentSlug").value=slugify($("#contentTitle").value);});
