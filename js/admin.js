@@ -59,7 +59,7 @@
     $("#contentTmdbVoteCount").value=Number(item.vote_count)||"";
     updateTypeFields();
     msg($("#tmdbSearchMessage"),"Metadata added to the editor. Add your authorized artwork and video before publishing.");
-    $("#contentEditorCard").scrollIntoView({behavior:"smooth",block:"start"});
+    openEditor();
   }
 
 
@@ -195,7 +195,7 @@
     $("#backdropStatus").textContent="Choose a wide image to upload to ImageKit.";
     $("#videoStatus").textContent="Choose your authorized video. It will be uploaded to the private Supabase movie-videos bucket.";
     $("#saveContentButton").textContent="Save content";$("#editorHeading").textContent="Add new content";
-    updateTypeFields();window.scrollTo({top:0,behavior:"smooth"});
+    updateTypeFields();
   }
 
   function editContent(id) {
@@ -212,7 +212,7 @@
     if(m.poster_url){$("#posterPreview").src=m.poster_url;$("#posterPreview").hidden=false;$("#posterStatus").textContent="Current poster is saved. Choose a file to replace it.";}
     if(m.backdrop_url){$("#backdropPreview").src=m.backdrop_url;$("#backdropPreview").hidden=false;$("#backdropStatus").textContent="Current backdrop is saved. Choose a file to replace it.";}
     $("#saveContentButton").textContent="Save changes";$("#editorHeading").textContent="Edit "+(m.content_type||"movie");
-    window.scrollTo({top:0,behavior:"smooth"});
+    openEditor();
   }
 
   async function uploadArtwork(file,folder,status) {
@@ -354,15 +354,17 @@
 
 
   document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));
+  function openEditor(){ $("#contentEditorCard").classList.add("editor-open"); document.body.classList.add("editor-modal-open"); }
+  function closeEditor(){ $("#contentEditorCard").classList.remove("editor-open"); document.body.classList.remove("editor-modal-open"); }
   function showView(name){
     document.querySelectorAll(".pro-view").forEach(v=>v.classList.toggle("active",v.id==="view-"+name));
     document.querySelectorAll(".pro-nav [data-view]").forEach(v=>v.classList.toggle("active",v.dataset.view===name));
     $("#viewTitle").textContent=({overview:"Overview",movies:"Movies",series:"Series",bulk:"Bulk Upload",categories:"Categories",superadmin:"Super Admin",analytics:"Analytics",settings:"Settings",translators:"Translators",announcements:"Announcements"})[name]||"Overview";
     if(name==="series")renderSeriesCatalogue();
   }
-  $("#addMovieButton").addEventListener("click",()=>{resetEditor();$("#contentType").value="movie";updateTypeFields();$("#contentEditorCard").scrollIntoView({behavior:"smooth"});});
-  $("#addSeriesButton").addEventListener("click",()=>{resetEditor();$("#contentType").value="series";updateTypeFields();showView("movies");$("#contentEditorCard").scrollIntoView({behavior:"smooth"});});
-  $("#addEpisodeButton").addEventListener("click",()=>{if(!state.selectedSeries)return;resetEditor();$("#contentType").value="episode";updateTypeFields();$("#seriesPicker").value=state.selectedSeries.id;showView("movies");$("#contentEditorCard").scrollIntoView({behavior:"smooth"});});
+  $("#addMovieButton").addEventListener("click",()=>{resetEditor();$("#contentType").value="movie";updateTypeFields();openEditor();});
+  $("#addSeriesButton").addEventListener("click",()=>{resetEditor();$("#contentType").value="series";updateTypeFields();showView("movies");openEditor();});
+  $("#addEpisodeButton").addEventListener("click",()=>{if(!state.selectedSeries)return;resetEditor();$("#contentType").value="episode";updateTypeFields();$("#seriesPicker").value=state.selectedSeries.id;showView("movies");openEditor();});
   $("#bulkSeriesEpisodes").addEventListener("click",()=>{if(!state.selectedSeries)return;showView("bulk");$("#bulkType").value="episode";$("#bulkSeriesWrap").hidden=false;$("#bulkSeasonWrap").hidden=false;$("#bulkSeriesPicker").value=state.selectedSeries.id;});
   $("#bulkType").addEventListener("change",()=>{const ep=$("#bulkType").value==="episode";$("#bulkSeriesWrap").hidden=!ep;$("#bulkSeasonWrap").hidden=!ep;});
   $("#bulkUploadForm").addEventListener("submit",bulkUpload);
@@ -392,6 +394,7 @@
   $("#contentTitle").addEventListener("input",()=>{if(!$("#contentSlug").dataset.edited)$("#contentSlug").value=slugify($("#contentTitle").value);});
   $("#contentSlug").addEventListener("input",()=>$("#contentSlug").dataset.edited="true");
   $("#resetEditor").addEventListener("click",resetEditor);
+  $("#closeContentEditor").addEventListener("click",closeEditor);
   $("#refreshCatalogue").addEventListener("click",()=>loadCatalogue().catch(e=>msg($("#catalogueMessage"),e.message,true)));
   $("#catalogueSearch").addEventListener("input",renderCatalogue);$("#catalogueType").addEventListener("change",renderCatalogue);
   $("#catalogueList").addEventListener("click",e=>{
