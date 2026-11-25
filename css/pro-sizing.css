@@ -95,3 +95,46 @@
  .member-header .icon-action,.member-header .profile-action,.member-header .menu-action{width:34px!important;height:34px!important;min-width:34px!important;border-radius:9px!important}
 }
 @media(prefers-reduced-motion:reduce){.cineva-header *,.member-header *{transition:none!important}}
+
+
+/* Premium shared header refinements — navigation, search and mobile drawer */
+.premium-header{isolation:isolate}
+.premium-header .top-links a{gap:7px}
+.premium-header .top-links a [data-lucide],.premium-header .top-links a svg{width:15px;height:15px;opacity:.82}
+.premium-header .top-links a.active{color:#f7fbff!important}
+.premium-header .top-links a.active:before{content:"";position:absolute;inset:5px -10px;background:rgba(75,145,240,.09);border:1px solid rgba(75,145,240,.13);border-radius:8px;z-index:-1}
+.premium-header .top-links .vip-nav-link.active:before{background:rgba(214,165,46,.1);border-color:rgba(214,165,46,.22)}
+.premium-header .premium-search{flex:0 1 230px;min-width:150px}
+.premium-header .premium-search>svg,.premium-header .premium-search>[data-lucide]{width:17px;height:17px;color:#91bfff;flex:0 0 auto}
+.premium-header .premium-search input{outline:none!important;border:0!important;box-shadow:none!important}
+.premium-header .saved-action{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.premium-header .saved-action svg,.premium-header .profile-action svg{width:19px;height:19px}
+.premium-header .profile-action{background:linear-gradient(145deg,#246fc8,#0a2d5b)!important;border:1px solid rgba(121,174,248,.45)!important;color:#fff!important}
+.premium-header .menu-action{display:none!important;color:#d9e9ff!important}
+.premium-header .menu-action svg{width:20px;height:20px}
+@media(max-width:849px){
+ .premium-header{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-rows:auto auto!important;column-gap:10px!important;row-gap:9px!important}
+ .premium-header .cineva-brand{grid-column:1;grid-row:1;min-width:0}
+ .premium-header .top-actions{grid-column:2;grid-row:1}
+ .premium-header .menu-action{display:inline-flex!important}
+ .premium-header .premium-search{grid-column:1/-1;grid-row:2;width:100%;max-width:none;min-width:0;height:39px!important}
+ .premium-header .top-links{display:none!important}
+ .premium-header .top-links.menu-open{
+   display:flex!important;position:absolute!important;top:100%!important;left:10px!important;right:10px!important;
+   flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;gap:4px!important;
+   padding:12px!important;border:1px solid rgba(121,174,248,.24)!important;border-radius:0 0 16px 16px!important;
+   background:rgba(5,17,33,.985)!important;box-shadow:0 22px 42px rgba(0,0,0,.48)!important;
+   -webkit-backdrop-filter:blur(22px)!important;backdrop-filter:blur(22px)!important;
+   z-index:1100!important;max-height:70vh;overflow:auto
+ }
+ .premium-header .top-links.menu-open a{display:flex!important;align-items:center!important;min-height:45px!important;padding:0 13px!important;border-radius:9px!important;font-size:13px!important}
+ .premium-header .top-links.menu-open a:after{display:none!important}
+ .premium-header .top-links.menu-open a.active{background:rgba(75,145,240,.13)!important}
+ .premium-header .top-links.menu-open .vip-nav-link{margin-top:3px}
+}
+@media(max-width:420px){
+ .premium-header .cineva-brand small{letter-spacing:.35px!important}
+ .premium-header .top-actions{gap:4px!important}
+ .premium-header .icon-action,.premium-header .profile-action,.premium-header .menu-action{width:33px!important;height:33px!important;min-width:33px!important}
+}
+@media(prefers-reduced-motion:reduce){.premium-header,.premium-header *{transition:none!important}}
