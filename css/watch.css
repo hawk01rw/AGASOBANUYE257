@@ -191,3 +191,41 @@
  .related-section .poster-row{grid-auto-columns:minmax(115px,38%)}
 }
 @media(max-width:390px){.watch-title-block h1{font-size:22px}.episode-row{gap:8px}.episode-thumb{width:52px;height:56px}}
+
+
+/* You may also like — compact recommendation cards */
+.watch-main .related-section:last-of-type .poster-row{
+  grid-auto-columns:minmax(105px,12.5%)!important;
+  gap:11px!important;
+}
+.watch-main .related-section:last-of-type .poster-card{
+  max-width:150px;
+  border-radius:10px!important;
+}
+.watch-main .related-section:last-of-type .poster-card img{
+  width:100%;
+  aspect-ratio:2/3;
+  object-fit:cover;
+}
+.watch-main .related-section:last-of-type .poster-info{
+  padding:8px 8px!important;
+}
+.watch-main .related-section:last-of-type .poster-info h3,
+.watch-main .related-section:last-of-type .poster-info h4{
+  font-size:11px!important;
+  line-height:1.3!important;
+}
+.watch-main .related-section:last-of-type .poster-meta{
+  font-size:9px!important;
+}
+@media(max-width:760px){
+  .watch-main .related-section:last-of-type .poster-row{
+    grid-auto-columns:minmax(105px,32%)!important;
+    gap:10px!important;
+  }
+}
+@media(max-width:390px){
+  .watch-main .related-section:last-of-type .poster-row{
+    grid-auto-columns:minmax(98px,36%)!important;
+  }
+}
