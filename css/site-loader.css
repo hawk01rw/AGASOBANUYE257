@@ -1,5 +1,5 @@
 /* AGASOBANUYE257 premium page loader */
-#siteLoader{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:radial-gradient(circle at 50% 42%,rgba(28,91,150,.22),transparent 34%),#07101e;opacity:1;visibility:visible;transition:opacity .45s ease,visibility .45s ease}
+#siteLoader{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:radial-gradient(circle at 50% 42%,rgba(28,91,150,.22),transparent 34%),#07101e;opacity:1;visibility:visible;transition:opacity .45s ease,visibility .45s ease;animation:site-loader-failsafe 0s 6s forwards}
 #siteLoader.is-hidden{opacity:0;visibility:hidden;pointer-events:none}
 .site-loader-inner{display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center;padding:24px}
 .site-loader-mark{width:88px;height:88px;object-fit:contain;filter:drop-shadow(0 0 18px rgba(52,153,255,.45));animation:site-loader-pulse 1.5s ease-in-out infinite}
@@ -11,3 +11,6 @@
 @keyframes site-loader-spin{to{transform:rotate(360deg)}}
 @keyframes site-loader-pulse{50%{transform:scale(.92);opacity:.78}}
 @media(prefers-reduced-motion:reduce){.site-loader-ring,.site-loader-mark{animation:none}#siteLoader{transition:none}}
+
+/* Independent CSS failsafe: hide the overlay after six seconds even if JavaScript fails. */
+@keyframes site-loader-failsafe{to{opacity:0;visibility:hidden;pointer-events:none}}
