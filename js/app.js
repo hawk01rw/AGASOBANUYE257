@@ -1,3 +1,6 @@
+// Legacy homepage hash links now open their dedicated pages.
+const legacyPages = {"#movies":"movies.html","#series":"series.html","#favorite":"favorite.html","#vip":"vip.html"};
+if (location.pathname.endsWith("/") && legacyPages[location.hash]) location.replace(legacyPages[location.hash]);
 // AGASOBANUYE257 homepage catalogue
 // Demo entries are text-only until real titles and ImageKit artwork are added.
 let movies = [];
