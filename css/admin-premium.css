@@ -170,3 +170,35 @@
 .pro-admin #contentEditorCard .video-upload{border:1px solid rgba(112,190,255,.48);background:linear-gradient(135deg,rgba(24,64,99,.72),rgba(5,18,33,.96))}
 .pro-admin #contentEditorCard .video-upload input[type=file]{min-height:48px;padding:11px;border:1px dashed rgba(141,187,255,.62);background:rgba(3,12,23,.75);cursor:pointer}
 .pro-admin #contentEditorCard .video-upload small{max-width:850px}
+
+
+/* Pro Upload Studio — redesigned editor, preserving existing form behavior. */
+.pro-admin .pro-upload-studio{display:none;position:fixed;z-index:80;inset:24px 24px 24px max(285px,calc((100vw - 1500px)/2 + 270px));overflow:auto;margin:0;padding:clamp(18px,2.2vw,30px);border:1px solid rgba(126,180,248,.42);border-radius:18px;background:linear-gradient(150deg,#102943 0%,#08182b 55%,#061221 100%);box-shadow:0 28px 100px #000b}
+.pro-admin .pro-upload-studio.editor-open{display:block}
+.pro-admin .pro-upload-studio:before{content:"";position:fixed;z-index:-1;inset:0;background:rgba(1,7,15,.78);backdrop-filter:blur(7px)}
+.pro-admin .pro-upload-studio>.pro-card-head{position:sticky;top:-30px;z-index:3;margin:-2px 0 20px;padding:14px 0 17px;background:linear-gradient(180deg,#102943 75%,rgba(16,41,67,0));border-bottom:1px solid #8dbbff2b}
+.pro-admin .pro-upload-studio .pro-card-head h2{font-size:24px}
+.pro-admin .pro-upload-form{gap:14px}
+.pro-admin .pro-upload-section{padding:17px;border:1px solid #8dbbff24;border-radius:13px;background:linear-gradient(145deg,#10243a99,#061426b8)}
+.pro-admin .pro-upload-section-title{display:flex;align-items:center;gap:12px;margin-bottom:15px}
+.pro-admin .pro-upload-section-title>span{display:grid;place-items:center;flex:0 0 32px;height:32px;border:1px solid #79aef84d;border-radius:9px;background:#3479c526;color:#a9ceff;font-size:10px;font-weight:800}
+.pro-admin .pro-upload-section-title strong{display:block;color:#f3f7ff;font-size:13px}
+.pro-admin .pro-upload-section-title small{display:block;margin-top:3px;color:#91a9c5;font-size:10px;line-height:1.5}
+.pro-admin .pro-upload-section .form-grid{padding:0;border:0;background:none}
+.pro-admin .pro-upload-section .form-grid>label small{color:#91a9c5;font-size:9px;font-weight:400}
+.pro-admin .pro-upload-section .artwork-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.pro-admin .pro-upload-section .publish-row{margin:0}
+.pro-admin .pro-upload-submit{position:sticky;bottom:-30px;z-index:3;display:flex;align-items:center;gap:14px;margin:0 -4px -4px;padding:14px 4px 4px;background:linear-gradient(0deg,#08182b 70%,transparent)}
+.pro-admin .pro-upload-submit .save-button{min-width:180px;min-height:42px}
+.pro-admin .pro-upload-submit .admin-message{margin:0}
+.pro-admin.editor-modal-open{overflow:hidden}
+@media(max-width:760px){
+ .pro-admin .pro-upload-studio{inset:8px;max-height:calc(100dvh - 16px);padding:14px;border-radius:14px}
+ .pro-admin .pro-upload-studio>.pro-card-head{top:-14px;align-items:flex-start;flex-direction:row;padding:10px 0 13px}
+ .pro-admin .pro-upload-studio .pro-card-head h2{font-size:19px}
+ .pro-admin .pro-upload-section{padding:13px}
+ .pro-admin .pro-upload-section .form-grid,.pro-admin .pro-upload-section .artwork-grid{grid-template-columns:1fr}
+ .pro-admin .pro-upload-section .form-grid .full-field{grid-column:auto}
+ .pro-admin .pro-upload-submit{bottom:-14px;flex-direction:column;align-items:stretch}
+ .pro-admin .pro-upload-submit .save-button{width:100%}
+}
