@@ -108,7 +108,7 @@
     $("#durationWrap").hidden=type==="series";
     $("#artworkFields").hidden=episode;
     $("#editorHeading").textContent=state.editing?"Edit "+type:"Add "+(type==="episode"?"episode":type==="series"?"new series":"new movie");
-    if(type==="series") $("#contentFeatured").checked=false;
+    
   }
 
   async function populateSeries() {
@@ -196,7 +196,7 @@
         if(duplicate)throw new Error("Duplicate title: already exists as \""+duplicate.title+"\". Names are checked without case sensitivity.");
         if(!file.type.startsWith("video/"))throw new Error("Not a video file");
         const path=await uploadVideo(file,type,slug);
-        const record={title,slug,content_type:type,genre:$("#bulkGenre").value,release_year:$("#bulkYear").value?Number($("#bulkYear").value):null,language:$("#bulkLanguage").value.trim()||"Kinyarwanda",video_path:path,download_url:null,featured:false,published:$("#bulkPublish").checked,created_by:state.session.user.id,series_id:type==="episode"?seriesId:null,season_number:type==="episode"?season:null,episode_number:type==="episode"?episodeNo:null,episode_title:type==="episode"?title:null};
+        const record={title,slug,content_type:type,genre:$("#bulkGenre").value,release_year:$("#bulkYear").value?Number($("#bulkYear").value):null,language:$("#bulkLanguage").value.trim()||"Kinyarwanda",video_path:path,download_url:null,featured:false,published:true,created_by:state.session.user.id,series_id:type==="episode"?seriesId:null,season_number:type==="episode"?season:null,episode_number:type==="episode"?episodeNo:null,episode_title:type==="episode"?title:null};
         const {data:inserted,error}=await db().from("movies").insert(record).select("id,title,content_type,series_id,season_number,episode_number,genre,release_year,poster_url,backdrop_url,video_path,published,created_at").single();if(error)throw error;
         if(inserted)state.catalogue.unshift(inserted);
         done++;row.classList.add("success");row.textContent=(i+1)+"/"+files.length+" · "+title+" — uploaded";
@@ -224,7 +224,7 @@
     $("#contentLanguage").value=m.language||"Kinyarwanda";$("#contentDuration").value=m.duration_minutes||"";
     $("#contentSynopsis").value=m.synopsis||"";$("#contentTrailer").value=m.trailer_url||"";$("#contentWatchUrl").value=m.watch_url||"";$("#contentDownloadUrl").value=m.download_url||"";
     $("#seasonNumber").value=m.season_number||"";$("#episodeNumber").value=m.episode_number||"";
-    $("#contentFeatured").checked=!!m.featured;$("#contentPublished").checked=!!m.published;
+    
     updateTypeFields();if(m.series_id)$("#seriesPicker").value=m.series_id;
     $("#videoStatus").textContent=m.video_path?"Current video: "+m.video_path+" (choose a file only to replace it).":"No video uploaded yet.";
     $("#posterUrl").value=m.poster_url||"";if(m.poster_url){$("#posterPreview").src=m.poster_url;$("#posterPreview").hidden=false;$("#posterStatus").textContent="Current poster loaded. Upload a file or change the URL to replace it.";}
@@ -333,7 +333,7 @@
         language:$("#contentLanguage").value.trim()||"Kinyarwanda",
         duration_minutes:type==="series"||!$("#contentDuration").value?null:Number($("#contentDuration").value),
         trailer_url:$("#contentTrailer").value.trim()||null,watch_url:watchUrl||null,download_url:$("#contentDownloadUrl").value.trim()||null,
-        featured:type==="series"?false:$("#contentFeatured").checked,published:$("#contentPublished").checked,
+        featured:false,published:true,
         series_id:seriesId,season_number:type==="episode"?Number($("#seasonNumber").value):null,
         episode_number:type==="episode"?Number($("#episodeNumber").value):null,episode_title:type==="episode"?title:null
       };
