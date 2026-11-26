@@ -117,8 +117,7 @@ async function showTitle(m){
   await loadComments();return;
  }
  if(m.downloadUrl){dl.href=m.downloadUrl;dl.hidden=false;dl.target="_blank";dl.rel="noopener noreferrer"}
- if(m.watchUrl&&mountCustomPlayer(m.watchUrl)){await loadComments();return;}
-  let movieParts=[];
+ let movieParts=[];
  if(m.type==="movie"&&window.AgasobanuyeDB?.configured){try{movieParts=await window.AgasobanuyeDB.getMovieParts(m.id)}catch(error){console.warn("Movie parts could not be loaded:",error)}}
  const partsSection=$("#moviePartsSection"),partsList=$("#moviePartsList");
  if(partsSection)partsSection.hidden=!movieParts.length;
@@ -127,11 +126,12 @@ async function showTitle(m){
   const playPart=async index=>{
    const part=movieParts[index];if(!part)return;
    partsList.querySelectorAll(".movie-part-button").forEach((button,i)=>{button.classList.toggle("active",i===index);button.querySelector("small").textContent=i===index?"Now playing":"Play part"});
-   try{const [playUrl,downloadUrl]=await Promise.all([window.AgasobanuyeDB.getVideoUrl(part.video_path),window.AgasobanuyeDB.getVideoUrl(part.video_path,true)]);const v=document.createElement("video");v.controls=true;v.playsInline=true;v.preload="metadata";v.src=playUrl;$("#watchPlayer").replaceChildren(v);dl.href=downloadUrl;dl.hidden=false;dl.textContent="↓ Download "+part.part_label;dl.target="_blank";dl.rel="noopener noreferrer";}
+   try{const [playUrl,downloadUrl]=await Promise.all([window.AgasobanuyeDB.getVideoUrl(part.video_path),window.AgasobanuyeDB.getVideoUrl(part.video_path,true)]);const v=document.createElement("video");v.controls=true;v.playsInline=true;v.preload="metadata";v.src=playUrl;v.addEventListener("ended",()=>{if(index+1<movieParts.length)playPart(index+1)});$("#watchPlayer").replaceChildren(v);dl.href=downloadUrl;dl.hidden=false;dl.textContent="↓ Download "+part.part_label;dl.target="_blank";dl.rel="noopener noreferrer";}
    catch(error){const p=$("#watchPlayer .player-placeholder");if(p){p.querySelector("h2").textContent="This part is not available";p.querySelector("p").textContent=error.message||"Please try again."}}
   };
   partsList.onclick=e=>{const button=e.target.closest("[data-movie-part]");if(button)playPart(Number(button.dataset.moviePart))};
   await playPart(0);
+ }else if(m.watchUrl&&mountCustomPlayer(m.watchUrl)){await loadComments();return;
  }else if(m.videoPath&&window.AgasobanuyeDB?.configured){
   try{const [playUrl,downloadUrl]=await Promise.all([window.AgasobanuyeDB.getVideoUrl(m.videoPath),window.AgasobanuyeDB.getVideoUrl(m.videoPath,true)]);const v=document.createElement("video");v.controls=true;v.playsInline=true;v.preload="metadata";v.src=playUrl;$("#watchPlayer").replaceChildren(v);if(!m.downloadUrl){dl.href=downloadUrl;dl.hidden=false;dl.setAttribute("download","")}}
   catch(e){const p=$("#watchPlayer .player-placeholder");if(p){p.querySelector("h2").textContent="Video is not available right now";p.querySelector("p").textContent=e.message||"Please contact support."}}
