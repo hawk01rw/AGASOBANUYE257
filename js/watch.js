@@ -51,6 +51,23 @@ async function loadComments(){
   }
  }catch(e){status.textContent="Could not load comments. "+(e.message||"Please try again.");}
 }
+function renderSeriesEpisodeStrip(episodes,currentEpisode){
+ const strip=$("#seriesEpisodeStrip"),tabs=$("#seriesEpisodeTabs"),next=$("#seriesNextEpisode");
+ if(!strip||!tabs||!episodes.length)return;
+ const ordered=[...episodes].sort((a,b)=>(Number(a.season_number||1)-Number(b.season_number||1))||(Number(a.episode_number||0)-Number(b.episode_number||0)));
+ const currentIndex=ordered.findIndex(ep=>String(ep.id)===String(currentEpisode.id));
+ if(currentIndex<0)return;
+ document.body.classList.add("is-series-episode-watch");
+ strip.hidden=false;
+ tabs.innerHTML=ordered.map((ep,index)=>{
+  const number=Number(ep.episode_number||index+1);
+  const label="EP"+number;
+  return '<a class="series-episode-tab '+(String(ep.id)===String(currentEpisode.id)?'active':'')+'" href="watch.html?id='+encodeURIComponent(ep.id)+'" aria-current="'+(String(ep.id)===String(currentEpisode.id)?'page':'false')+'">'+esc(label)+'</a>';
+ }).join("");
+ const upcoming=ordered[currentIndex+1];
+ if(upcoming){next.hidden=false;next.onclick=()=>location.href="watch.html?id="+encodeURIComponent(upcoming.id);}
+ else {next.hidden=true;next.onclick=null;}
+}
 function renderEpisodeRows(episodes){
  const host=$("#seriesEpisodes");
  if(!episodes.length){host.innerHTML='<div class="episode-empty"><strong>No episodes published yet</strong><span>Published episodes for this series will appear here.</span></div>';return;}
@@ -162,7 +179,7 @@ async function init(){
   const rows=await window.AgasobanuyeDB.getMovies();allTitles=rows||[];
   let found=allTitles.find(m=>String(m.id)===id||String(m.slug)===id);
   if(!found&&id)found=await window.AgasobanuyeDB.getTitleById(id);
-  if(found){await showTitle(found);if(found.type==="episode"&&found.seriesId){const parent=allTitles.find(x=>String(x.id)===found.seriesId);if(parent){$("#seriesEpisodesSection").hidden=false;await loadSeriesEpisodes(parent.id)}}}
+  if(found){await showTitle(found);if(found.type==="episode"&&found.seriesId){const parent=allTitles.find(x=>String(x.id)===found.seriesId);if(parent){$("#seriesEpisodesSection").hidden=false;const episodes=await loadSeriesEpisodes(parent.id);renderSeriesEpisodeStrip(episodes,found);}}}
   else if(title&&String(title.id)===id)await showTitle(title);else $("#watchTitle").textContent="Title not found";
   renderRelated();
  }catch(e){console.error("Watch page:",e);if(title)await showTitle(title);else $("#watchTitle").textContent="Unable to load this title"}
