@@ -94,3 +94,13 @@ input:focus,select:focus,textarea:focus{border-color:rgba(131,173,221,.7)!import
  html{scroll-behavior:auto}
  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+/* Performance refinements: reduce off-screen rendering and keep poster media efficient */
+img{max-width:100%}
+.poster-card img,.catalog-card img,.member-card img,.watch-recommendation-card img{
+  content-visibility:auto;
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
