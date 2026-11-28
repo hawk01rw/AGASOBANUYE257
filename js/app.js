@@ -120,7 +120,10 @@ function renderFeature() {
     $("#featureTitle").textContent = "Discover your next favourite story";
     $("#featureDescription").textContent = "New movies and series will appear here as soon as they are published.";
     $("#featureTags").innerHTML = "<span>AGASOBANUYE257</span><span>Movies & Series</span>";
-    $("#featureImage").style.backgroundImage = "none";
+    const stage = $("#heroPosterStage");
+    if (stage) { $("#heroCoverLineTop").innerHTML = ""; $("#heroCoverLineBottom").innerHTML = ""; $("#heroCoverFocus").innerHTML = '<div class="hero-cover-fallback hero-cover-fallback-main">AGASOBANUYE<span>257</span></div>'; }
+    const progress = $("#heroProgress");
+    if (progress) progress.innerHTML = "";
     $("#heroCount").textContent = "00 / 00";
     return;
   }
