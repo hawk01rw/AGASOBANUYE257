@@ -53,20 +53,19 @@ async function loadComments(){
 }
 function renderSeriesEpisodeStrip(episodes,currentEpisode){
  const strip=$("#seriesEpisodeStrip"),tabs=$("#seriesEpisodeTabs"),next=$("#seriesNextEpisode");
- if(!strip||!tabs||!episodes.length)return;
- const ordered=[...episodes].sort((a,b)=>(Number(a.season_number||1)-Number(b.season_number||1))||(Number(a.episode_number||0)-Number(b.episode_number||0)));
- const currentIndex=ordered.findIndex(ep=>String(ep.id)===String(currentEpisode.id));
- if(currentIndex<0)return;
+ if(!strip||!tabs)return;
+ const ordered=[...(episodes||[])].sort((a,b)=>(Number(a.season_number||1)-Number(b.season_number||1))||(Number(a.episode_number||0)-Number(b.episode_number||0)));
+ if(!ordered.length){strip.hidden=true;return;}
+ const currentIndex=ordered.findIndex(ep=>String(ep.id)===String(currentEpisode?.id));
  document.body.classList.add("is-series-episode-watch");
  strip.hidden=false;
  tabs.innerHTML=ordered.map((ep,index)=>{
-  const number=Number(ep.episode_number||index+1);
-  const label="EP"+number;
-  return '<a class="series-episode-tab '+(String(ep.id)===String(currentEpisode.id)?'active':'')+'" href="watch.html?id='+encodeURIComponent(ep.id)+'" aria-current="'+(String(ep.id)===String(currentEpisode.id)?'page':'false')+'">'+esc(label)+'</a>';
+  const number=Number(ep.episode_number||index+1),active=index===currentIndex;
+  return '<a class="series-episode-tab '+(active?'active':'')+'" href="watch.html?id='+encodeURIComponent(ep.id)+'" '+(active?'aria-current="page"':'')+'>EP'+number+'</a>';
  }).join("");
- const upcoming=ordered[currentIndex+1];
- if(upcoming){next.hidden=false;next.onclick=()=>location.href="watch.html?id="+encodeURIComponent(upcoming.id);}
- else {next.hidden=true;next.onclick=null;}
+ const upcoming=ordered[currentIndex>=0?currentIndex+1:0];
+ if(upcoming){next.hidden=false;next.textContent=currentIndex<0?"Play first episode ›":"Next episode ›";next.onclick=()=>location.href="watch.html?id="+encodeURIComponent(upcoming.id);}
+ else{next.hidden=true;next.onclick=null;}
 }
 function renderEpisodeRows(episodes){
  const host=$("#seriesEpisodes");
@@ -129,8 +128,10 @@ async function showTitle(m){
  $("#seriesEpisodesSection").hidden=m.type!=="series";
  $("#commentsSection").hidden=false;
  if(m.type==="series"){
-  $("#watchPlayer").innerHTML='<div class="player-placeholder"><div class="play-large">▣</div><h2>Series library</h2><p>Select an episode below to start watching.</p></div>';
-  await loadSeriesEpisodes(m.id);
+  document.body.classList.add("is-series-episode-watch");
+  $("#watchPlayer").innerHTML='<div class="player-placeholder"><div class="play-large">▣</div><h2>Choose an episode</h2><p>Select an episode below to start watching.</p></div>';
+  const episodes=await loadSeriesEpisodes(m.id);
+  renderSeriesEpisodeStrip(episodes,{id:""});
   await loadComments();return;
  }
  if(m.downloadUrl){dl.href=m.downloadUrl;dl.hidden=false;dl.target="_blank";dl.rel="noopener noreferrer"}
