@@ -5,7 +5,7 @@ if (location.pathname.endsWith("/") && legacyPages[location.hash]) location.repl
 // Demo entries are text-only until real titles and ImageKit artwork are added.
 let movies = [];
 let activeFilter = "All";
-let featuredIndex = 0;
+let featuredIndex = 0;\nlet featurePaused = false;
 const SAVED_KEY = "agasobanuye257-favorites";
 let savedIds = new Set();
 try { savedIds = new Set(JSON.parse(localStorage.getItem(SAVED_KEY) || "[]").map(String)); } catch (_) {}
@@ -128,7 +128,7 @@ function renderFeature() {
     tagsNode.innerHTML = "<span>AGASOBANUYE257</span><span>Movies & Series</span>";
     if (stackNode) stackNode.innerHTML = '<div class="hero-stack-empty">AGASOBANUYE<span>257</span></div>';
     if (progressNode) progressNode.innerHTML = "";
-    countNode.textContent = "00 / 00";
+    countNode.textContent = "00 / 00";\n    const timerFill = $("#heroTimerFill");\n    if (timerFill) timerFill.style.width = "0%";
     return;
   }
 
@@ -190,7 +190,7 @@ function renderFeature() {
       renderFeature();
     });
   });
-  if (hero) window.setTimeout(() => hero.classList.remove("hero-changing"), 500);
+  const timerFill = $("#heroTimerFill");\n  if (timerFill) { timerFill.style.animation = "none"; timerFill.style.width = "0%"; void timerFill.offsetWidth; timerFill.style.animation = featurePaused ? "none" : "heroTimerRun 6.5s linear forwards"; }\n  if (hero) window.setTimeout(() => hero.classList.remove("hero-changing"), 500);
 }
 function advanceFeature(direction = 1) {
   const total = Math.min(movies.length, 10);
@@ -279,7 +279,7 @@ renderFeature();
 // Auto-rotate featured titles like a streaming-service hero carousel.
 window.setInterval(() => {
   const hero = $("#featureHero");
-  if (!hero || document.hidden || hero.matches(":hover") || hero.contains(document.activeElement)) return;
+  if (!hero || featurePaused || document.hidden || hero.matches(":hover") || hero.contains(document.activeElement)) return;
   advanceFeature(1);
 }, 6500);
 window.addEventListener("hashchange", () => {
