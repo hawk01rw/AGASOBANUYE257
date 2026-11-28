@@ -1,0 +1,18 @@
+/* Premium 3D secure administrator login */
+.login-panel{position:relative;isolation:isolate;overflow:hidden;transform-style:preserve-3d;perspective:1100px;animation:login-card-enter .85s cubic-bezier(.2,.8,.2,1) both;transition:transform .35s,border-color .35s,box-shadow .35s}
+.login-panel:after{content:"";position:absolute;z-index:-1;inset:-45% -25%;pointer-events:none;background:conic-gradient(from 35deg,transparent 0 22%,rgba(77,151,255,.13) 28%,transparent 39% 62%,rgba(214,165,46,.09) 70%,transparent 80%);filter:blur(28px);animation:login-aura-spin 18s linear infinite}
+.login-panel:hover{transform:translateY(-5px) rotateX(1deg);border-color:rgba(105,169,255,.55);box-shadow:0 38px 110px #000b,0 0 55px #1769d233}
+.login-panel:before{width:100%;height:1px;margin:0 0 22px;background:linear-gradient(90deg,transparent,#5799f3,#d6a52e,transparent)}
+.login-brand-orbit{position:relative;width:112px;height:112px;margin:0 auto 20px;display:grid;place-items:center;transform-style:preserve-3d;animation:login-logo-float 5s ease-in-out infinite}
+.login-brand-mark{position:relative;z-index:2;width:72px;height:72px;object-fit:cover;border-radius:50%;border:2px solid rgba(255,255,255,.55);box-shadow:0 12px 34px #0009,0 0 0 7px rgba(75,145,240,.10),0 0 30px rgba(75,145,240,.28);transform:translateZ(24px)}
+.login-orbit{position:absolute;inset:7px;border:1px solid rgba(108,169,248,.38);border-radius:50%;transform:rotateX(68deg) rotateZ(-20deg);box-shadow:0 0 18px #3987ee25}.login-orbit.orbit-two{inset:14px;border-color:rgba(214,165,46,.38);transform:rotateY(68deg) rotateZ(28deg)}
+.login-brand-glow{position:absolute;width:65px;height:65px;border-radius:50%;background:#1769d2;filter:blur(32px);opacity:.35}
+.login-panel .section-kicker{text-align:center;margin:0 0 9px;font-size:9px;letter-spacing:.2em}.login-panel h1{text-align:center;font-size:clamp(24px,4vw,31px);margin:0 0 9px;letter-spacing:-.03em}.login-panel h1 span{color:#8dbbff}
+.login-panel>.admin-muted{text-align:center;font-size:11px;line-height:1.55;margin:0 auto 24px;max-width:290px}.login-panel .admin-form{gap:14px}.login-panel .admin-form label{font-size:11px;gap:7px}
+.login-panel .admin-form input{min-height:43px;border-radius:11px;background:linear-gradient(145deg,#0a192b,#07111f);box-shadow:inset 0 1px 0 #ffffff08,0 5px 14px #0002}
+.login-panel .admin-button.primary{min-height:44px;margin-top:3px;border-radius:11px;letter-spacing:.02em;box-shadow:0 10px 25px #1769d244,inset 0 1px 0 #ffffff35;transform:translateZ(10px)}
+.login-panel .admin-button.primary:hover{transform:translateY(-2px) translateZ(14px);box-shadow:0 15px 32px #1769d266}.login-panel .admin-message{font-size:11px;text-align:center;margin:12px 0 0}
+@keyframes login-card-enter{from{opacity:0;transform:translateY(22px) rotateX(7deg) scale(.97)}to{opacity:1;transform:translateY(0) rotateX(0) scale(1)}}
+@keyframes login-logo-float{0%,100%{transform:translateY(0) rotateY(-5deg)}50%{transform:translateY(-7px) rotateY(5deg)}}@keyframes login-aura-spin{to{transform:rotate(360deg)}}
+@media(max-width:520px){.login-panel{margin:5vh auto;padding:26px 22px}.login-brand-orbit{width:96px;height:96px}.login-brand-mark{width:64px;height:64px}}
+@media(prefers-reduced-motion:reduce){.login-panel,.login-brand-orbit,.login-panel:after{animation:none!important;transition:none!important}.login-panel:hover{transform:none}}
