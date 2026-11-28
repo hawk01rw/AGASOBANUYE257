@@ -156,7 +156,7 @@ function renderFeature() {
       const opacity = Math.max(.34, 1 - distance * .145).toFixed(3);
       return '<button class="hero-stack-card' + (offset === 0 ? ' is-current' : '') +
         '" type="button" data-hero-index="' + index + '" style="--offset:' + offset +
-        ';--scale:' + scale + ';--opacity:' + opacity + ';--distance:' + distance + ';--layer:' + (20-distance) + ';--brightness:' + (1-distance*.08).toFixed(3) +
+        ';--x:' + (offset * 6) + 'vw;--rotation:' + (offset * -3) + 'deg;--scale:' + scale + ';--opacity:' + opacity + ';--distance:' + distance + ';--layer:' + (20-distance) + ';--brightness:' + (1-distance*.08).toFixed(3) +
         '" aria-label="Show ' + escapeHTML(item.title || "title") + '"' +
         (offset === 0 ? ' aria-current="true"' : '') + '>' +
         (src ? '<img src="' + escapeHTML(src) + '" alt="' + escapeHTML(item.title || "Movie poster") +
