@@ -434,6 +434,14 @@
   $("#tmdbSearchResults").addEventListener("click",e=>{const b=e.target.closest("[data-tmdb-select]");if(b){b.disabled=true;b.textContent="Loading…";chooseTmdbResult(b.dataset.tmdbSelect).catch(err=>msg($("#tmdbSearchMessage"),err.message||"Could not load details.",true));}});
   $("#contentForm").addEventListener("submit",saveContent);
   $("#contentType").addEventListener("change",updateTypeFields);
+  $("#videoFiles").addEventListener("change",()=>{
+    const files=Array.from($("#videoFiles").files||[]),preview=$("#moviePartsPreview"),status=$("#videoStatus");
+    if(files.length>26){status.textContent="You can select up to 26 files (Part A–Z).";$("#videoFiles").value="";preview.innerHTML='<span class="parts-empty">Selection cleared: maximum is 26 parts.</span>';return;}
+    if(files.some(file=>!file.type.startsWith("video/"))){status.textContent="Please select video files only.";$("#videoFiles").value="";preview.innerHTML='<span class="parts-empty">Selection cleared: choose video files.</span>';return;}
+    if(!files.length){status.textContent="Select one video or multiple movie parts.";preview.innerHTML='<span class="parts-empty">No video files selected yet.</span>';return;}
+    preview.innerHTML=files.map((file,index)=>'<div class="movie-part-chip"><b>PART '+String.fromCharCode(65+index)+'</b><span>'+esc(file.name)+'</span><small>'+Math.max(1,Math.round(file.size/1024/1024))+' MB</small></div>').join("");
+    status.textContent=files.length===1?"1 video selected. It will play as a normal movie.":files.length+" parts selected. Upload order: Part A → Part "+String.fromCharCode(64+files.length)+".";
+  });
   $("#contentTitle").addEventListener("input",()=>{if(!$("#contentSlug").dataset.edited)$("#contentSlug").value=slugify($("#contentTitle").value);});
   $("#contentSlug").addEventListener("input",()=>$("#contentSlug").dataset.edited="true");
   $("#resetEditor").addEventListener("click",resetEditor);
