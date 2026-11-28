@@ -77,3 +77,10 @@ img{max-width:100%}
 @media(prefers-reduced-motion:reduce){
  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+.movie-downloads-section{max-width:960px;margin:18px auto;padding:20px 0;border-bottom:1px solid var(--aga-stroke)}
+.movie-downloads-section h2{margin:0 0 13px;font:800 20px "DM Sans",sans-serif}
+.movie-downloads-list{display:flex;flex-wrap:wrap;gap:9px}
+.movie-download-option{display:inline-flex;align-items:center;gap:9px;min-height:42px;padding:0 14px;border:1px solid rgba(196,165,104,.3);border-radius:9px;background:rgba(196,165,104,.07);color:#e8d8b7;text-decoration:none;font:700 11px "DM Sans",sans-serif}
+.movie-download-option span{font-size:17px;color:var(--aga-gold)}
+.movie-download-option:hover{border-color:var(--aga-gold);background:rgba(196,165,104,.13)}
