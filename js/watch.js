@@ -117,7 +117,7 @@ async function showTitle(m){
  $("#watchMeta").textContent=kind+" · "+(m.genre||"Entertainment")+" · "+(m.year||"");
  const backdrop=imageKitAsset(m.backdrop||m.poster,"w-1600,h-900,fo-auto,q-78");
   $("#watchBackdrop").style.backgroundImage=backdrop?'url("'+backdrop.replace(/["\\]/g,"")+'")':"none";
- $("#watchChips").innerHTML=["HD EXPERIENCE",m.genre,m.year].filter(Boolean).map(x=>"<span>"+esc(x)+"</span>").join("");
+ $("#watchChips").innerHTML=[m.quality,m.genre,m.year,m.country,m.releaseDate?new Date(m.releaseDate+"T00:00:00").toLocaleDateString(): ""].filter(Boolean).map(x=>"<span>"+esc(x)+"</span>").join("");
  $("#watchLanguage").textContent="Language: "+(m.language||"Not specified");
  $("#watchDuration").textContent="Duration: "+(m.duration?m.duration+" minutes":"Not specified");
  const country=$("#watchCountry"),translator=$("#watchTranslator");if(country)country.textContent="Country: "+(m.country||"Not specified");if(translator)translator.textContent="Translator: "+(m.translator||"Not specified");
