@@ -1,0 +1,83 @@
+/* Double-line featured cover slider */
+.feature-hero{
+  background:#08090d!important;
+  min-height:550px!important;
+  height:clamp(550px,46vw,650px)!important;
+}
+.feature-overlay{
+  background:
+    linear-gradient(90deg,rgba(7,8,11,.98) 0%,rgba(7,8,11,.91) 35%,rgba(7,8,11,.52) 62%,rgba(7,8,11,.24) 100%),
+    linear-gradient(0deg,rgba(5,6,10,.92),transparent 48%)!important;
+}
+.feature-copy{
+  left:clamp(28px,5vw,78px)!important;
+  right:52%!important;
+  bottom:clamp(76px,10%,105px)!important;
+  max-width:560px!important;
+}
+.feature-copy h1{font-size:clamp(38px,5.3vw,72px)!important}
+.hero-poster-stage{
+  position:absolute;z-index:1;right:3.8%;top:9%;bottom:17%;
+  width:47%;display:flex;align-items:center;justify-content:center;
+  perspective:1100px;pointer-events:none;
+}
+.hero-cover-line{
+  position:absolute;left:0;right:0;height:42%;
+  display:flex;align-items:center;justify-content:center;gap:clamp(5px,.8vw,13px);
+}
+.hero-cover-line-top{top:0;transform:translateX(-1.5%) rotate(-2deg)}
+.hero-cover-line-bottom{bottom:0;transform:translateX(1.5%) rotate(2deg)}
+.hero-cover-tile{
+  pointer-events:auto;position:relative;flex:0 1 18%;min-width:0;height:100%;
+  padding:0;overflow:hidden;border:1px solid rgba(255,255,255,.16);
+  border-radius:10px;background:#111923;opacity:.66;
+  box-shadow:0 12px 30px rgba(0,0,0,.42);
+  transform:rotateY(-8deg);cursor:pointer;
+  transition:transform .35s ease,opacity .35s ease,border-color .35s ease;
+}
+.hero-cover-tile img{display:block;width:100%;height:100%;object-fit:cover}
+.hero-cover-tile:hover{opacity:1;transform:translateY(-7px) scale(1.04);border-color:rgba(229,195,126,.8)}
+.hero-cover-focus{
+  position:absolute;z-index:3;left:50%;top:50%;height:84%;width:29%;
+  transform:translate(-50%,-50%);overflow:hidden;border-radius:14px;
+  border:1px solid rgba(255,255,255,.38);
+  background:#101720;box-shadow:0 24px 65px rgba(0,0,0,.66),0 0 32px rgba(214,165,46,.12);
+  animation:doubleCoverIn .55s cubic-bezier(.2,.75,.25,1) both;
+}
+.hero-cover-focus img{display:block;width:100%;height:100%;object-fit:cover}
+.hero-cover-fallback{height:100%;display:grid;place-items:center;padding:8px;text-align:center;color:#e8d3a1;font-weight:900;font-size:11px;letter-spacing:2px;background:linear-gradient(145deg,#1d3147,#090e16)}
+.hero-cover-fallback span{color:#d6a52e}
+.hero-cover-fallback-main{font-size:14px}
+@keyframes doubleCoverIn{from{opacity:0;transform:translate(-50%,-47%) scale(.92)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+.hero-pagination{
+  left:clamp(28px,5vw,78px)!important;right:auto!important;bottom:20px!important;
+  width:min(46%,560px);justify-content:flex-start!important;
+  background:rgba(8,10,15,.6)!important;border-color:rgba(255,255,255,.13)!important;
+}
+.hero-pagination .hero-progress{display:flex;align-items:center;justify-content:center;gap:7px;flex:1}
+.hero-pagination .hero-progress button{width:clamp(15px,3vw,38px)!important;height:3px!important;min-height:3px!important;padding:0!important;border:0!important;border-radius:0!important;background:rgba(255,255,255,.3)!important}
+.hero-pagination .hero-progress button.is-active{background:#d6a52e!important;box-shadow:0 0 12px rgba(214,165,46,.5)}
+@media(max-width:849px){
+ .feature-hero{height:650px!important;min-height:650px!important}
+ .hero-poster-stage{top:18px;bottom:auto;left:4%;right:4%;width:92%;height:275px}
+ .hero-cover-line{height:39%}
+ .hero-cover-focus{height:88%;width:23%;border-radius:10px}
+ .hero-cover-tile{border-radius:7px}
+ .feature-copy{left:24px!important;right:24px!important;bottom:82px!important;max-width:none!important}
+ .feature-overlay{background:linear-gradient(0deg,rgba(5,7,11,.99) 0%,rgba(5,7,11,.96) 42%,rgba(5,7,11,.15) 100%)!important}
+ .hero-pagination{left:18px!important;right:18px!important;bottom:12px!important;width:auto}
+}
+@media(max-width:520px){
+ .feature-hero{height:620px!important;min-height:620px!important}
+ .hero-poster-stage{height:235px;top:12px}
+ .hero-cover-line{height:38%;gap:4px}
+ .hero-cover-focus{height:90%;width:25%;border-radius:8px}
+ .hero-cover-tile{border-radius:6px}
+ .feature-copy{left:17px!important;right:17px!important;bottom:79px!important}
+ .feature-copy h1{font-size:clamp(29px,8vw,40px)!important}
+ .feature-buttons{margin-top:13px!important}
+ .hero-pagination{left:10px!important;right:10px!important;gap:5px!important}
+ .hero-pagination .hero-progress{gap:4px}
+ .hero-pagination .hero-progress button{width:13px!important}
+}
+@media(prefers-reduced-motion:reduce){.hero-cover-focus{animation:none}}
