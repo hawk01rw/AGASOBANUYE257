@@ -126,6 +126,8 @@ async function showTitle(m){
  $("#watchRating").textContent=score>0?"TMDB Rating: ★ "+score.toFixed(1)+"/10 · "+Number(m.voteCount||0).toLocaleString()+" votes":"TMDB Rating: Not rated";
  renderTmdbCredits(tmdb);
  const dl=$("#movieDownloadButton");dl.hidden=true;dl.removeAttribute("href");dl.removeAttribute("download");
+ const downloadsSection=$("#movieDownloadsSection"),downloadsList=$("#movieDownloadsList");
+ if(downloadsSection&&downloadsList){downloadsSection.hidden=true;downloadsList.replaceChildren();if(m.type==="movie"&&window.AgasobanuyeDB?.configured){try{const links=await window.AgasobanuyeDB.getMovieDownloadLinks(m.id);const safe=links.filter(item=>{try{return ["https:","http:"].includes(new URL(item.url).protocol)}catch(_){return false}});if(safe.length){downloadsList.innerHTML=safe.map(item=>'<a class="movie-download-option" href="'+esc(item.url)+'" target="_blank" rel="noopener noreferrer"><span>↓</span><strong>'+esc(item.label||"Download")+'</strong></a>').join("");downloadsSection.hidden=false;}}catch(error){console.warn("Additional downloads unavailable:",error);}}}
  $("#seriesEpisodesSection").hidden=m.type!=="series";
  $("#commentsSection").hidden=false;
  if(m.type==="series"){
@@ -146,7 +148,7 @@ async function showTitle(m){
    const part=movieParts[index];if(!part)return;
    partsList.querySelectorAll(".movie-part-button").forEach((button,i)=>{button.classList.toggle("active",i===index);button.querySelector("small").textContent=i===index?"Now playing":"Play part"});
    try{
-    if(part.watch_url){if(!mountCustomPlayer(part.watch_url))throw new Error("This part has an invalid watch URL.");}
+    if(part.watch_url){if(!mountCustomPlayer(part.watch_url))throw new Error("This part has an invalid watch URL.");const activeVideo=$("#watchPlayer video");if(activeVideo)activeVideo.addEventListener("ended",()=>{if(index+1<movieParts.length)playPart(index+1)});}
     else if(part.video_path){const playUrl=await window.AgasobanuyeDB.getVideoUrl(part.video_path);const v=document.createElement("video");v.controls=true;v.playsInline=true;v.preload="metadata";v.src=playUrl;v.addEventListener("ended",()=>{if(index+1<movieParts.length)playPart(index+1)});$("#watchPlayer").replaceChildren(v);}
     else throw new Error("No watch URL or uploaded video is available for this part.");
     let downloadUrl=part.download_url||m.downloadUrl||"";if(!downloadUrl&&part.video_path)downloadUrl=await window.AgasobanuyeDB.getVideoUrl(part.video_path,true);
