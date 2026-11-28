@@ -37,8 +37,7 @@
     const lines = [["Email","Subscribed at","Active"], ...subscribers.map(row => [
       row.email, row.subscribed_at, row.is_active ? "Yes" : "No"
     ])];
-    const csv = "\uFEFF" + lines.map(row => row.map(quote).join(",")).join("\r
-");
+    const csv = "\uFEFF" + lines.map(row => row.map(quote).join(",")).join("\r\n");
     const url = URL.createObjectURL(new Blob([csv], {type:"text/csv;charset=utf-8"}));
     const link = document.createElement("a");
     link.href = url;
