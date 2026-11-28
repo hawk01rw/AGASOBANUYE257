@@ -194,7 +194,7 @@ function renderFeature() {
     });
   });
   const timerFill = $("#heroTimerFill");
-  if (timerFill) { timerFill.style.animation = "none"; timerFill.style.width = "0%"; void timerFill.offsetWidth; timerFill.style.animation = featurePaused ? "none" : "heroTimerRun 6.5s linear forwards"; }
+  if (timerFill) { timerFill.style.animation = "none"; timerFill.style.width = "0%"; void timerFill.offsetWidth; timerFill.style.animation = featurePaused ? "none" : "heroTimerRun 4s linear forwards"; }
   if (hero) window.setTimeout(() => hero.classList.remove("hero-changing"), 500);
 }
 function advanceFeature(direction = 1) {
@@ -257,7 +257,7 @@ $("#heroPause").onclick = () => {
   const timerFill = $("#heroTimerFill");
   if (timerFill) {
     timerFill.style.animation = "none";
-    if (!featurePaused) { void timerFill.offsetWidth; timerFill.style.animation = "heroTimerRun 6.5s linear forwards"; }
+    if (!featurePaused) { void timerFill.offsetWidth; timerFill.style.animation = "heroTimerRun 4s linear forwards"; }
   }
 };
 // Shared responsive navigation behavior is handled by js/header.js.
@@ -298,7 +298,7 @@ window.setInterval(() => {
   const hero = $("#featureHero");
   if (!hero || featurePaused || document.hidden || hero.matches(":hover") || hero.contains(document.activeElement)) return;
   advanceFeature(1);
-}, 6500);
+}, 4000);
 window.addEventListener("hashchange", () => {
   const hash = location.hash || "#home";
   document.querySelectorAll(".top-links a,.mobile-bottom-nav a").forEach(link => link.classList.toggle("active", link.getAttribute("href") === hash));
