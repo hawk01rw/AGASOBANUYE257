@@ -2,9 +2,9 @@
   const config=window.AGASOBANUYE257_CONFIG||{};
   const ready=!!(window.supabase&&config.supabaseUrl&&config.supabaseAnonKey&&!config.supabaseUrl.includes("YOUR_PROJECT_ID")&&!config.supabaseAnonKey.includes("YOUR_SUPABASE"));
   const client=ready?window.supabase.createClient(config.supabaseUrl,config.supabaseAnonKey):null;
-  const MOVIE_FIELDS="id,title,slug,synopsis,genre,release_year,poster_url,backdrop_url,tmdb_id,tmdb_vote_average,tmdb_vote_count,tmdb_metadata,video_path,watch_url,download_url,trailer_url,duration_minutes,language,featured,content_type,series_id,season_number,episode_number,episode_title";
+  const MOVIE_FIELDS="id,title,slug,synopsis,genre,release_year,release_date,production_country,translator,quality,poster_url,backdrop_url,thumbnail_url,tmdb_id,tmdb_vote_average,tmdb_vote_count,tmdb_metadata,video_path,watch_url,download_url,trailer_url,duration_minutes,language,featured,content_type,series_id,season_number,episode_number,episode_title";
   let moviesCache=null,moviesCacheAt=0,moviesRequest=null;
-  const mapMovie=m=>({id:m.id,title:m.title||m.episode_title||"Untitled",genre:m.genre||"",year:m.release_year||"—",rating:m.tmdb_vote_average!=null?Number(m.tmdb_vote_average).toFixed(1):"—",tag:m.featured?"FEATURED":(m.content_type==="series"?"SERIES":m.content_type==="episode"?"EPISODE":"MOVIE"),type:m.content_type||"movie",poster:m.poster_url||m.thumbnail_url||"",backdrop:m.backdrop_url||m.poster_url||"",tmdbId:m.tmdb_id,voteAverage:m.tmdb_vote_average,voteCount:m.tmdb_vote_count,tmdbMetadata:m.tmdb_metadata||{},description:m.synopsis||"",videoPath:m.video_path,watchUrl:m.watch_url||"",downloadUrl:m.download_url||"",trailerUrl:m.trailer_url||"",duration:m.duration_minutes,language:m.language,slug:m.slug,seriesId:m.series_id,season_number:m.season_number||null,episode_number:m.episode_number||null,episode_title:m.episode_title||m.title});
+  const mapMovie=m=>({id:m.id,title:m.title||m.episode_title||"Untitled",genre:m.genre||"",year:m.release_year||"—",rating:m.tmdb_vote_average!=null?Number(m.tmdb_vote_average).toFixed(1):"—",tag:m.featured?"FEATURED":(m.content_type==="series"?"SERIES":m.content_type==="episode"?"EPISODE":"MOVIE"),type:m.content_type||"movie",poster:m.poster_url||m.thumbnail_url||"",backdrop:m.backdrop_url||m.poster_url||"",thumbnail:m.thumbnail_url||"",country:m.production_country||"",translator:m.translator||"",quality:m.quality||"",releaseDate:m.release_date||"",tmdbId:m.tmdb_id,voteAverage:m.tmdb_vote_average,voteCount:m.tmdb_vote_count,tmdbMetadata:m.tmdb_metadata||{},description:m.synopsis||"",videoPath:m.video_path,watchUrl:m.watch_url||"",downloadUrl:m.download_url||"",trailerUrl:m.trailer_url||"",duration:m.duration_minutes,language:m.language,slug:m.slug,seriesId:m.series_id,season_number:m.season_number||null,episode_number:m.episode_number||null,episode_title:m.episode_title||m.title});
   const api={
     configured:ready,client,
     async getMovies(force=false){
@@ -40,7 +40,7 @@
     async toggleWatchlist(movieId,currentlySaved){if(!client)throw new Error("Supabase is not configured yet.");const session=await api.getSession();if(!session)throw new Error("Please sign in to use your watchlist.");const result=currentlySaved?await client.from("watchlist").delete().eq("movie_id",movieId).eq("user_id",session.user.id):await client.from("watchlist").insert({movie_id:movieId,user_id:session.user.id});if(result.error)throw result.error;return !currentlySaved;},
     async getMovieParts(movieId){
       if(!client||!movieId)return [];
-      const {data,error}=await client.from("movie_parts").select("id,movie_id,part_label,video_path,sort_order").eq("movie_id",movieId).order("sort_order",{ascending:true});
+      const {data,error}=await client.from("movie_parts").select("id,movie_id,part_label,video_path,watch_url,download_url,sort_order").eq("movie_id",movieId).order("sort_order",{ascending:true});
       if(error)throw error;return data||[];
     },
     async getEpisodes(seriesId){
