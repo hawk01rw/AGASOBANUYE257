@@ -67,6 +67,11 @@ function genreMatches(movie, category) {
 function renderRows() {
   const query = ($("#searchInput").value || "").trim().toLowerCase();
   $("#latestRow").innerHTML = movies.slice(0, 6).map(card).join("") || '<p class="empty-state">No movies have been published yet. New titles will appear here.</p>';
+  const rwanda = movies.filter(movie => String(movie.country||"").toLowerCase().includes("rwanda"));
+  const burundi = movies.filter(movie => String(movie.country||"").toLowerCase().includes("burundi"));
+  const rwandaRow=$("#rwandaRow"),burundiRow=$("#burundiRow");
+  if(rwandaRow)rwandaRow.innerHTML=rwanda.length?rwanda.slice(0,8).map(card).join(""):'<p class="empty-state">Rwandan titles will appear here when published with Production Country set to Rwanda.</p>';
+  if(burundiRow)burundiRow.innerHTML=burundi.length?burundi.slice(0,8).map(card).join(""):'<p class="empty-state">Burundian titles will appear here when published with Production Country set to Burundi.</p>';
   const series = movies.filter(movie => movie.type === "series");
   $("#seriesRow").innerHTML = series.length
     ? series.slice(0, 6).map(card).join("")
