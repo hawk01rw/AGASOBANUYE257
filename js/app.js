@@ -5,7 +5,8 @@ if (location.pathname.endsWith("/") && legacyPages[location.hash]) location.repl
 // Demo entries are text-only until real titles and ImageKit artwork are added.
 let movies = [];
 let activeFilter = "All";
-let featuredIndex = 0;\nlet featurePaused = false;
+let featuredIndex = 0;
+let featurePaused = false;
 const SAVED_KEY = "agasobanuye257-favorites";
 let savedIds = new Set();
 try { savedIds = new Set(JSON.parse(localStorage.getItem(SAVED_KEY) || "[]").map(String)); } catch (_) {}
@@ -242,6 +243,18 @@ $("#heroPrev").onclick = () => {
 };
 $("#heroNext").onclick = () => {
   advanceFeature(1);
+};
+$("#heroPause").onclick = () => {
+  featurePaused = !featurePaused;
+  const button = $("#heroPause");
+  button.textContent = featurePaused ? "▶" : "Ⅱ";
+  button.setAttribute("aria-label", featurePaused ? "Resume slideshow" : "Pause slideshow");
+  button.setAttribute("aria-pressed", String(featurePaused));
+  const timerFill = $("#heroTimerFill");
+  if (timerFill) {
+    timerFill.style.animation = "none";
+    if (!featurePaused) { void timerFill.offsetWidth; timerFill.style.animation = "heroTimerRun 6.5s linear forwards"; }
+  }
 };
 // Shared responsive navigation behavior is handled by js/header.js.
 $("#profileButton").onclick = () => $("#profileDialog").showModal();
