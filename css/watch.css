@@ -545,3 +545,48 @@ body:has(.watch-main){
  .watch-recommendations{padding:8px 12px 0}
  .watch-recommendations-heading h2{font-size:16px}
 }
+
+
+/* Series episode watch layout — compact cinema player, horizontal episode picker */
+.series-episode-strip{max-width:960px;margin:12px auto 2px;display:flex;align-items:center;gap:12px;min-height:44px}
+.series-episode-strip[hidden]{display:none!important}
+.series-episode-tabs{display:flex;align-items:center;gap:7px;min-width:0;flex:1;overflow-x:auto;scrollbar-width:thin;padding:2px 0 7px}
+.series-episode-tab{flex:0 0 auto;min-width:50px;height:34px;padding:0 12px;display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.15);border-radius:10px;background:#101014;color:#aeb0b8;text-decoration:none;font:800 11px 'DM Sans',sans-serif;white-space:nowrap;transition:.18s}
+.series-episode-tab:hover{border-color:rgba(239,54,61,.65);color:#fff}
+.series-episode-tab.active{border-color:#e32632;background:rgba(196,25,34,.16);color:#fff;box-shadow:inset 0 0 0 1px rgba(227,38,50,.08)}
+.series-next-button{flex:0 0 auto;height:34px;padding:0 15px;border:0;border-radius:9px;background:#b81720;color:white;font:800 11px 'DM Sans',sans-serif;cursor:pointer}
+.series-next-button span{font-size:18px;vertical-align:-1px;margin-left:5px}
+.series-next-button:hover{background:#d3212b}
+.is-series-episode-watch .watch-layout{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:28px;align-items:start;max-width:1280px;margin:0 auto}
+.is-series-episode-watch .watch-main{max-width:1440px;padding-left:clamp(18px,4vw,60px);padding-right:clamp(18px,4vw,60px)}
+.is-series-episode-watch .watch-player{max-width:none;width:100%;aspect-ratio:16/9;max-height:clamp(300px,55vw,620px);border-radius:0 0 16px 16px;border-color:rgba(255,255,255,.12);box-shadow:0 20px 55px rgba(0,0,0,.4)}
+.is-series-episode-watch .watch-player video,.is-series-episode-watch .watch-player iframe{width:100%;height:100%;object-fit:contain;background:#000}
+.is-series-episode-watch .watch-title-block{max-width:none;margin:0;padding:18px 0 20px;border:0;display:block}
+.is-series-episode-watch .watch-title-block h1{margin:4px 0 8px;font-size:clamp(24px,3vw,34px);font-weight:800}
+.is-series-episode-watch .watch-title-block #watchDescription{display:none}
+.is-series-episode-watch .watch-actions{justify-content:flex-start}
+.is-series-episode-watch .watch-actions #watchNowButton,.is-series-episode-watch .watch-actions #watchlistButton{display:none}
+.is-series-episode-watch .watch-actions #movieDownloadButton{display:inline-flex!important;min-height:40px;border-radius:10px}
+.is-series-episode-watch #seriesEpisodesSection{margin-top:24px}
+.is-series-episode-watch #seriesEpisodesSection>h2{font-size:19px}
+.is-series-episode-watch .watch-recommendations{position:sticky;top:18px;max-height:calc(100vh - 36px);overflow:auto}
+.is-series-episode-watch .watch-recommendations-heading h2{font-size:15px}
+.is-series-episode-watch .watch-recommendations-grid{display:grid;grid-template-columns:1fr;gap:12px}
+.is-series-episode-watch .watch-recommendations .poster-card{width:100%;max-width:none}
+.is-series-episode-watch .watch-recommendations .poster-image{aspect-ratio:2/3}
+.is-series-episode-watch .watch-kicker{color:#aeb0b8;font-size:10px;letter-spacing:.7px}
+.is-series-episode-watch .watch-title-block .watch-kicker:before{content:"";display:inline-block;width:4px;height:4px;margin:0 7px 2px 0;border-radius:50%;background:#e32632}
+@media(max-width:850px){
+ .is-series-episode-watch .watch-layout{grid-template-columns:1fr;gap:12px}
+ .is-series-episode-watch .watch-recommendations{position:static;max-height:none;overflow:visible}
+ .is-series-episode-watch .watch-recommendations-grid{display:flex;overflow-x:auto;gap:10px;padding-bottom:8px}
+ .is-series-episode-watch .watch-recommendations .poster-card{flex:0 0 125px}
+ .series-episode-strip{gap:7px}
+ .series-next-button{padding:0 10px}
+}
+@media(max-width:520px){
+ .series-episode-tab{min-width:45px;height:32px;padding:0 9px;font-size:10px}
+ .series-next-button{height:32px;font-size:10px}
+ .is-series-episode-watch .watch-player{border-radius:0 0 12px 12px}
+ .is-series-episode-watch .watch-title-block h1{font-size:24px}
+}
