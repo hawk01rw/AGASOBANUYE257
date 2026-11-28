@@ -51,13 +51,17 @@
   </div>
 </header><main class="watch-main">
 <div class="watch-backdrop" id="watchBackdrop"></div>
+<div class="watch-layout">
 <section class="watch-player-section">
+<nav class="watch-breadcrumb" aria-label="Breadcrumb"><a href="index.html">Home</a><span>/</span><a href="movies.html">Movies</a><span>/</span><strong id="watchBreadcrumbTitle">Now playing</strong></nav>
 <div class="watch-player" id="watchPlayer"><div class="player-placeholder"><div class="play-large">▶</div><h2 id="playerMessage">Ready when you are</h2><p>Video playback will appear here once a video has been added to this title.</p></div></div>
-<div class="watch-title-block"><div><p class="watch-kicker" id="watchMeta">AGASOBANUYE257 PREMIUM</p><h1 id="watchTitle">Loading title…</h1><p id="watchDescription"></p></div><div class="watch-actions"><button id="watchlistButton" class="outline-button">♡ Add to Saved</button><a id="movieDownloadButton" class="outline-button" href="#" hidden>↓ Download video</a></div></div>
+<div class="watch-title-block"><div><p class="watch-kicker" id="watchMeta">AGASOBANUYE257 PREMIUM</p><h1 id="watchTitle">Loading title…</h1><p id="watchDescription"></p></div><div class="watch-actions"><button id="watchNowButton" class="watch-now-button" type="button">▶ Watch</button><button id="watchlistButton" class="outline-button">♡ Add to Saved</button><a id="movieDownloadButton" class="outline-button" href="#" hidden>↓ Download video</a></div></div>
 <section class="movie-parts-section" id="moviePartsSection" hidden aria-label="Movie parts"><div class="movie-parts-heading"><div><span class="watch-kicker">FULL MOVIE</span><h2>Choose a part</h2><p>Select Part A, Part B, Part C or the next available part.</p></div></div><div class="movie-parts-list" id="moviePartsList"></div></section>
 <section id="seriesEpisodesSection" class="related-section" hidden><h2>Episodes</h2><div id="seriesEpisodes" class="episode-list"></div></section>
 <div class="watch-details"><div><h3>About this title</h3><p id="watchSynopsis"></p><div class="detail-chips" id="watchChips"></div></div><aside><h3>More information</h3><p id="watchLanguage"></p><p id="watchDuration"></p><p id="watchRating"></p></aside></div>
 </section>
+<aside class="watch-recommendations" aria-label="More like this"><div class="watch-recommendations-heading"><h2>More like this</h2><span></span></div><div id="relatedRow" class="watch-recommendations-grid"><p class="comments-empty">Finding similar titles…</p></div></aside>
+</div>
 <section class="tmdb-credits-section" id="tmdbCreditsSection"><h2>Cast &amp; crew</h2><div id="tmdbCredits" class="tmdb-credits-content" hidden></div><p class="tmdb-attribution">This product uses the <a href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer">TMDB API</a> but is not endorsed or certified by TMDB.</p></section>
 <section class="comments-section" id="commentsSection">
 <div class="comments-heading"><div><h2>Comments</h2><p id="commentsStatus">Share your thoughts about this title.</p></div><span id="commentsCount" class="comments-count">0 comments</span></div>
@@ -69,7 +73,7 @@
 </form>
 <div id="commentsList" class="comments-list"><p class="comments-empty">Loading comments…</p></div>
 </section>
-<section class="related-section"><h2>You may also like</h2><div class="poster-row" id="relatedRow"></div></section>
+
 </main>
 <nav class="mobile-bottom-nav"><a href="index.html"><b>⌂</b><span>Home</span></a><a href="movies.html"><b>▦</b><span>Movies</span></a><a href="series.html"><b>▣</b><span>Series</span></a><a href="favorite.html"><b>♡</b><span>Saved</span></a><a href="vip.html"><b>✦</b><span>VIP</span></a></nav>
 
