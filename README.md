@@ -2,6 +2,21 @@
 
 Responsive movie-discovery website with a blue, metallic-gold and midnight-black visual identity.
 
+
+## Replace the website logo
+
+The website uses one shared logo file: `assets/logo.jpg`. To add your own logo:
+
+1. Open this repository on GitHub: `hawk01rw/AGASOBANUYE257`.
+2. Open the `assets` folder.
+3. Choose **Add file → Upload files**.
+4. Select your own logo image in JPG/JPEG format.
+5. Make sure the uploaded filename is exactly **`logo.jpg`** (all lowercase).
+6. Commit the upload to the `main` branch.
+7. Deploy the updated project to the Cloudflare Worker and refresh the site.
+
+The same file is used for the site logo, admin logo, loader, footer, social preview and browser tab icon. If `assets/logo.jpg` is not present or cannot load, the page images fall back to the original SVG logo. Use a square or landscape logo with a clear background; JPG does not support transparency. Keep the image reasonably optimized (ideally under 500 KB).
+
 ## Platform services
 
 - **TMDB** supplies movie metadata: titles, synopses, release dates, genres and ratings.
