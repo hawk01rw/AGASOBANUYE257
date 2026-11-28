@@ -54,3 +54,24 @@ body>.agas-footer{flex-shrink:0;margin-top:auto}
 .agas-footer-social-menu[open]>.agas-footer-social a{animation:agasSocialReveal .18s ease both}
 @keyframes agasSocialReveal{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){.agas-footer-social-menu[open]>.agas-footer-social a{animation:none}}
+
+
+/* Shared minimal black footer matching the approved reference layout */
+.agas-footer-reference{padding:46px clamp(22px,4.2vw,64px) 16px!important;background:#080808!important;border-top:1px solid rgba(255,255,255,.07)!important;box-shadow:none!important;color:#f4f4f6!important}
+.agas-footer-reference:before{display:none!important}
+.agas-footer-reference .agas-footer-inner{max-width:1440px!important;margin:0 auto 32px!important;grid-template-columns:minmax(260px,1.35fr) minmax(150px,.8fr) minmax(170px,.85fr) minmax(210px,.9fr)!important;gap:clamp(28px,5vw,80px)!important;align-items:start!important}
+.agas-footer-reference .agas-footer-brand{display:inline-flex!important}
+.agas-footer-reference .agas-footer-brand img{width:90px!important;height:70px!important;object-fit:contain!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+.agas-footer-reference .agas-footer-intro{max-width:330px!important;margin:18px 0 0!important;color:#a0a0aa!important;font-size:12px!important;line-height:1.65!important}
+.agas-footer-reference .agas-footer-column{gap:12px!important}
+.agas-footer-reference .agas-footer-column h2{position:relative;margin:0 0 8px!important;padding-bottom:12px!important;color:#f4f4f6!important;font-size:13px!important;font-weight:800!important;letter-spacing:-.2px!important;text-transform:none!important}
+.agas-footer-reference .agas-footer-column h2:after{content:"";position:absolute;left:0;bottom:0;width:32px;height:2px;border-radius:2px;background:#e32935}
+.agas-footer-reference .agas-footer-column a{width:max-content!important;display:flex!important;align-items:center!important;gap:10px!important;color:#9999a3!important;font-size:12px!important;font-weight:500!important;text-decoration:none!important;transition:color .18s ease,transform .18s ease!important}
+.agas-footer-reference .agas-footer-column a:hover{color:#f0f0f2!important;transform:translateX(3px)!important}
+.agas-footer-reference .agas-footer-column a svg{width:14px;height:14px;flex:0 0 14px;fill:currentColor;color:#777781}
+.agas-footer-reference .agas-footer-bottom{max-width:1440px!important;margin:0 auto!important;padding:17px 0 0!important;border-top:1px solid rgba(255,255,255,.09)!important;display:flex!important;justify-content:center!important;gap:13px!important;flex-wrap:wrap!important;color:#777781!important;font-size:10px!important}
+.agas-footer-reference .agas-footer-credit{color:#8f8f98!important;font-size:10px!important;font-weight:500!important;letter-spacing:0!important}
+.agas-footer-reference .agas-footer-credit strong{color:#dedee2!important;font-weight:800!important}
+.agas-footer-reference .agas-heart{color:#f04455!important;font-size:13px!important;margin-left:3px}
+@media(max-width:850px){.agas-footer-reference{padding:34px 4% calc(88px + env(safe-area-inset-bottom))!important}.agas-footer-reference .agas-footer-inner{grid-template-columns:1fr 1fr!important;gap:28px 24px!important}.agas-footer-reference .agas-footer-main{grid-column:1/-1!important}.agas-footer-reference .agas-footer-bottom{font-size:9px!important}}
+@media(max-width:480px){.agas-footer-reference{padding-top:28px!important}.agas-footer-reference .agas-footer-inner{grid-template-columns:1fr 1fr!important;gap:24px 15px!important}.agas-footer-reference .agas-footer-brand img{width:76px!important;height:62px!important}.agas-footer-reference .agas-footer-intro{font-size:11px!important}.agas-footer-reference .agas-footer-column h2{font-size:12px!important}.agas-footer-reference .agas-footer-column a{font-size:10px!important}.agas-footer-reference .agas-footer-bottom{gap:8px!important;flex-direction:column!important;align-items:center!important;text-align:center!important}}
