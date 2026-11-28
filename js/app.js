@@ -136,6 +136,34 @@ function renderFeature() {
     "</span><span>" + escapeHTML(movie.year || "—") + "</span>";
   const backdrop = imageKitURL(movie.backdrop || movie.poster, "w-1600,h-900,fo-auto,q-82");
   $("#featureImage").style.backgroundImage = backdrop ? 'url("' + backdrop.replace(/["\\\\]/g, "") + '")' : "none";
+  const stage = $("#heroPosterStage");
+  if (stage) {
+    const total = heroMovies.length;
+    const posterAt = index => {
+      const item = heroMovies[(index + total) % total];
+      const src = imageKitURL(item.poster, "w-420,h-630,fo-auto,q-82");
+      return '<button class="hero-cover-tile" type="button" data-hero-index="' + ((index + total) % total) + '" aria-label="Feature ' + escapeHTML(item.title || "title") + '">' +
+        (src ? '<img src="' + escapeHTML(src) + '" alt="" loading="lazy" decoding="async">' : '<span class="hero-cover-fallback">AGASOBANUYE 257</span>') + '</button>';
+    };
+    const top = [-4,-3,-2,-1].map(offset => posterAt(featuredIndex + offset)).join("");
+    const bottom = [1,2,3,4].map(offset => posterAt(featuredIndex + offset)).join("");
+    $("#heroCoverLineTop").innerHTML = top;
+    $("#heroCoverLineBottom").innerHTML = bottom;
+    const activePoster = imageKitURL(movie.poster, "w-720,h-1080,fo-auto,q-88");
+    $("#heroCoverFocus").innerHTML = activePoster
+      ? '<img src="' + escapeHTML(activePoster) + '" alt="' + escapeHTML(movie.title || "Featured poster") + '" decoding="async">'
+      : '<div class="hero-cover-fallback hero-cover-fallback-main">AGASOBANUYE<span>257</span></div>';
+    const progress = $("#heroProgress");
+    if (progress) progress.innerHTML = heroMovies.map((item, index) =>
+      '<button type="button" data-hero-index="' + index + '" class="' + (index === featuredIndex ? 'is-active' : '') + '" aria-label="Show featured title ' + (index + 1) + '"></button>'
+    ).join("");
+    stage.querySelectorAll("[data-hero-index]").forEach(button => {
+      button.addEventListener("click", () => {
+        featuredIndex = Number(button.dataset.heroIndex) || 0;
+        renderFeature();
+      });
+    });
+  }
   $("#featureWatch").onclick = event => { event.preventDefault(); openWatch(movie); };
   $("#featureDetails").onclick = event => { event.preventDefault(); openWatch(movie); };
   $("#heroCount").textContent = String(featuredIndex + 1).padStart(2, "0") +
