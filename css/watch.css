@@ -590,3 +590,19 @@ body:has(.watch-main){
  .is-series-episode-watch .watch-player{border-radius:0 0 12px 12px}
  .is-series-episode-watch .watch-title-block h1{font-size:24px}
 }
+
+
+/* Corrected compact layout for series landing and episode watch pages */
+.is-series-episode-watch .watch-layout{grid-template-columns:minmax(0,1fr) 190px;gap:28px;align-items:start;max-width:1280px;margin:0 auto}
+.is-series-episode-watch .watch-main{max-width:1440px;padding-left:clamp(18px,4vw,60px);padding-right:clamp(18px,4vw,60px)}
+.is-series-episode-watch .watch-player-section{min-width:0}
+.is-series-episode-watch .watch-player{width:100%;aspect-ratio:16/9;max-height:clamp(300px,55vw,620px);border-radius:0 0 16px 16px;overflow:hidden}
+.is-series-episode-watch .watch-player video,.is-series-episode-watch .watch-player iframe{width:100%;height:100%;object-fit:contain;background:#000}
+.is-series-episode-watch .watch-title-block{padding:18px 0 20px;border:0;display:flex;align-items:center;justify-content:space-between}
+.is-series-episode-watch .watch-title-block h1{font-size:clamp(24px,3vw,34px);font-weight:800}
+.is-series-episode-watch #seriesEpisodesSection{display:none!important}
+.is-series-episode-watch .watch-recommendations{position:sticky;top:18px;max-height:calc(100vh - 36px);overflow:auto}
+.is-series-episode-watch .watch-recommendations-grid{display:grid;grid-template-columns:1fr;gap:12px}
+.is-series-episode-watch .watch-recommendation-card{width:100%;min-width:0}
+.is-series-episode-watch .watch-recommendation-poster{aspect-ratio:2/3}
+@media(max-width:850px){.is-series-episode-watch .watch-layout{grid-template-columns:1fr;gap:12px}.is-series-episode-watch .watch-recommendations{position:static;max-height:none;overflow:visible}.is-series-episode-watch .watch-recommendations-grid{display:flex;overflow-x:auto;gap:10px;padding-bottom:8px}.is-series-episode-watch .watch-recommendation-card{flex:0 0 125px}.series-episode-strip{margin-top:10px}}
