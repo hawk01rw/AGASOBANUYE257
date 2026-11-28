@@ -134,8 +134,8 @@ function renderFeature() {
     "<span>" + escapeHTML(movie.type === "series" ? "Series" : "Movie") +
     "</span><span>" + escapeHTML(movie.genre || "Discover") +
     "</span><span>" + escapeHTML(movie.year || "—") + "</span>";
-  const backdrop = imageKitURL(movie.backdrop || movie.poster, "w-1600,h-900,fo-auto,q-82");
-  $("#featureImage").style.backgroundImage = backdrop ? 'url("' + backdrop.replace(/["\\\\]/g, "") + '")' : "none";
+  
+
   const stage = $("#heroPosterStage");
   if (stage) {
     const total = heroMovies.length;
