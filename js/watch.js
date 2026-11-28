@@ -95,7 +95,7 @@ function updateWatchSeo(movie){
 
 async function showTitle(m){
  if(!m)return;title=m;updateWatchSeo(m);
- $("#watchTitle").textContent=m.title;$("#watchDescription").textContent=m.description||"Watch this title on AGASOBANUYE257.";
+ $("#watchTitle").textContent=m.title;const crumb=$("#watchBreadcrumbTitle");if(crumb)crumb.textContent=m.title;$("#watchDescription").textContent=m.description||"Watch this title on AGASOBANUYE257.";
  $("#watchSynopsis").textContent=m.description||"No synopsis has been added yet.";
  const kind=m.type==="series"?"SERIES":m.type==="episode"?"EPISODE":"MOVIE";
  $("#watchMeta").textContent=kind+" · "+(m.genre||"Entertainment")+" · "+(m.year||"");
@@ -144,8 +144,12 @@ function renderRelated(){
  let related=allTitles.filter(x=>x.type!=="episode"&&x.type!=="series"&&String(x.id)!==current);
  if(categories.length){const matched=related.filter(x=>String(x.genre||"").split(/[,/&|]/).some(g=>categories.some(c=>g.trim().toLowerCase()===c||g.trim().toLowerCase().includes(c))));related=[...matched,...related.filter(x=>!matched.includes(x))]}
  related=related.slice(0,8);
- $("#relatedRow").innerHTML=related.map(m=>'<article class="poster-card" data-id="'+esc(m.id)+'" tabindex="0" role="button"><div class="poster-image"><img src="'+esc(imageKitAsset(m.poster)||"assets/agasobanuye257-logo.svg")+'" alt="" loading="lazy" decoding="async"></div><div class="poster-info"><h3>'+esc(m.title)+'</h3><div class="poster-meta"><span>'+esc(m.genre)+'</span><span>'+esc(m.year)+'</span></div></div></article>').join("")||'<p class="comments-empty">More titles will appear here as the catalogue grows.</p>';
- $("#relatedRow").onclick=e=>{const c=e.target.closest("[data-id]");if(!c)return;const m=allTitles.find(x=>String(x.id)===c.dataset.id);if(m){sessionStorage.setItem("agasobanuyeSelectedTitle",JSON.stringify(m));location.href="watch.html?id="+encodeURIComponent(m.slug||m.id)}};
+ const host=$("#relatedRow");
+ if(!host)return;
+ host.innerHTML=related.map(m=>'<article class="watch-recommendation-card" data-id="'+esc(m.id)+'" tabindex="0" role="button" aria-label="Watch '+esc(m.title)+'"><div class="watch-recommendation-poster"><img src="'+esc(imageKitAsset(m.poster)||"assets/agasobanuye257-logo.svg")+'" alt="" loading="lazy" decoding="async"><span class="watch-recommendation-genre">'+esc((m.genre||"Movie").split(/[,/&|]/)[0])+'</span><span class="watch-recommendation-year">'+esc(m.year||"")+'</span>'+(Number(m.partsCount||0)>1?'<span class="watch-recommendation-parts">'+Number(m.partsCount)+' parts</span>':'')+'</div><div class="watch-recommendation-info"><strong>'+esc(m.title)+'</strong><small>'+esc(m.language||"AGASOBANUYE257")+'</small></div></article>').join("")||'<p class="comments-empty">More titles will appear here as the catalogue grows.</p>';
+ const openCard=c=>{if(!c)return;const m=allTitles.find(x=>String(x.id)===c.dataset.id);if(m){sessionStorage.setItem("agasobanuyeSelectedTitle",JSON.stringify(m));location.href="watch.html?id="+encodeURIComponent(m.slug||m.id)}};
+ host.onclick=e=>openCard(e.target.closest("[data-id]"));
+ host.onkeydown=e=>{if((e.key==="Enter"||e.key===" ")&&e.target.matches("[data-id]")){e.preventDefault();openCard(e.target)}};
 }
 $("#commentForm").addEventListener("submit",async e=>{e.preventDefault();const input=$("#commentInput"),name=$("#commentName"),button=e.currentTarget.querySelector("button[type=submit]"),message=$("#commentMessage"),body=input.value.trim(),author=name.value.trim();if(!body||!author)return;button.disabled=true;message.textContent="Posting…";try{await window.AgasobanuyeDB.addComment(commentTarget(title),author,body);input.value="";message.textContent="Your comment has been posted.";await loadComments()}catch(err){message.textContent=err.message||"Could not post your comment."}finally{button.disabled=false}});
 $("#commentsList").addEventListener("click",async e=>{const b=e.target.closest("[data-delete-comment]");if(!b)return;if(!confirm("Delete your comment?"))return;try{await window.AgasobanuyeDB.removeComment(b.dataset.deleteComment);await loadComments()}catch(err){alert(err.message)}});
