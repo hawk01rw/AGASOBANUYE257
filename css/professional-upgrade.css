@@ -1,0 +1,79 @@
+/* AGASOBANUYE257 — professional cross-site finish */
+:root{--aga-surface:#101923;--aga-surface-2:#151f2b;--aga-stroke:rgba(151,177,207,.16);--aga-text:#edf2f8;--aga-muted:#9eacbd;--aga-accent:#79a9e8;--aga-gold:#c4a568}
+html{scroll-padding-top:100px;scrollbar-color:#33475e #090d13}
+body{font-family:"DM Sans",Arial,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:"DM Sans",Arial,sans-serif}
+a,button,input,select,textarea{-webkit-tap-highlight-color:transparent}
+button,a{touch-action:manipulation}
+:where(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--aga-gold)!important;outline-offset:3px}
+::selection{background:rgba(121,169,232,.32);color:#fff}
+img{max-width:100%}
+.cineva-header{min-height:70px}
+.cineva-header .top-links a{position:relative;display:inline-flex;align-items:center;gap:7px;font:700 12px/1.2 "DM Sans",sans-serif;transition:color .18s ease}
+.cineva-header .top-links a.active:after{content:"";position:absolute;left:0;right:0;bottom:-9px;height:2px;border-radius:2px;background:var(--aga-gold)}
+.cineva-header .cineva-brand img{object-fit:contain}
+.cineva-header .cineva-brand b{font-family:"DM Sans",sans-serif}
+.cineva-search input{font:13px "DM Sans",sans-serif}
+.premium-button,.outline-button,.watch-now-button,.member-watch,.member-remove,.filter-chip,.comment-submit,.episode-watch,.episode-download{transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease}
+.premium-button:hover,.watch-now-button:hover,.member-watch:hover,.comment-submit:hover,.episode-watch:hover{transform:translateY(-1px);filter:brightness(1.06)}
+.outline-button:hover,.episode-download:hover{border-color:rgba(196,165,104,.65)!important;background:#1a2633!important}
+.poster-card,.catalog-card,.member-card,.watch-recommendation-card{min-width:0;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.poster-card:hover,.catalog-card:hover,.member-card:hover{transform:translateY(-3px)}
+.poster-image,.member-poster{overflow:hidden;background:#101923}
+.poster-image img,.member-poster img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .35s ease}
+.poster-card:hover .poster-image img,.member-card:hover .member-poster img{transform:scale(1.035)}
+.poster-info h3,.member-card-info h2{font-family:"DM Sans",sans-serif;overflow-wrap:anywhere}
+.poster-meta,.catalog-toolbar,.catalog-filters{font-family:"DM Sans",sans-serif}
+.catalog-main,.member-main,.watch-main{isolation:isolate}
+.catalog-hero{border-color:var(--aga-stroke);background:radial-gradient(ellipse at 85% 0,rgba(73,126,190,.17),transparent 42%),linear-gradient(120deg,#142033,#0c131d 75%)}
+.catalog-toolbar select,.catalog-toolbar input,.catalog-search input{font:600 12px "DM Sans",sans-serif}
+.filter-chip{font:700 11px "DM Sans",sans-serif}
+.filter-chip.selected{background:#1d3c61;border-color:#668fc0;color:#fff}
+.catalog-grid{gap:clamp(10px,1.5vw,18px)}
+.catalog-grid .poster-card{border-radius:12px}
+.catalog-grid .poster-image{aspect-ratio:2/3;height:auto}
+.catalog-grid .poster-info{padding:11px}
+.catalog-grid .poster-info h3{font-size:13px;line-height:1.4;margin:0 0 9px}
+.catalog-grid .poster-meta{font-size:10px;flex-wrap:wrap}
+.watch-player{position:relative;width:100%;aspect-ratio:16/9;max-height:none}
+.watch-player video,.watch-player iframe{display:block;width:100%;height:100%;min-height:0;max-height:none;object-fit:contain;border:0;background:#000}
+.watch-player iframe{position:absolute;inset:0}
+.watch-player-section{min-width:0}
+.watch-title-block{align-items:flex-start}
+.watch-title-block>div:first-child{min-width:0}
+.watch-title-block h1{overflow-wrap:anywhere}
+.watch-details aside p{margin:8px 0}
+.detail-chips span{font-weight:700}
+.movie-parts-section{padding:22px 0;border-bottom:1px solid var(--aga-stroke)}
+.series-episode-strip{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:15px auto;padding:12px;border:1px solid var(--aga-stroke);border-radius:13px;background:rgba(13,25,39,.88)}
+.series-episode-tabs{display:flex;gap:8px;overflow-x:auto;min-width:0;padding:2px;scrollbar-width:thin}
+.series-episode-tab{flex:0 0 auto;display:grid;place-items:center;min-width:48px;height:38px;padding:0 12px;border:1px solid var(--aga-stroke);border-radius:8px;background:#111d2b;color:#b8c7d9;text-decoration:none;font:800 11px "DM Sans",sans-serif}
+.series-episode-tab.active{background:#1e426b;border-color:#7aa9e7;color:#fff;box-shadow:0 0 0 2px rgba(121,169,232,.12)}
+.series-next-button{flex:0 0 auto;min-height:38px;padding:0 13px;border:1px solid rgba(196,165,104,.45);border-radius:8px;background:rgba(196,165,104,.1);color:#e7d4ac;font:800 11px "DM Sans",sans-serif;cursor:pointer}
+.player-error-note{padding:12px;color:#ffb6b6;font:12px/1.5 "DM Sans",sans-serif}
+.comments-section,.watch-details,.watch-title-block{border-color:var(--aga-stroke)!important}
+.agas-footer-reference{font-family:"DM Sans",sans-serif}
+.site-announcements{font-family:"DM Sans",sans-serif}
+.pro-search-dialog{font-family:"DM Sans",sans-serif}
+.mobile-bottom-nav{padding-bottom:env(safe-area-inset-bottom)}
+@media(max-width:849px){
+ .cineva-header .top-links.menu-open{z-index:70}
+ .catalog-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .series-episode-strip{align-items:stretch;flex-direction:column}
+ .series-next-button{width:100%}
+}
+@media(max-width:560px){
+ .catalog-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .catalog-grid .poster-info{padding:9px}
+ .catalog-grid .poster-info h3{font-size:11px}
+ .watch-player{border-radius:10px}
+ .watch-title-block{gap:14px}
+ .watch-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}
+ .watch-actions>*{min-width:0}
+ .watch-actions .outline-button,.watch-actions .watch-now-button{justify-content:center;text-align:center}
+ .series-episode-strip{padding:9px}
+ .series-episode-tab{min-width:44px;height:36px}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
