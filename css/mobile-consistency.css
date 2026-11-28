@@ -134,3 +134,13 @@
   .pro-search-hint{padding-top:6px!important}
   .pro-search-results{overflow:auto}
 }
+
+
+/* BR · RW mobile navigation slot — six evenly sized destinations */
+@media(max-width:849px){
+  .mobile-bottom-nav{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;align-items:center!important;}
+  .mobile-bottom-nav>a{min-width:0!important;min-height:54px!important;padding:6px 1px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:3px!important;white-space:nowrap!important;}
+  .mobile-bottom-nav>a b{font-size:16px!important;line-height:1.1!important;}
+  .mobile-bottom-nav>a span{font-size:9px!important;letter-spacing:-.2px!important;}
+}
+@media(max-width:360px){.mobile-bottom-nav>a span{font-size:8px!important}.mobile-bottom-nav>a b{font-size:14px!important}}
