@@ -116,64 +116,82 @@ function openWatch(movie) {
 }
 
 function renderFeature() {
+  const titleNode = $("#featureTitle");
+  const descriptionNode = $("#featureDescription");
+  const tagsNode = $("#featureTags");
+  const stackNode = $("#heroCoverStack");
+  const progressNode = $("#heroProgress");
+  const countNode = $("#heroCount");
   if (!movies.length) {
-    $("#featureTitle").textContent = "Discover your next favourite story";
-    $("#featureDescription").textContent = "New movies and series will appear here as soon as they are published.";
-    $("#featureTags").innerHTML = "<span>AGASOBANUYE257</span><span>Movies & Series</span>";
-    const stage = $("#heroPosterStage");
-    if (stage) { $("#heroCoverLineTop").innerHTML = ""; $("#heroCoverLineBottom").innerHTML = ""; $("#heroCoverFocus").innerHTML = '<div class="hero-cover-fallback hero-cover-fallback-main">AGASOBANUYE<span>257</span></div>'; }
-    const progress = $("#heroProgress");
-    if (progress) progress.innerHTML = "";
-    $("#heroCount").textContent = "00 / 00";
+    titleNode.textContent = "Discover your next favourite story";
+    descriptionNode.textContent = "New movies and series will appear here as soon as they are published.";
+    tagsNode.innerHTML = "<span>AGASOBANUYE257</span><span>Movies & Series</span>";
+    if (stackNode) stackNode.innerHTML = '<div class="hero-stack-empty">AGASOBANUYE<span>257</span></div>';
+    if (progressNode) progressNode.innerHTML = "";
+    countNode.textContent = "00 / 00";
     return;
   }
+
   const heroMovies = movies.slice(0, 10);
-  const movie = heroMovies[featuredIndex % heroMovies.length];
+  const total = heroMovies.length;
+  featuredIndex = ((featuredIndex % total) + total) % total;
+  const movie = heroMovies[featuredIndex];
   const hero = $("#featureHero");
   if (hero) hero.classList.add("hero-changing");
-  $("#featureTitle").textContent = movie.title || "Discover your next favourite";
-  $("#featureDescription").textContent = movie.description || "Discover this title on AGASOBANUYE257.";
-  $("#featureTags").innerHTML =
-    "<span>" + escapeHTML(movie.type === "series" ? "Series" : "Movie") +
-    "</span><span>" + escapeHTML(movie.genre || "Discover") +
-    "</span><span>" + escapeHTML(movie.year || "—") + "</span>";
-  
 
-  const stage = $("#heroPosterStage");
-  if (stage) {
-    const total = heroMovies.length;
-    const posterAt = index => {
-      const item = heroMovies[(index + total) % total];
-      const src = imageKitURL(item.poster, "w-420,h-630,fo-auto,q-82");
-      return '<button class="hero-cover-tile" type="button" data-hero-index="' + ((index + total) % total) + '" aria-label="Feature ' + escapeHTML(item.title || "title") + '">' +
-        (src ? '<img src="' + escapeHTML(src) + '" alt="" loading="lazy" decoding="async">' : '<span class="hero-cover-fallback">AGASOBANUYE 257</span>') + '</button>';
-    };
-    const top = [-4,-3,-2,-1].map(offset => posterAt(featuredIndex + offset)).join("");
-    const bottom = [1,2,3,4].map(offset => posterAt(featuredIndex + offset)).join("");
-    $("#heroCoverLineTop").innerHTML = top;
-    $("#heroCoverLineBottom").innerHTML = bottom;
-    const activePoster = imageKitURL(movie.poster, "w-720,h-1080,fo-auto,q-88");
-    $("#heroCoverFocus").innerHTML = activePoster
-      ? '<img src="' + escapeHTML(activePoster) + '" alt="' + escapeHTML(movie.title || "Featured poster") + '" decoding="async">'
-      : '<div class="hero-cover-fallback hero-cover-fallback-main">AGASOBANUYE<span>257</span></div>';
-    const progress = $("#heroProgress");
-    if (progress) progress.innerHTML = heroMovies.map((item, index) =>
-      '<button type="button" data-hero-index="' + index + '" class="' + (index === featuredIndex ? 'is-active' : '') + '" aria-label="Show featured title ' + (index + 1) + '"></button>'
-    ).join("");
-    stage.querySelectorAll("[data-hero-index]").forEach(button => {
+  titleNode.textContent = movie.title || "Discover your next favourite";
+  descriptionNode.textContent = movie.description || "Discover this title on AGASOBANUYE257.";
+  tagsNode.innerHTML =
+    "<span>" + escapeHTML(movie.genre || (movie.type === "series" ? "Series" : "Movie")) +
+    "</span><span>" + escapeHTML(movie.year || "—") + "</span>";
+
+  if (stackNode) {
+    const offsets = [-4,-3,-2,-1,0,1,2,3,4];
+    stackNode.innerHTML = offsets.map(offset => {
+      const index = (featuredIndex + offset + total) % total;
+      const item = heroMovies[index];
+      const distance = Math.abs(offset);
+      const src = imageKitURL(item.poster, offset === 0 ? "w-720,h-1080,fo-auto,q-88" : "w-420,h-630,fo-auto,q-82");
+      const scale = Math.max(.72, 1 - distance * .055).toFixed(3);
+      const opacity = Math.max(.34, 1 - distance * .145).toFixed(3);
+      return '<button class="hero-stack-card' + (offset === 0 ? ' is-current' : '') +
+        '" type="button" data-hero-index="' + index + '" style="--offset:' + offset +
+        ';--scale:' + scale + ';--opacity:' + opacity +
+        '" aria-label="Show ' + escapeHTML(item.title || "title") + '"' +
+        (offset === 0 ? ' aria-current="true"' : '') + '>' +
+        (src ? '<img src="' + escapeHTML(src) + '" alt="' + escapeHTML(item.title || "Movie poster") +
+        '" loading="' + (offset === 0 ? 'eager' : 'lazy') + '" decoding="async">' :
+        '<span class="hero-stack-fallback">AGASOBANUYE<span>257</span></span>') +
+        '</button>';
+    }).join("");
+    stackNode.querySelectorAll("[data-hero-index]").forEach(button => {
       button.addEventListener("click", () => {
-        featuredIndex = Number(button.dataset.heroIndex) || 0;
-        renderFeature();
+        const nextIndex = Number(button.dataset.heroIndex);
+        if (Number.isInteger(nextIndex)) {
+          featuredIndex = nextIndex;
+          renderFeature();
+        }
       });
     });
   }
+
   $("#featureWatch").onclick = event => { event.preventDefault(); openWatch(movie); };
   $("#featureDetails").onclick = event => { event.preventDefault(); openWatch(movie); };
-  $("#heroCount").textContent = String(featuredIndex + 1).padStart(2, "0") +
-    " / " + String(Math.min(movies.length, 10)).padStart(2, "0");
-  if (hero) { window.setTimeout(() => hero.classList.remove("hero-changing"), 1100); }
+  countNode.textContent = String(featuredIndex + 1).padStart(2, "0") +
+    " / " + String(total).padStart(2, "0");
+  if (progressNode) progressNode.innerHTML = heroMovies.map((item, index) =>
+    '<button type="button" data-hero-index="' + index + '" class="' +
+    (index === featuredIndex ? 'is-active' : '') +
+    '" aria-label="Show featured title ' + (index + 1) + '"></button>'
+  ).join("");
+  if (progressNode) progressNode.querySelectorAll("[data-hero-index]").forEach(button => {
+    button.addEventListener("click", () => {
+      featuredIndex = Number(button.dataset.heroIndex) || 0;
+      renderFeature();
+    });
+  });
+  if (hero) window.setTimeout(() => hero.classList.remove("hero-changing"), 500);
 }
-
 function advanceFeature(direction = 1) {
   const total = Math.min(movies.length, 10);
   if (total < 2) return;
