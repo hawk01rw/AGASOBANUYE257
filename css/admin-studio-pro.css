@@ -31,3 +31,28 @@ body.editor-modal-open{overflow:hidden}
 body.editor-modal-open:before{content:"";position:fixed;inset:0;z-index:110;background:rgba(1,5,12,.82);backdrop-filter:blur(9px)}
 body.admin-nav-open .pro-sidebar{transform:translateX(0)}
 @media(max-width:760px){.pro-upload-studio.editor-open{inset:2vh 3vw!important;max-height:96vh;padding:14px}.pro-upload-studio.editor-open>.pro-card-head{position:sticky;top:-14px;z-index:4;background:#0b192b;padding:12px 0}.pro-sidebar{box-shadow:25px 0 80px #000b}}
+
+/* Catalogue polish: restore structured content cards after admin CSS reset */
+.catalogue-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:14px}
+.catalogue-item{display:flex;align-items:center;justify-content:space-between;gap:14px;min-width:0;padding:16px;border:1px solid rgba(93,151,235,.2);border-radius:13px;background:linear-gradient(135deg,rgba(17,34,56,.96),rgba(8,18,31,.98));box-shadow:0 8px 24px #0002;transition:transform .18s,border-color .18s,box-shadow .18s}
+.catalogue-item:hover{transform:translateY(-2px);border-color:#5799f377;box-shadow:0 14px 32px #0004,0 0 22px #1769d214}
+.catalogue-copy{display:grid;align-content:center;gap:7px;min-width:0;flex:1}
+.catalogue-copy>strong{display:block;overflow:hidden;color:#f1f6ff;font-size:13px;line-height:1.45;text-overflow:ellipsis;white-space:nowrap}
+.catalogue-copy>small{display:block;color:#91a7c2;font-size:10px;line-height:1.5}
+.catalogue-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;flex:0 0 auto}
+.catalogue-actions .admin-button{min-height:32px;padding:7px 10px;font-size:10px}
+.admin-button.danger{border-color:#d66b744a;background:#9e293018;color:#ffb5b9}
+.admin-button.danger:hover{border-color:#e27a82;background:#b52f3a30;color:#fff}
+.status-pill{display:inline-flex;align-items:center;gap:6px;width:max-content;max-width:100%;padding:4px 8px;border:1px solid #d6a52e40;border-radius:99px;background:#d6a52e12;color:#e8c875;font-size:9px;font-weight:800;letter-spacing:.04em}
+.status-pill:before{content:"";width:6px;height:6px;border-radius:50%;background:#d6a52e}
+.status-pill.published{border-color:#54cf9144;background:#54cf9112;color:#9bdab7}
+.status-pill.published:before{background:#54cf91;box-shadow:0 0 8px #54cf9180}
+.catalogue-filters{align-items:center;padding:12px;border:1px solid #ffffff0c;border-radius:12px;background:#071321}
+.catalogue-filters input{flex:1 1 260px}.catalogue-filters select{flex:0 1 170px}
+#catalogueMessage:empty{display:none}
+.admin-hint{grid-column:1/-1;margin:0;padding:28px;border:1px dashed #4b91f044;border-radius:12px;color:#9aacc4;text-align:center;background:#091626}
+#seriesEpisodeManager{margin-top:18px}
+#seriesEpisodeManager[hidden]{display:none!important}
+#tmdbSearchCard .search-form input{flex:1 1 260px}
+@media(max-width:1050px){.catalogue-list{grid-template-columns:1fr}}
+@media(max-width:760px){.catalogue-item{align-items:flex-start;flex-direction:column;padding:14px}.catalogue-actions{justify-content:flex-start;width:100%}.catalogue-actions .admin-button{flex:1 1 auto}.catalogue-copy>strong{white-space:normal}.catalogue-filters{align-items:stretch;flex-direction:column}.catalogue-filters select{flex:1 1 auto;width:100%}}
