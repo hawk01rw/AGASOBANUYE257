@@ -76,7 +76,7 @@ function renderEpisodeRows(episodes){
   return '<section class="episode-season"><div class="episode-season-heading"><span>SEASON '+season+'</span><small>'+items.length+' '+(items.length===1?'EPISODE':'EPISODES')+'</small></div><div class="episode-season-list">'+items.map(ep=>{
    const number=String(Number(ep.episode_number||0)).padStart(2,'0');
    const name=ep.episode_title||ep.title||('Episode '+number);
-   const ready=!!ep.videoPath;
+   const ready=!!(ep.watchUrl||ep.videoPath);
    return '<article class="episode-row"><div class="episode-thumb">'+(imageKitAsset(ep.poster)?'<img src="'+esc(imageKitAsset(ep.poster,"w-180,h-180,fo-auto,q-78"))+'" alt="" loading="lazy" decoding="async">':'<span>▶</span>')+'</div><div class="episode-info"><span class="episode-number">EPISODE '+number+'</span><strong>'+esc(name)+'</strong><small>'+esc(ep.description||'')+'</small><em class="episode-status '+(ready?'is-ready':'is-pending')+'">'+(ready?'READY TO WATCH':'VIDEO NOT UPLOADED')+'</em></div><div class="episode-actions">'+(ready?'<a class="episode-watch" href="watch.html?id='+encodeURIComponent(ep.id)+'">▶ Watch</a>':'<span class="episode-unavailable">Coming soon</span>')+(ep.downloadUrl?'<a class="episode-download" href="'+esc(ep.downloadUrl)+'" target="_blank" rel="noopener noreferrer">↓ Download</a>':ep.videoPath?'<button class="episode-download" data-episode-download="'+esc(ep.videoPath)+'" type="button">↓ Download</button>':'')+'</div></article>';
   }).join('')+'</div></section>';
  }).join('');
@@ -120,6 +120,7 @@ async function showTitle(m){
  $("#watchChips").innerHTML=["HD EXPERIENCE",m.genre,m.year].filter(Boolean).map(x=>"<span>"+esc(x)+"</span>").join("");
  $("#watchLanguage").textContent="Language: "+(m.language||"Not specified");
  $("#watchDuration").textContent="Duration: "+(m.duration?m.duration+" minutes":"Not specified");
+ const country=$("#watchCountry"),translator=$("#watchTranslator");if(country)country.textContent="Country: "+(m.country||"Not specified");if(translator)translator.textContent="Translator: "+(m.translator||"Not specified");
  const tmdb= m.tmdbMetadata||{};
  const score=Number(m.voteAverage||m.rating||0);
  $("#watchRating").textContent=score>0?"TMDB Rating: ★ "+score.toFixed(1)+"/10 · "+Number(m.voteCount||0).toLocaleString()+" votes":"TMDB Rating: Not rated";
@@ -144,8 +145,14 @@ async function showTitle(m){
   const playPart=async index=>{
    const part=movieParts[index];if(!part)return;
    partsList.querySelectorAll(".movie-part-button").forEach((button,i)=>{button.classList.toggle("active",i===index);button.querySelector("small").textContent=i===index?"Now playing":"Play part"});
-   try{const [playUrl,downloadUrl]=await Promise.all([window.AgasobanuyeDB.getVideoUrl(part.video_path),window.AgasobanuyeDB.getVideoUrl(part.video_path,true)]);const v=document.createElement("video");v.controls=true;v.playsInline=true;v.preload="metadata";v.src=playUrl;v.addEventListener("ended",()=>{if(index+1<movieParts.length)playPart(index+1)});$("#watchPlayer").replaceChildren(v);dl.href=downloadUrl;dl.hidden=false;dl.textContent="↓ Download "+part.part_label;dl.target="_blank";dl.rel="noopener noreferrer";}
-   catch(error){const p=$("#watchPlayer .player-placeholder");if(p){p.querySelector("h2").textContent="This part is not available";p.querySelector("p").textContent=error.message||"Please try again."}}
+   try{
+    if(part.watch_url){if(!mountCustomPlayer(part.watch_url))throw new Error("This part has an invalid watch URL.");}
+    else if(part.video_path){const playUrl=await window.AgasobanuyeDB.getVideoUrl(part.video_path);const v=document.createElement("video");v.controls=true;v.playsInline=true;v.preload="metadata";v.src=playUrl;v.addEventListener("ended",()=>{if(index+1<movieParts.length)playPart(index+1)});$("#watchPlayer").replaceChildren(v);}
+    else throw new Error("No watch URL or uploaded video is available for this part.");
+    let downloadUrl=part.download_url||m.downloadUrl||"";if(!downloadUrl&&part.video_path)downloadUrl=await window.AgasobanuyeDB.getVideoUrl(part.video_path,true);
+    if(downloadUrl){dl.href=downloadUrl;dl.hidden=false;dl.textContent="↓ Download "+part.part_label;dl.target="_blank";dl.rel="noopener noreferrer";}else{dl.hidden=true;dl.removeAttribute("href");}
+   }
+   catch(error){const p=$("#watchPlayer .player-placeholder");if(p){p.querySelector("h2").textContent="This part is not available";p.querySelector("p").textContent=error.message||"Please try again."}else{const note=document.createElement("p");note.className="player-error-note";note.textContent=error.message||"Please try again.";$("#watchPlayer").append(note);}}
   };
   partsList.onclick=e=>{const button=e.target.closest("[data-movie-part]");if(button)playPart(Number(button.dataset.moviePart))};
   await playPart(0);
