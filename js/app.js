@@ -129,7 +129,9 @@ function renderFeature() {
     tagsNode.innerHTML = "<span>AGASOBANUYE257</span><span>Movies & Series</span>";
     if (stackNode) stackNode.innerHTML = '<div class="hero-stack-empty">AGASOBANUYE<span>257</span></div>';
     if (progressNode) progressNode.innerHTML = "";
-    countNode.textContent = "00 / 00";\n    const timerFill = $("#heroTimerFill");\n    if (timerFill) timerFill.style.width = "0%";
+    countNode.textContent = "00 / 00";
+    const timerFill = $("#heroTimerFill");
+    if (timerFill) timerFill.style.width = "0%";
     return;
   }
 
@@ -191,7 +193,9 @@ function renderFeature() {
       renderFeature();
     });
   });
-  const timerFill = $("#heroTimerFill");\n  if (timerFill) { timerFill.style.animation = "none"; timerFill.style.width = "0%"; void timerFill.offsetWidth; timerFill.style.animation = featurePaused ? "none" : "heroTimerRun 6.5s linear forwards"; }\n  if (hero) window.setTimeout(() => hero.classList.remove("hero-changing"), 500);
+  const timerFill = $("#heroTimerFill");
+  if (timerFill) { timerFill.style.animation = "none"; timerFill.style.width = "0%"; void timerFill.offsetWidth; timerFill.style.animation = featurePaused ? "none" : "heroTimerRun 6.5s linear forwards"; }
+  if (hero) window.setTimeout(() => hero.classList.remove("hero-changing"), 500);
 }
 function advanceFeature(direction = 1) {
   const total = Math.min(movies.length, 10);
