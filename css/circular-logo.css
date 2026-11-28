@@ -1,0 +1,26 @@
+/* Consistent circular brand marks across public pages, loader and admin */
+.cineva-brand img,
+.agas-footer-brand img,
+.site-loader-mark,
+.pro-brand img{
+  width:44px!important;
+  height:44px!important;
+  min-width:44px!important;
+  aspect-ratio:1/1!important;
+  display:block!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  border-radius:50%!important;
+  overflow:hidden!important;
+  clip-path:circle(50% at 50% 50%);
+  border:1px solid rgba(255,255,255,.24)!important;
+  background:#10141c!important;
+  box-shadow:0 2px 12px rgba(0,0,0,.28),0 0 0 3px rgba(255,255,255,.035)!important;
+}
+.site-loader-mark{width:72px!important;height:72px!important;min-width:72px!important}
+.pro-brand img{width:42px!important;height:42px!important;min-width:42px!important}
+.agas-footer-brand img{width:46px!important;height:46px!important;min-width:46px!important}
+.cineva-brand{align-items:center}
+@media(max-width:600px){
+ .cineva-brand img{width:38px!important;height:38px!important;min-width:38px!important}
+}
