@@ -393,7 +393,10 @@
   }
 
 
-  document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));
+  const menuToggle=$("#adminMenuToggle");
+  menuToggle?.addEventListener("click",()=>{const open=document.body.classList.toggle("admin-nav-open");menuToggle.setAttribute("aria-expanded",String(open));menuToggle.setAttribute("aria-label",open?"Close navigation":"Open navigation");});
+  document.addEventListener("click",e=>{if(document.body.classList.contains("admin-nav-open")&&!e.target.closest(".pro-sidebar")&&!e.target.closest("#adminMenuToggle")){document.body.classList.remove("admin-nav-open");menuToggle?.setAttribute("aria-expanded","false");}});
+  document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{showView(b.dataset.view);document.body.classList.remove("admin-nav-open");menuToggle?.setAttribute("aria-expanded","false");}));
   function openEditor(){ $("#contentEditorCard").classList.add("editor-open"); document.body.classList.add("editor-modal-open"); }
   function closeEditor(){ $("#contentEditorCard").classList.remove("editor-open"); document.body.classList.remove("editor-modal-open"); }
   function showView(name){
