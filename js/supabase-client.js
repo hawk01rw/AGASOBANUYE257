@@ -38,6 +38,11 @@
     async getSession(){if(!client)return null;const {data,error}=await client.auth.getSession();if(error)throw error;return data.session;},
     async getWatchlist(){if(!client)throw new Error("Supabase is not configured yet.");const session=await api.getSession();if(!session)throw new Error("Please sign in to view your watchlist.");const {data,error}=await client.from("watchlist").select("movie_id").eq("user_id",session.user.id);if(error)throw error;return (data||[]).map(x=>x.movie_id);},
     async toggleWatchlist(movieId,currentlySaved){if(!client)throw new Error("Supabase is not configured yet.");const session=await api.getSession();if(!session)throw new Error("Please sign in to use your watchlist.");const result=currentlySaved?await client.from("watchlist").delete().eq("movie_id",movieId).eq("user_id",session.user.id):await client.from("watchlist").insert({movie_id:movieId,user_id:session.user.id});if(result.error)throw result.error;return !currentlySaved;},
+    async getMovieDownloadLinks(movieId){
+      if(!client||!movieId)return [];
+      const {data,error}=await client.from("movie_download_links").select("id,movie_id,label,url,sort_order").eq("movie_id",movieId).order("sort_order",{ascending:true});
+      if(error)throw error;return data||[];
+    },
     async getMovieParts(movieId){
       if(!client||!movieId)return [];
       const {data,error}=await client.from("movie_parts").select("id,movie_id,part_label,video_path,watch_url,download_url,sort_order").eq("movie_id",movieId).order("sort_order",{ascending:true});
